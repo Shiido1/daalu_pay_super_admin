@@ -5,29 +5,21 @@ part 'data.g.dart';
 @JsonSerializable()
 class Data {
   num? id;
-  String? uuid;
   String? firstName;
   String? lastName;
   String? email;
   dynamic phone;
-  String? role;
-  String? status;
-  num? transactionsAssigned;
-  dynamic deletedAt;
   String? token;
+  String? userType;
 
   Data({
     this.id,
-    this.uuid,
     this.firstName,
     this.lastName,
     this.email,
     this.phone,
-    this.role,
-    this.status,
-    this.transactionsAssigned,
-    this.deletedAt,
     this.token,
+    this.userType,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);

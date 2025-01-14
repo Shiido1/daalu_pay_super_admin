@@ -5,6 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../app_assets/app_color.dart';
 import 'widget/button_widget.dart';
 import 'widget/text_widget.dart';
+
 // ignore: must_be_immutable
 class VerifyScreen extends StatefulWidget {
   VerifyScreen({super.key});

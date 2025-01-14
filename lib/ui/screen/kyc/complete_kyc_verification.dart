@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -6,7 +5,6 @@ import '../../app_assets/app_color.dart';
 import '../widget/button_widget.dart';
 import '../widget/text_widget.dart';
 import 'complete_kyc.dart';
-
 
 // ignore: must_be_immutable
 class CompleteKycVerificationScreen extends StatelessWidget {

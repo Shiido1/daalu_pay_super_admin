@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import '../model/login_response_model/login_response_model.dart';
@@ -27,7 +26,6 @@ class AuthViewModel extends BaseViewModel {
 
   LoginResponseModel? _loginResponse;
   LoginResponseModel? get loginResponse => _loginResponse;
-  
 
   // login flow so api call for method can be called here
 
@@ -50,6 +48,4 @@ class AuthViewModel extends BaseViewModel {
   //   }
   //   notifyListeners();
   // }
-
-  
 }
