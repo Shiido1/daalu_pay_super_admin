@@ -1,5 +1,4 @@
-import 'package:daalu_pay_super_admin/core/core_folder/app/app.router.dart';
-import 'package:daalu_pay_super_admin/main.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/login_entity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
@@ -23,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -134,7 +132,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       buttonColor: AppColor.inGrey,
                       buttonBorderColor: Colors.transparent,
                       onPressed: () {
-                        navigate.navigateTo(Routes.superAdminDashboard);
+                        if (formKeyLogin.currentState!.validate()) {
+                          model.loginUser(
+                              LoginEntityModel(
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim()),
+                              context);
+                        }
                       },
                     ),
                     SizedBox(
