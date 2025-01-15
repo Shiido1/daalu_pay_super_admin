@@ -101,10 +101,11 @@ class AuthApi {
     }
   }
 
-  Future<SuspendAdminResponseModel> suspendAdmin(String reason) async {
+  Future<SuspendAdminResponseModel> suspendAdmin(
+      {String? id, String? reason}) async {
     try {
       final response = await _service.call(
-          '${UrlConfig.admins}/suspend', RequestMethod.post,
+          '${UrlConfig.admins}/$id/suspend', RequestMethod.post,
           data: {'reason': reason});
       logger.d(response.data);
       return SuspendAdminResponseModel.fromJson(response.data);
@@ -114,13 +115,26 @@ class AuthApi {
     }
   }
 
-  Future<DisablePaymentResponseModel> unsuspend(String reason) async {
+  Future<SuspendAdminResponseModel> unsuspendAdmin(
+      {String? id, String? reason}) async {
     try {
       final response = await _service.call(
-          '${UrlConfig.admins}/unsuspend', RequestMethod.post,
+          '${UrlConfig.admins}/$id/unsuspend', RequestMethod.post,
           data: {'reason': reason});
       logger.d(response.data);
-      return DisablePaymentResponseModel.fromJson(response.data);
+      return SuspendAdminResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> deleteAdmin(String id) async {
+    try {
+      final response = await _service.call(
+          '${UrlConfig.admins}/$id/delete', RequestMethod.post);
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;

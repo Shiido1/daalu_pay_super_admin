@@ -1,7 +1,9 @@
+import 'package:daalu_pay_super_admin/core/connect_end/model/disable_payment_response_model/disable_payment_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_response_model/suspend_admin_response_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../core_folder/app/app.locator.dart';
@@ -39,6 +41,33 @@ class AuthRepoImpl {
 
   Future<GetExchangeRates> getExchangeRate() async {
     final response = await _contract.getExchangeRates();
+    return response;
+  }
+
+  Future<DisablePaymentResponseModel> disablePayment(String id) async {
+    final response = await _contract.disablePayment(id);
+    return response;
+  }
+
+  Future<DisablePaymentResponseModel> enablePayment(String id) async {
+    final response = await _contract.enablePayment(id);
+    return response;
+  }
+
+  Future<SuspendAdminResponseModel> suspendAdmin(
+      {String? id, String? reason}) async {
+    final response = await _contract.suspendAdmin(id: id, reason: reason);
+    return response;
+  }
+
+  Future<SuspendAdminResponseModel> unsuspendAdmin(
+      {String? id, String? reason}) async {
+    final response = await _contract.unSuspendAdmin(id: id, reason: reason);
+    return response;
+  }
+
+  Future<dynamic> deleteAdimn(String? id) async {
+    final response = await _contract.deleteAdmin(id!);
     return response;
   }
 

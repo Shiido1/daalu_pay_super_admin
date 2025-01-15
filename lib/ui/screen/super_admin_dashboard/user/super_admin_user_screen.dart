@@ -332,14 +332,18 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          8.w,
+                                                                      horizontal: e.status ==
+                                                                              'active'
+                                                                          ? 8.w
+                                                                          : 4.w,
                                                                       vertical:
-                                                                          5.2.w),
+                                                                          4.8.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: AppColor
-                                                                          .green
-                                                                          .withOpacity(
+                                                                      color: e.status ==
+                                                                              'active'
+                                                                          ? AppColor.green.withOpacity(
+                                                                              .17)
+                                                                          : AppColor.grey.withOpacity(
                                                                               .17),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
@@ -351,11 +355,18 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                         '',
                                                                     fontSize:
                                                                         12.4.sp,
-                                                                    color: AppColor
-                                                                        .deeperGreen,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
+                                                                    color: e.status ==
+                                                                            'active'
+                                                                        ? AppColor
+                                                                            .deeperGreen
+                                                                        : AppColor
+                                                                            .grey,
+                                                                    fontWeight: e.status ==
+                                                                            'active'
+                                                                        ? FontWeight
+                                                                            .w600
+                                                                        : FontWeight
+                                                                            .w500,
                                                                   ),
                                                                 ),
                                                                 PopupMenuButton(
@@ -485,14 +496,18 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          8.w,
+                                                                      horizontal: e.status ==
+                                                                              'active'
+                                                                          ? 8.w
+                                                                          : 4.w,
                                                                       vertical:
-                                                                          5.2.w),
+                                                                          4.8.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: AppColor
-                                                                          .green
-                                                                          .withOpacity(
+                                                                      color: e.status ==
+                                                                              'active'
+                                                                          ? AppColor.green.withOpacity(
+                                                                              .17)
+                                                                          : AppColor.grey.withOpacity(
                                                                               .17),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
@@ -504,11 +519,18 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                         '',
                                                                     fontSize:
                                                                         12.4.sp,
-                                                                    color: AppColor
-                                                                        .deeperGreen,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
+                                                                    color: e.status ==
+                                                                            'active'
+                                                                        ? AppColor
+                                                                            .deeperGreen
+                                                                        : AppColor
+                                                                            .grey,
+                                                                    fontWeight: e.status ==
+                                                                            'active'
+                                                                        ? FontWeight
+                                                                            .w600
+                                                                        : FontWeight
+                                                                            .w500,
                                                                   ),
                                                                 ),
                                                                 PopupMenuButton(
@@ -639,14 +661,18 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          8.w,
+                                                                      horizontal: e.status ==
+                                                                              'active'
+                                                                          ? 8.w
+                                                                          : 4.w,
                                                                       vertical:
-                                                                          5.2.w),
+                                                                          4.8.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: AppColor
-                                                                          .green
-                                                                          .withOpacity(
+                                                                      color: e.status ==
+                                                                              'active'
+                                                                          ? AppColor.green.withOpacity(
+                                                                              .17)
+                                                                          : AppColor.grey.withOpacity(
                                                                               .17),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
@@ -658,11 +684,18 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                         '',
                                                                     fontSize:
                                                                         12.4.sp,
-                                                                    color: AppColor
-                                                                        .deeperGreen,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
+                                                                    color: e.status ==
+                                                                            'active'
+                                                                        ? AppColor
+                                                                            .deeperGreen
+                                                                        : AppColor
+                                                                            .grey,
+                                                                    fontWeight: e.status ==
+                                                                            'active'
+                                                                        ? FontWeight
+                                                                            .w600
+                                                                        : FontWeight
+                                                                            .w500,
                                                                   ),
                                                                 ),
                                                                 PopupMenuButton(
@@ -788,14 +821,18 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          8.w,
+                                                                      horizontal: e.status ==
+                                                                              'active'
+                                                                          ? 8.w
+                                                                          : 4.w,
                                                                       vertical:
-                                                                          5.2.w),
+                                                                          4.8.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: AppColor
-                                                                          .green
-                                                                          .withOpacity(
+                                                                      color: e.status ==
+                                                                              'active'
+                                                                          ? AppColor.green.withOpacity(
+                                                                              .17)
+                                                                          : AppColor.grey.withOpacity(
                                                                               .17),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
@@ -807,11 +844,18 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                         '',
                                                                     fontSize:
                                                                         12.4.sp,
-                                                                    color: AppColor
-                                                                        .deeperGreen,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
+                                                                    color: e.status ==
+                                                                            'active'
+                                                                        ? AppColor
+                                                                            .deeperGreen
+                                                                        : AppColor
+                                                                            .grey,
+                                                                    fontWeight: e.status ==
+                                                                            'active'
+                                                                        ? FontWeight
+                                                                            .w600
+                                                                        : FontWeight
+                                                                            .w500,
                                                                   ),
                                                                 ),
                                                                 PopupMenuButton(
