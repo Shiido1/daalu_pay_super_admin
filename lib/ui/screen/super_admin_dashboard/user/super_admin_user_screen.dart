@@ -1,181 +1,903 @@
+import 'package:daalu_pay_super_admin/ui/app_assets/contant.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:stacked/stacked.dart';
+import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../app_assets/app_color.dart';
 import '../../../app_assets/app_image.dart';
 import '../../widget/text_form_widget.dart';
 import '../../widget/text_widget.dart';
 
-class SuperAdminUsersScreen extends StatelessWidget {
+class SuperAdminUsersScreen extends StatefulWidget {
   const SuperAdminUsersScreen({super.key});
 
   @override
+  State<SuperAdminUsersScreen> createState() => _SuperAdminUsersScreenState();
+}
+
+class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
+  RefreshController refreshController = RefreshController();
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.light,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 50.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 36.0.w,
-                  height: 50.h,
-                ),
-                TextView(
-                  text: 'User Management',
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-                SvgPicture.asset(
-                  AppImage.person,
-                  color: AppColor.primary,
-                )
-              ],
-            ),
-            SizedBox(
-              height: 30.h,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: TextFormWidget(
-                    label: 'Search',
-                    labelColor: AppColor.grey,
-                    hint: null,
-                    border: 10,
-                    borderColor: AppColor.transparent,
-                    isFilled: true,
-                    fillColor: AppColor.inGreyOut,
-                    prefixWidget: Padding(
-                      padding: EdgeInsets.all(12.w),
-                      child: SvgPicture.asset(
-                        AppImage.search,
-                      ),
-                    ),
-                    // controller: emailController,
-                    // validator: AppValidator.validateEmail(),
-                  ),
-                ),
-                SizedBox(
-                  width: 18.w,
-                ),
-                SvgPicture.asset(AppImage.filter)
-              ],
-            ),
-            SizedBox(
-              height: 30.h,
-            ),
-            TextView(
-              text: 'App Users',
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w400,
-            ),
-            SizedBox(
-              height: 16.h,
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 14.w),
-              decoration: BoxDecoration(
-                  color: AppColor.white,
-                  border: Border.all(color: AppColor.inGrey),
-                  borderRadius: BorderRadius.circular(4)),
+    return ViewModelBuilder<AuthViewModel>.reactive(
+        viewModelBuilder: () => AuthViewModel(),
+        onViewModelReady: (model) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            model.superAdminUsers(context);
+          });
+        },
+        disposeViewModel: false,
+        builder: (_, AuthViewModel model, __) {
+          return Scaffold(
+            backgroundColor: AppColor.light,
+            body: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 50.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextView(
-                          text: 'Name',
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        TextView(
-                          text: 'Email',
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        TextView(
-                          text: 'Status',
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 36.0.w,
+                        height: 50.h,
+                      ),
+                      TextView(
+                        text: 'User Management',
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      SvgPicture.asset(
+                        AppImage.person,
+                        color: AppColor.primary,
+                      )
+                    ],
                   ),
-                  Divider(
-                    color: AppColor.inGrey,
-                    thickness: .3.sp,
+                  SizedBox(
+                    height: 30.h,
                   ),
-                  ...[
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                  ].map((i) => Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () => openDialog(context),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: 80.w,
-                                  child: TextView(
-                                    text: 'John Doe',
-                                    fontSize: 14.sp,
-                                    maxLines: 1,
-                                    textOverflow: TextOverflow.ellipsis,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 140.w,
-                                  child: TextView(
-                                    text: 'john.doe@gmail.com',
-                                    fontSize: 14.sp,
-                                    maxLines: 1,
-                                    textOverflow: TextOverflow.ellipsis,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 8.w, vertical: 5.2.w),
-                                  decoration: BoxDecoration(
-                                      color: AppColor.green.withOpacity(.17),
-                                      borderRadius: BorderRadius.circular(4)),
-                                  child: TextView(
-                                    text: 'Active',
-                                    fontSize: 12.4.sp,
-                                    color: AppColor.deeperGreen,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                )
-                              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: TextFormWidget(
+                          label: 'Search',
+                          labelColor: AppColor.grey,
+                          hint: null,
+                          border: 10,
+                          borderColor: AppColor.transparent,
+                          isFilled: true,
+                          fillColor: AppColor.inGreyOut,
+                          prefixWidget: Padding(
+                            padding: EdgeInsets.all(12.w),
+                            child: SvgPicture.asset(
+                              AppImage.search,
                             ),
                           ),
-                          Divider(
-                            color: AppColor.inGrey,
-                            thickness: .3.sp,
+                          onChange: (p0) {
+                            model.query = p0;
+                            model.notifyListeners();
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 18.w,
+                      ),
+                      PopupMenuButton(
+                        onSelected: (value) {
+                          // your logic
+                        },
+                        color: AppColor.white,
+                        child: SvgPicture.asset(AppImage.filter),
+                        itemBuilder: (BuildContext bc) {
+                          return [
+                            PopupMenuItem(
+                              value: '/all',
+                              onTap: () {
+                                model.userStats = 'all';
+                                model.usergroupStatus();
+                                model.notifyListeners();
+                              },
+                              child: TextView(
+                                text: 'All',
+                                fontSize: 15.2.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: '/active',
+                              onTap: () {
+                                model.userStats = 'active';
+                                model.usergroupStatus();
+                                model.notifyListeners();
+                              },
+                              child: TextView(
+                                text: 'Active',
+                                fontSize: 15.2.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: '/suspended',
+                              onTap: () {
+                                model.userStats = 'suspended';
+                                model.usergroupStatus();
+                                model.notifyListeners();
+                              },
+                              child: TextView(
+                                text: 'Suspended',
+                                fontSize: 15.2.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: '/band',
+                              onTap: () {
+                                model.userStats = 'band';
+                                model.usergroupStatus();
+                                model.notifyListeners();
+                              },
+                              child: TextView(
+                                text: 'Band',
+                                fontSize: 15.2.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: '/unverified',
+                              onTap: () {
+                                model.userStats = 'unverified';
+                                model.usergroupStatus();
+                                model.notifyListeners();
+                              },
+                              child: TextView(
+                                text: 'Unverified',
+                                fontSize: 15.2.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ];
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  TextView(
+                    text: 'App Users',
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  SizedBox(
+                    height: 16.h,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.w, horizontal: 14.w),
+                    decoration: BoxDecoration(
+                        color: AppColor.white,
+                        border: Border.all(color: AppColor.inGrey),
+                        borderRadius: BorderRadius.circular(4)),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 4.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextView(
+                                text: 'Name',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              TextView(
+                                text: 'Email',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 80.w),
+                                child: TextView(
+                                  text: 'Status',
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              TextView(
+                                text: 'Actions',
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ],
                           ),
-                        ],
-                      ))
+                        ),
+                        Divider(
+                          color: AppColor.inGrey,
+                          thickness: .3.sp,
+                        ),
+                        SizedBox(
+                          height: 430,
+                          child: SmartRefresher(
+                            key: const PageStorageKey('storage_key_add_sales'),
+                            enablePullUp: true,
+                            enablePullDown: false,
+                            onRefresh: () async {
+                              await model.onRefresh();
+                              model.superAdminUsers(context);
+                              refreshController.refreshCompleted();
+                            },
+                            onLoading: () async {
+                              await model.onLoading();
+                              refreshController.loadComplete();
+                            },
+                            controller: refreshController,
+                            footer: CustomFooter(builder: ((context, m) {
+                              Widget body;
+                              if (model.adminUserResponseModel != null &&
+                                  model.adminUserResponseModel!.data!.data!
+                                      .isEmpty) {
+                                body = TextView(
+                                    text: "You're caught up",
+                                    color: AppColor.textColor);
+                              } else if (m == LoadStatus.idle &&
+                                  model.isLoadNoMore == false) {
+                                body = TextView(
+                                  text: "Pull up load",
+                                  color: AppColor.textColor,
+                                );
+                              } else if (m == LoadStatus.loading) {
+                                body = const CupertinoActivityIndicator();
+                              } else if (m == LoadStatus.failed) {
+                                body = TextView(
+                                    text: "Load Failed!Click retry!",
+                                    color: AppColor.textColor);
+                              } else if (m == LoadStatus.canLoading) {
+                                body = TextView(
+                                    text: "release to load more",
+                                    color: AppColor.textColor);
+                              } else {
+                                body = TextView(
+                                    text: "You're caught up",
+                                    color: AppColor.textColor);
+                              }
+                              return SizedBox(
+                                height: 50.0,
+                                child: Center(child: body),
+                              );
+                            })),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  model.query != ''
+                                      ? Column(
+                                          children: [
+                                            if (model.userGroupList.isNotEmpty)
+                                              ...model.userGroupList
+                                                  .where((o) => o.firstName!
+                                                      .toLowerCase()
+                                                      .contains(model.query
+                                                          .toLowerCase()))
+                                                  .map((e) => Column(
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () =>
+                                                                openDialog(
+                                                                    context),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 50.w,
+                                                                  child:
+                                                                      TextView(
+                                                                    text:
+                                                                        e.firstName ??
+                                                                            '',
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    maxLines: 1,
+                                                                    textOverflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 140.w,
+                                                                  child:
+                                                                      TextView(
+                                                                    text: e.email
+                                                                            ?.toLowerCase() ??
+                                                                        '',
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    maxLines: 1,
+                                                                    textOverflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                      horizontal:
+                                                                          8.w,
+                                                                      vertical:
+                                                                          5.2.w),
+                                                                  decoration: BoxDecoration(
+                                                                      color: AppColor
+                                                                          .green
+                                                                          .withOpacity(
+                                                                              .17),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              4)),
+                                                                  child:
+                                                                      TextView(
+                                                                    text: e.status
+                                                                            ?.capitalize() ??
+                                                                        '',
+                                                                    fontSize:
+                                                                        12.4.sp,
+                                                                    color: AppColor
+                                                                        .deeperGreen,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                                PopupMenuButton(
+                                                                  onSelected:
+                                                                      (value) {
+                                                                    // your logic
+                                                                  },
+                                                                  color: AppColor
+                                                                      .white,
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .more_vert,
+                                                                    size: 20.sp,
+                                                                  ),
+                                                                  itemBuilder:
+                                                                      (BuildContext
+                                                                          bc) {
+                                                                    return [
+                                                                      PopupMenuItem(
+                                                                        value:
+                                                                            '/suspend',
+                                                                        // onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                        //     context:
+                                                                        //         context,
+                                                                        //     id: i
+                                                                        //         .id,
+                                                                        //     status:
+                                                                        //         i.status),
+                                                                        child:
+                                                                            TextView(
+                                                                          text: e.status?.toLowerCase() == 'active'
+                                                                              ? 'Suspend'
+                                                                              : "Unsuspend",
+                                                                          fontSize:
+                                                                              14.2.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                      PopupMenuItem(
+                                                                        value:
+                                                                            '/delete',
+                                                                        // onTap: () =>
+                                                                        //     model.modalBottomDeleteUserSheet(
+                                                                        //   context,
+                                                                        //   id: i
+                                                                        //       .id,
+                                                                        // ),
+                                                                        child:
+                                                                            TextView(
+                                                                          text:
+                                                                              'Delete',
+                                                                          fontSize:
+                                                                              14.2.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                    ];
+                                                                  },
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Divider(
+                                                            color:
+                                                                AppColor.inGrey,
+                                                            thickness: .3.sp,
+                                                          ),
+                                                        ],
+                                                      ))
+                                            else if (model
+                                                .adminUserResponseListModel
+                                                .isNotEmpty)
+                                              ...model
+                                                  .adminUserResponseListModel
+                                                  .where((o) => o.firstName!
+                                                      .toLowerCase()
+                                                      .contains(model.query
+                                                          .toLowerCase()))
+                                                  .map((e) => Column(
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () =>
+                                                                openDialog(
+                                                                    context),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 50.w,
+                                                                  child:
+                                                                      TextView(
+                                                                    text:
+                                                                        e.firstName ??
+                                                                            '',
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    maxLines: 1,
+                                                                    textOverflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 140.w,
+                                                                  child:
+                                                                      TextView(
+                                                                    text: e.email
+                                                                            ?.toLowerCase() ??
+                                                                        '',
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    maxLines: 1,
+                                                                    textOverflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                      horizontal:
+                                                                          8.w,
+                                                                      vertical:
+                                                                          5.2.w),
+                                                                  decoration: BoxDecoration(
+                                                                      color: AppColor
+                                                                          .green
+                                                                          .withOpacity(
+                                                                              .17),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              4)),
+                                                                  child:
+                                                                      TextView(
+                                                                    text: e.status
+                                                                            ?.capitalize() ??
+                                                                        '',
+                                                                    fontSize:
+                                                                        12.4.sp,
+                                                                    color: AppColor
+                                                                        .deeperGreen,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                                PopupMenuButton(
+                                                                  onSelected:
+                                                                      (value) {
+                                                                    // your logic
+                                                                  },
+                                                                  color: AppColor
+                                                                      .white,
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .more_vert,
+                                                                    size: 20.sp,
+                                                                  ),
+                                                                  itemBuilder:
+                                                                      (BuildContext
+                                                                          bc) {
+                                                                    return [
+                                                                      PopupMenuItem(
+                                                                        value:
+                                                                            '/suspend',
+                                                                        // onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                        //     context:
+                                                                        //         context,
+                                                                        //     id: i
+                                                                        //         .id,
+                                                                        //     status:
+                                                                        //         i.status),
+                                                                        child:
+                                                                            TextView(
+                                                                          text: e.status?.toLowerCase() == 'active'
+                                                                              ? 'Suspend'
+                                                                              : "Unsuspend",
+                                                                          fontSize:
+                                                                              14.2.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                      PopupMenuItem(
+                                                                        value:
+                                                                            '/delete',
+                                                                        // onTap: () =>
+                                                                        //     model.modalBottomDeleteUserSheet(
+                                                                        //   context,
+                                                                        //   id: i
+                                                                        //       .id,
+                                                                        // ),
+                                                                        child:
+                                                                            TextView(
+                                                                          text:
+                                                                              'Delete',
+                                                                          fontSize:
+                                                                              14.2.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                    ];
+                                                                  },
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Divider(
+                                                            color:
+                                                                AppColor.inGrey,
+                                                            thickness: .3.sp,
+                                                          ),
+                                                        ],
+                                                      ))
+                                          ],
+                                        )
+                                      : Column(
+                                          children: [
+                                            if (model.userGroupList.isNotEmpty)
+                                              ...model.userGroupList
+                                                  .where((o) => o.firstName!
+                                                      .toLowerCase()
+                                                      .contains(model.query
+                                                          .toLowerCase()))
+                                                  .map((e) => Column(
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () =>
+                                                                openDialog(
+                                                                    context),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 50.w,
+                                                                  child:
+                                                                      TextView(
+                                                                    text:
+                                                                        e.firstName ??
+                                                                            '',
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    maxLines: 1,
+                                                                    textOverflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 140.w,
+                                                                  child:
+                                                                      TextView(
+                                                                    text: e.email
+                                                                            ?.toLowerCase() ??
+                                                                        '',
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    maxLines: 1,
+                                                                    textOverflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                      horizontal:
+                                                                          8.w,
+                                                                      vertical:
+                                                                          5.2.w),
+                                                                  decoration: BoxDecoration(
+                                                                      color: AppColor
+                                                                          .green
+                                                                          .withOpacity(
+                                                                              .17),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              4)),
+                                                                  child:
+                                                                      TextView(
+                                                                    text: e.status
+                                                                            ?.capitalize() ??
+                                                                        '',
+                                                                    fontSize:
+                                                                        12.4.sp,
+                                                                    color: AppColor
+                                                                        .deeperGreen,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                                PopupMenuButton(
+                                                                  onSelected:
+                                                                      (value) {
+                                                                    // your logic
+                                                                  },
+                                                                  color: AppColor
+                                                                      .white,
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .more_vert,
+                                                                    size: 20.sp,
+                                                                  ),
+                                                                  itemBuilder:
+                                                                      (BuildContext
+                                                                          bc) {
+                                                                    return [
+                                                                      PopupMenuItem(
+                                                                        value:
+                                                                            '/suspend',
+                                                                        // onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                        //     context:
+                                                                        //         context,
+                                                                        //     id: i
+                                                                        //         .id,
+                                                                        //     status:
+                                                                        //         i.status),
+                                                                        child:
+                                                                            TextView(
+                                                                          text: e.status?.toLowerCase() == 'active'
+                                                                              ? 'Suspend'
+                                                                              : "Unsuspend",
+                                                                          fontSize:
+                                                                              14.2.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                      PopupMenuItem(
+                                                                        value:
+                                                                            '/delete',
+                                                                        // onTap: () =>
+                                                                        //     model.modalBottomDeleteUserSheet(
+                                                                        //   context,
+                                                                        //   id: i
+                                                                        //       .id,
+                                                                        // ),
+                                                                        child:
+                                                                            TextView(
+                                                                          text:
+                                                                              'Delete',
+                                                                          fontSize:
+                                                                              14.2.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                    ];
+                                                                  },
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Divider(
+                                                            color:
+                                                                AppColor.inGrey,
+                                                            thickness: .3.sp,
+                                                          ),
+                                                        ],
+                                                      ))
+                                            else if (model
+                                                .adminUserResponseListModel
+                                                .isNotEmpty)
+                                              ...model
+                                                  .adminUserResponseListModel
+                                                  .map((e) => Column(
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () =>
+                                                                openDialog(
+                                                                    context),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 50.w,
+                                                                  child:
+                                                                      TextView(
+                                                                    text:
+                                                                        e.firstName ??
+                                                                            '',
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    maxLines: 1,
+                                                                    textOverflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 140.w,
+                                                                  child:
+                                                                      TextView(
+                                                                    text: e.email
+                                                                            ?.toLowerCase() ??
+                                                                        '',
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    maxLines: 1,
+                                                                    textOverflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                      horizontal:
+                                                                          8.w,
+                                                                      vertical:
+                                                                          5.2.w),
+                                                                  decoration: BoxDecoration(
+                                                                      color: AppColor
+                                                                          .green
+                                                                          .withOpacity(
+                                                                              .17),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              4)),
+                                                                  child:
+                                                                      TextView(
+                                                                    text: e.status
+                                                                            ?.capitalize() ??
+                                                                        '',
+                                                                    fontSize:
+                                                                        12.4.sp,
+                                                                    color: AppColor
+                                                                        .deeperGreen,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ),
+                                                                ),
+                                                                PopupMenuButton(
+                                                                  onSelected:
+                                                                      (value) {
+                                                                    // your logic
+                                                                  },
+                                                                  color: AppColor
+                                                                      .white,
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .more_vert,
+                                                                    size: 20.sp,
+                                                                  ),
+                                                                  itemBuilder:
+                                                                      (BuildContext
+                                                                          bc) {
+                                                                    return [
+                                                                      PopupMenuItem(
+                                                                        value:
+                                                                            '/suspend',
+                                                                        // onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                        //     context:
+                                                                        //         context,
+                                                                        //     id: i
+                                                                        //         .id,
+                                                                        //     status:
+                                                                        //         i.status),
+                                                                        child:
+                                                                            TextView(
+                                                                          text: e.status?.toLowerCase() == 'active'
+                                                                              ? 'Suspend'
+                                                                              : "Unsuspend",
+                                                                          fontSize:
+                                                                              14.2.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                      PopupMenuItem(
+                                                                        value:
+                                                                            '/delete',
+                                                                        // onTap: () =>
+                                                                        //     model.modalBottomDeleteUserSheet(
+                                                                        //   context,
+                                                                        //   id: i
+                                                                        //       .id,
+                                                                        // ),
+                                                                        child:
+                                                                            TextView(
+                                                                          text:
+                                                                              'Delete',
+                                                                          fontSize:
+                                                                              14.2.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                    ];
+                                                                  },
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Divider(
+                                                            color:
+                                                                AppColor.inGrey,
+                                                            thickness: .3.sp,
+                                                          ),
+                                                        ],
+                                                      ))
+                                          ],
+                                        )
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          );
+        });
   }
 
   paddedWing({child}) => Padding(

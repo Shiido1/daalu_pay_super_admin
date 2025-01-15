@@ -4,21 +4,21 @@ part 'transaction_stats.g.dart';
 
 @JsonSerializable()
 class TransactionStats {
-	int? total;
-	int? pending;
-	int? approved;
-	int? rejected;
+  int? total;
+  int? pending;
+  int? approved;
+  int? rejected;
 
-	TransactionStats({
-		this.total, 
-		this.pending, 
-		this.approved, 
-		this.rejected, 
-	});
+  TransactionStats({
+    this.total,
+    this.pending,
+    this.approved,
+    this.rejected,
+  });
 
-	factory TransactionStats.fromJson(Map<String, dynamic> json) {
-		return _$TransactionStatsFromJson(json);
-	}
+  factory TransactionStats.fromJson(Map<String, dynamic> json) {
+    return _$TransactionStatsFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$TransactionStatsToJson(this);
+  Map<String, dynamic> toJson() => _$TransactionStatsToJson(this);
 }

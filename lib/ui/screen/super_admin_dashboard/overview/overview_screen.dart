@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
+import '../../../../core/connect_end/model/get_exchange_rates/datum.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../app_assets/app_color.dart';
 import '../../../app_assets/app_image.dart';
@@ -69,8 +70,10 @@ class _OverviewScreenState extends State<OverviewScreen> {
     return ViewModelBuilder<AuthViewModel>.reactive(
         viewModelBuilder: () => AuthViewModel(),
         onViewModelReady: (model) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            model.superAdminStats(context);
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            await model.superAdminStats(context);
+            model.getCurrencies(context);
+            model.getExchanges(context);
           });
         },
         disposeViewModel: false,
@@ -387,79 +390,85 @@ class _OverviewScreenState extends State<OverviewScreen> {
                     )
                   else if (model.getStatistisResponseModell != null ||
                       model.getStatistisResponseModell!.data!.swaps!.isNotEmpty)
-                    ...model.getStatistisResponseModell!.data!.swaps!.map((o) =>
-                        Container(
-                          padding: EdgeInsets.all(10.w),
-                          margin: EdgeInsets.only(bottom: 16.w),
-                          decoration: BoxDecoration(
-                              color: AppColor.white,
-                              border: Border.all(color: AppColor.inGrey),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
+                    ...model.getStatistisResponseModell!.data!.swaps!
+                        .getRange(0, 10)
+                        .map((o) => Container(
+                              padding: EdgeInsets.all(10.w),
+                              margin: EdgeInsets.only(bottom: 16.w),
+                              decoration: BoxDecoration(
+                                  color: AppColor.white,
+                                  border: Border.all(color: AppColor.inGrey),
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  TextView(
-                                    text: 'ID:- ${o.transactionId}',
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextView(
+                                        text: 'ID:- ${o.transactionId}',
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      SizedBox(
+                                        height: 20.h,
+                                      ),
+                                      TextView(
+                                        text: DateFormat('yyyy-MM-dd hh:mm a')
+                                            .format(DateTime.parse(
+                                                o.createdAt.toString())),
+                                        fontSize: 14.sp,
+                                        color: AppColor.grey,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  TextView(
-                                    text: DateFormat('yyyy-MM-dd hh:mm a')
-                                        .format(DateTime.parse(
-                                            o.createdAt.toString())),
-                                    fontSize: 14.sp,
-                                    color: AppColor.grey,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextView(
+                                        text:
+                                            '${getAllCurrency(o.fromCurrency)}${oCcy.format(double.parse(o.fromAmount!))} -> ${oCcy.format(double.parse(o.toAmount!))}${getAllCurrency(o.toCurrency)}',
+                                        color: AppColor.green,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      SizedBox(
+                                        height: 20.h,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 12.w, vertical: 6.w),
+                                        decoration: BoxDecoration(
+                                            color: o.status == 'approved'
+                                                ? AppColor.green
+                                                    .withOpacity(.17)
+                                                : o.status == 'rejected'
+                                                    ? AppColor.red
+                                                        .withOpacity(.17)
+                                                    : AppColor.yellow
+                                                        .withOpacity(.17),
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: TextView(
+                                          text: o.status!.capitalize(),
+                                          fontSize: 12.4.sp,
+                                          color: o.status == 'approved'
+                                              ? AppColor.deeperGreen
+                                              : o.status == 'rejected'
+                                                  ? AppColor.red
+                                                  : AppColor.yellow,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  TextView(
-                                    text:
-                                        '${getAllCurrency(o.fromCurrency)}${oCcy.format(double.parse(o.fromAmount!))} -> ${oCcy.format(double.parse(o.toAmount!))}${getAllCurrency(o.toCurrency)}',
-                                    color: AppColor.green,
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 12.w, vertical: 6.w),
-                                    decoration: BoxDecoration(
-                                        color: o.status == 'approved'
-                                            ? AppColor.green.withOpacity(.17)
-                                            : o.status == 'rejected'
-                                                ? AppColor.red.withOpacity(.17)
-                                                : AppColor.yellow
-                                                    .withOpacity(.17),
-                                        borderRadius: BorderRadius.circular(6)),
-                                    child: TextView(
-                                      text: o.status!.capitalize(),
-                                      fontSize: 12.4.sp,
-                                      color: o.status == 'approved'
-                                          ? AppColor.deeperGreen
-                                          : o.status == 'rejected'
-                                              ? AppColor.red
-                                              : AppColor.yellow,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        )),
+                            )),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -490,7 +499,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: 170.w,
+                                width: 230.w,
                                 child: TextFormWidget(
                                   label: 'Search',
                                   labelColor: AppColor.grey,
@@ -553,7 +562,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
                           color: AppColor.grey,
                           thickness: .4.sp,
                         ),
-                        ...currentManagement.map((e) => currencyManWidget(e)),
+                        if (model.filteredData.isEmpty)
+                          const SizedBox.shrink()
+                        else if (model.filteredData.isNotEmpty)
+                          ...model.filteredData
+                              .map((e) => model.currencyManWidget(e)),
                       ],
                     ),
                   ),
@@ -573,7 +586,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextView(
-                          text: 'Edit exchange rates',
+                          text: 'Exchange rates',
                           color: AppColor.greyKind,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
@@ -590,11 +603,9 @@ class _OverviewScreenState extends State<OverviewScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ...[
-                                1,
-                                2,
-                                3,
-                              ].map((e) => exchangeConWidget())
+                              if (model.getExchangeRates != null)
+                                ...model.getExchangeRates!.data!
+                                    .map((e) => exchangeConWidget(e))
                             ],
                           ),
                         ),
@@ -659,89 +670,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
         ),
       );
 
-  currencyManWidget(e) => Column(
-        children: [
-          paddWing(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Wrap(
-                      children: [
-                        SvgPicture.asset(
-                          e['flag'],
-                          height: 26.0.h,
-                        ),
-                        SizedBox(
-                          width: 6.w,
-                        ),
-                        SizedBox(
-                          width: 60.w,
-                          child: TextView(
-                            maxLines: 1,
-                            textOverflow: TextOverflow.ellipsis,
-                            text: e['country'],
-                            color: AppColor.greyKind,
-                            fontSize: 14.0.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                TextView(
-                  text: e['currency'],
-                  color: AppColor.greyKind,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
-                  decoration: BoxDecoration(
-                      color: e['status'] == 'Active'
-                          ? AppColor.green.withOpacity(.17)
-                          : AppColor.grey.withOpacity(.17),
-                      borderRadius: BorderRadius.circular(6)),
-                  child: TextView(
-                    text: e['status'],
-                    fontSize: e['status'] == 'Active' ? 13.4.sp : 11.4.sp,
-                    color: e['status'] == 'Active'
-                        ? AppColor.deeperGreen
-                        : AppColor.grey,
-                    fontWeight: e['status'] == 'Active'
-                        ? FontWeight.w600
-                        : FontWeight.w900,
-                  ),
-                ),
-                Switch(
-                  value: e['status_value'],
-                  onChanged: (v) {
-                    e['status_value'] = !e['status_value'];
-                    e['status'] =
-                        e['status_value'] == true ? 'Active' : 'Disabled';
-                    setState(() {});
-                  },
-                  activeTrackColor: e['status_value'] == true
-                      ? AppColor.deeperGreen
-                      : AppColor.inGrey,
-                  activeColor: e['status_value'] == true
-                      ? Colors.white
-                      : AppColor.inGrey,
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            color: AppColor.grey,
-            thickness: .4.sp,
-          )
-        ],
-      );
-
-  exchangeConWidget() => Column(
+  exchangeConWidget(Datum e) => Column(
         children: [
           paddWingEx(
             child: Row(
@@ -754,7 +683,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextView(
-                          text: 'NGN',
+                          text: e.fromCurrency ?? '',
                           color: AppColor.greyKind,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
@@ -772,7 +701,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                           height: 10.h,
                         ),
                         TextView(
-                          text: 'USD',
+                          text: e.toCurrency ?? '',
                           color: AppColor.greyKind,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
@@ -780,57 +709,35 @@ class _OverviewScreenState extends State<OverviewScreen> {
                       ],
                     ),
                     TextView(
-                      text: '1,714.31',
-                      color: AppColor.grey,
+                      text: DateFormat('yyyy-MM-dd hh:mm a')
+                          .format(DateTime.parse(e.createdAt.toString())),
+                      color: AppColor.greyKind,
                       fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                     ),
                   ],
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextView(
-                          text: 'NGN',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        TextView(
-                          text: '-',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        TextView(
-                          text: 'USD',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ],
+                    TextView(
+                      text: e.rate ?? '',
+                      color: AppColor.greyKind,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                     TextView(
-                      text: '0.000595',
-                      color: AppColor.grey,
+                      text: 'Exchange Rate',
+                      color: AppColor.greyKind,
                       fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                     ),
                   ],
                 ),
-                SvgPicture.asset(
-                  AppImage.pen,
-                  color: AppColor.darkGrey,
-                )
+                // SvgPicture.asset(
+                //   AppImage.pen,
+                //   color: AppColor.darkGrey,
+                // )
               ],
             ),
           ),

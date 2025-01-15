@@ -1,4 +1,6 @@
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
 import 'package:injectable/injectable.dart';
 
@@ -25,13 +27,22 @@ class AuthRepoImpl {
     return response;
   }
 
-  Future<GetAdminUserResponseModel> superAdminUsers() async {
-    final response = await _contract.superAmdinUsers();
+  Future<GetAdminUserResponseModel> superAdminUsers({String? page}) async {
+    final response = await _contract.superAmdinUsers(page: page);
+    return response;
+  }
+
+  Future<GetCurrenciesResponseModel> getCurrencies() async {
+    final response = await _contract.getCurrencies();
+    return response;
+  }
+
+  Future<GetExchangeRates> getExchangeRate() async {
+    final response = await _contract.getExchangeRates();
     return response;
   }
 
   void _chache(data) {
-    print("object::::::${data.toJson()}");
     if (data != null) {
       _session.authToken = data.token!;
       _session.usersData = data.toJson();

@@ -1,5 +1,9 @@
+import 'package:daalu_pay_super_admin/core/connect_end/model/disable_payment_response_model/disable_payment_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_response_model/suspend_admin_response_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../connect_end/model/login_entity_model.dart';
@@ -37,11 +41,86 @@ class AuthApi {
     }
   }
 
-  Future<GetAdminUserResponseModel> getSuperAdminUser() async {
+  Future<GetAdminUserResponseModel> getSuperAdminUser({String? page}) async {
     try {
-      final response = await _service.call(UrlConfig.admins, RequestMethod.get);
+      final response = await _service
+          .call(UrlConfig.admins, RequestMethod.get, data: {"page": page});
       logger.d(response.data);
       return GetAdminUserResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetCurrenciesResponseModel> getCurrencies() async {
+    try {
+      final response =
+          await _service.call(UrlConfig.currencies, RequestMethod.get);
+      logger.d(response.data);
+      return GetCurrenciesResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetExchangeRates> getExchangeRate() async {
+    try {
+      final response =
+          await _service.call(UrlConfig.exchange_rates, RequestMethod.get);
+      logger.d(response.data);
+      return GetExchangeRates.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<DisablePaymentResponseModel> disablePayment(String id) async {
+    try {
+      final response = await _service.call(
+          '${UrlConfig.disable_payment}/$id/disable', RequestMethod.post);
+      logger.d(response.data);
+      return DisablePaymentResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<DisablePaymentResponseModel> enablePayment(String id) async {
+    try {
+      final response = await _service.call(
+          '${UrlConfig.disable_payment}/$id/enable', RequestMethod.post);
+      logger.d(response.data);
+      return DisablePaymentResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<SuspendAdminResponseModel> suspendAdmin(String reason) async {
+    try {
+      final response = await _service.call(
+          '${UrlConfig.admins}/suspend', RequestMethod.post,
+          data: {'reason': reason});
+      logger.d(response.data);
+      return SuspendAdminResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<DisablePaymentResponseModel> unsuspend(String reason) async {
+    try {
+      final response = await _service.call(
+          '${UrlConfig.admins}/unsuspend', RequestMethod.post,
+          data: {'reason': reason});
+      logger.d(response.data);
+      return DisablePaymentResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

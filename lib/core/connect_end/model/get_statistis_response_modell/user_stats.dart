@@ -4,15 +4,15 @@ part 'user_stats.g.dart';
 
 @JsonSerializable()
 class UserStats {
-	int? total;
-	int? active;
-	int? newUser;
+  int? total;
+  int? active;
+  int? newUser;
 
-	UserStats({this.total, this.active, this.newUser});
+  UserStats({this.total, this.active, this.newUser});
 
-	factory UserStats.fromJson(Map<String, dynamic> json) {
-		return _$UserStatsFromJson(json);
-	}
+  factory UserStats.fromJson(Map<String, dynamic> json) {
+    return _$UserStatsFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$UserStatsToJson(this);
+  Map<String, dynamic> toJson() => _$UserStatsToJson(this);
 }

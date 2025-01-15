@@ -1,4 +1,6 @@
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
 import 'package:injectable/injectable.dart';
 
@@ -15,6 +17,11 @@ class AuthContractsImpl {
       await _api.login(loginEntity);
   Future<GetStatistisResponseModell> superAdminStats() async =>
       await _api.superAdminStatistic();
-  Future<GetAdminUserResponseModel> superAmdinUsers() async =>
-      await _api.getSuperAdminUser();
+  Future<GetAdminUserResponseModel> superAmdinUsers({String? page}) async =>
+      await _api.getSuperAdminUser(page: page);
+
+  Future<GetCurrenciesResponseModel> getCurrencies() async =>
+      await _api.getCurrencies();
+  Future<GetExchangeRates> getExchangeRates() async =>
+      await _api.getExchangeRate();
 }

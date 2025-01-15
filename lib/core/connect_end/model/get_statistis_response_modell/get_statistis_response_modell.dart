@@ -6,15 +6,15 @@ part 'get_statistis_response_modell.g.dart';
 
 @JsonSerializable()
 class GetStatistisResponseModell {
-	bool? status;
-	Data? data;
-	String? message;
+  bool? status;
+  Data? data;
+  String? message;
 
-	GetStatistisResponseModell({this.status, this.data, this.message});
+  GetStatistisResponseModell({this.status, this.data, this.message});
 
-	factory GetStatistisResponseModell.fromJson(Map<String, dynamic> json) {
-		return _$GetStatistisResponseModellFromJson(json);
-	}
+  factory GetStatistisResponseModell.fromJson(Map<String, dynamic> json) {
+    return _$GetStatistisResponseModellFromJson(json);
+  }
 
-	Map<String, dynamic> toJson() => _$GetStatistisResponseModellToJson(this);
+  Map<String, dynamic> toJson() => _$GetStatistisResponseModellToJson(this);
 }

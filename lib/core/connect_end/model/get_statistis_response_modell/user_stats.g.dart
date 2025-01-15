@@ -9,11 +9,11 @@ part of 'user_stats.dart';
 UserStats _$UserStatsFromJson(Map<String, dynamic> json) => UserStats(
       total: (json['total'] as num?)?.toInt(),
       active: (json['active'] as num?)?.toInt(),
-      newUser: (json['new'] as num?)?.toInt(),
+      newUser: (json['newUser'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$UserStatsToJson(UserStats instance) => <String, dynamic>{
       'total': instance.total,
       'active': instance.active,
-      'new': instance.newUser,
+      'newUser': instance.newUser,
     };
