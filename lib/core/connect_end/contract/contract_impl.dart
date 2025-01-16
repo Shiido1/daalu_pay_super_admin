@@ -11,6 +11,7 @@ import 'package:injectable/injectable.dart';
 import '../../api_folder/auth_api.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_exchange_rate_entity_model.dart';
+import '../model/disable_currency_response_model/disable_currency_response_model.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../model/transfer_fee_entity_model.dart';
@@ -30,11 +31,20 @@ class AuthContractsImpl {
       await _api.createAdminUser(createAdmin);
   Future<GetCurrenciesResponseModel> getCurrencies() async =>
       await _api.getCurrencies();
+  Future<DisableCurrencyResponseModel> enableCurrencies(String id) async =>
+      await _api.enableCurrencies(id);
+  Future<DisableCurrencyResponseModel> disableCurrencies(String id) async =>
+      await _api.disableCurrencies(id);
   Future<GetExchangeRates> getExchangeRates() async =>
       await _api.getExchangeRate();
   Future<dynamic> addExchangeRate(
           AddExchangeRateEntityModel addExchangeEntity) async =>
       await _api.addExchangeRate(addExchangeEntity);
+  Future<dynamic> updateExchangeRate(
+          AddExchangeRateEntityModel addExchangeEntity, String id) async =>
+      await _api.updateExchangeRate(addExchangeEntity, id);
+  Future<dynamic> deleteExchangeRate(String id) async =>
+      await _api.deleteExchangeRate(id);
   Future<DisablePaymentResponseModel> disablePayment(String id) async =>
       await _api.disablePayment(id);
   Future<DisablePaymentResponseModel> enablePayment(String id) async =>

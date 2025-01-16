@@ -9,7 +9,6 @@ import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_respo
 import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_response_model/suspend_admin_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/transfer_fee_entity_model.dart';
 import 'package:injectable/injectable.dart';
-
 import '../connect_end/model/create_admin_response_model/create_admin_response_model.dart';
 import '../connect_end/model/login_entity_model.dart';
 import '../connect_end/model/login_response_model/login_response_model.dart';

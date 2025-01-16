@@ -4,7 +4,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import '../../../../core/connect_end/model/get_exchange_rates/datum.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../app_assets/app_color.dart';
 import '../../../app_assets/app_image.dart';
@@ -27,10 +26,6 @@ class _OverviewScreenState extends State<OverviewScreen> {
         padding: EdgeInsets.symmetric(
           horizontal: 12.w,
         ),
-        child: child,
-      );
-  paddWingEx({child}) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 16.w),
         child: child,
       );
 
@@ -621,7 +616,8 @@ class _OverviewScreenState extends State<OverviewScreen> {
                               fontWeight: FontWeight.w500,
                             ),
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () => model.modalBottomExchangeSheet(
+                                    context: context),
                                 icon: Icon(
                                   Icons.add_circle_outline,
                                   size: 20.sp,
@@ -642,8 +638,8 @@ class _OverviewScreenState extends State<OverviewScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (model.getExchangeRates != null)
-                                ...model.getExchangeRates!.data!.reversed
-                                    .map((e) => exchangeConWidget(e))
+                                ...model.getExchangeRates!.data!.reversed.map(
+                                    (e) => model.exchangeConWidget(context, e))
                             ],
                           ),
                         ),
@@ -706,83 +702,5 @@ class _OverviewScreenState extends State<OverviewScreen> {
             ],
           ),
         ),
-      );
-
-  exchangeConWidget(Datum e) => Column(
-        children: [
-          paddWingEx(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextView(
-                          text: e.fromCurrency ?? '',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        TextView(
-                          text: '-',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        TextView(
-                          text: e.toCurrency ?? '',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ],
-                    ),
-                    TextView(
-                      text: DateFormat('yyyy-MM-dd hh:mm a')
-                          .format(DateTime.parse(e.createdAt.toString())),
-                      color: AppColor.greyKind,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextView(
-                      text: e.rate ?? '',
-                      color: AppColor.greyKind,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    TextView(
-                      text: 'Exchange Rate',
-                      color: AppColor.greyKind,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ],
-                ),
-                SvgPicture.asset(
-                  AppImage.pen,
-                  color: AppColor.darkGrey,
-                )
-              ],
-            ),
-          ),
-          Divider(
-            color: AppColor.grey,
-            thickness: .4.sp,
-          ),
-        ],
       );
 }

@@ -32,6 +32,7 @@ import '../model/login_response_model/login_response_model.dart';
 import '../repo/repo_impl.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/datum.dart'
     as d;
+import '../model/get_exchange_rates/datum.dart' as ex;
 
 class AuthViewModel extends BaseViewModel {
   final BuildContext? context;
@@ -86,10 +87,14 @@ class AuthViewModel extends BaseViewModel {
       _disableCurrencyResponseModel;
 
   TextEditingController controller = TextEditingController();
+  TextEditingController rateController = TextEditingController();
 
   String userStats = 'all';
   String query = '';
   String queryCurrency = '';
+
+  String qFromCur = '';
+  String qToCur = '';
 
   Set<String> seenCodes = {};
   List<Datum> filteredData = [];
@@ -105,10 +110,97 @@ class AuthViewModel extends BaseViewModel {
   TextEditingController dobController = TextEditingController();
 
   TextEditingController reasonController = TextEditingController();
+  TextEditingController fromCurrencyController = TextEditingController();
+  TextEditingController toCurrencyController = TextEditingController();
 
   DateTime selectedDOB = DateTime.now();
 
   String? _formattedDob = DateFormat('EEEE, d MMM yyyy').format(DateTime.now());
+  paddWingEx({child}) => Padding(
+        padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 16.w),
+        child: child,
+      );
+
+  exchangeConWidget(context, ex.Datum e) => Column(
+        children: [
+          paddWingEx(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextView(
+                          text: e.fromCurrency ?? '',
+                          color: AppColor.greyKind,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextView(
+                          text: '-',
+                          color: AppColor.greyKind,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextView(
+                          text: e.toCurrency ?? '',
+                          color: AppColor.greyKind,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    ),
+                    TextView(
+                      text: DateFormat('yyyy-MM-dd hh:mm a')
+                          .format(DateTime.parse(e.createdAt.toString())),
+                      color: AppColor.greyKind,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextView(
+                      text: e.rate ?? '',
+                      color: AppColor.greyKind,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    TextView(
+                      text: 'Exchange Rate',
+                      color: AppColor.greyKind,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () => modalBottomExchangeSheet(context: context, d: e),
+                  child: SvgPicture.asset(
+                    AppImage.pen,
+                    color: AppColor.darkGrey,
+                  ),
+                )
+              ],
+            ),
+          ),
+          Divider(
+            color: AppColor.grey,
+            thickness: .4.sp,
+          ),
+        ],
+      );
 
   void modalBottomDeleteUserSheet(context, {String? id}) {
     showModalBottomSheet(
@@ -311,6 +403,180 @@ class AuthViewModel extends BaseViewModel {
         });
   }
 
+  void modalBottomExchangeSheet({context, ex.Datum? d}) {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return ViewModelBuilder<AuthViewModel>.reactive(
+              viewModelBuilder: () => AuthViewModel(),
+              onViewModelReady: (model) {
+                if (d != null) {
+                  fromCurrencyController.text = d.fromCurrency!;
+                  toCurrencyController.text = d.toCurrency!;
+                  rateController.text = d.rate!;
+                }
+              },
+              disposeViewModel: false,
+              builder: (_, AuthViewModel model, __) {
+                return Container(
+                  height: 400.0,
+                  decoration: const BoxDecoration(
+                      color: AppColor.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(14.0),
+                          topRight: Radius.circular(14.0))),
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(14.0),
+                              topRight: Radius.circular(14.0))),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: Center(
+                                child: TextView(
+                                  text: d == null
+                                      ? 'Add Exchange Rate'
+                                      : 'Update Exchange Rate',
+                                  fontSize: 16.4.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: AppColor.inGrey,
+                              thickness: .5.r,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: TextView(
+                                text: d == null
+                                    ? 'Kindly select currencies to add exchange rates'
+                                    : 'Kindly select currencies to update exchange rates',
+                                fontSize: 14.8.sp,
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: TextFormWidget(
+                                      label: 'From Currency',
+                                      hint: 'Exchange rate from',
+                                      border: 10,
+                                      isFilled: true,
+                                      readOnly: true,
+                                      fillColor: AppColor.white,
+                                      controller: fromCurrencyController,
+                                      validator: AppValidator.validateString(),
+                                      suffixWidget: IconButton(
+                                          onPressed: () =>
+                                              shwFromCurrencyDialog(context),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down_sharp,
+                                            color: AppColor.black,
+                                          )),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 18.w,
+                                  ),
+                                  Expanded(
+                                    child: TextFormWidget(
+                                      label: 'To Currency',
+                                      hint: 'Exchange rate to',
+                                      border: 10,
+                                      isFilled: true,
+                                      readOnly: true,
+                                      fillColor: AppColor.white,
+                                      controller: toCurrencyController,
+                                      validator: AppValidator.validateString(),
+                                      suffixWidget: IconButton(
+                                          onPressed: () => model
+                                              .shwToCurrencyDialog(context),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down_sharp,
+                                            color: AppColor.black,
+                                          )),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: TextFormWidget(
+                                label: 'Add Rate',
+                                alignLabelWithHint: true,
+                                border: 10,
+                                isFilled: true,
+                                fillColor: AppColor.white,
+                                controller: rateController,
+                                validator: AppValidator.validateString(),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: ButtonWidget(
+                                  buttonText: d == null
+                                      ? 'Add Exchange Rate'
+                                      : 'Update Exchange Rate',
+                                  color: AppColor.white,
+                                  border: 8,
+                                  isLoading: model.isLoading,
+                                  buttonColor: AppColor.red,
+                                  buttonBorderColor: Colors.transparent,
+                                  onPressed: () {
+                                    if (d == null) {
+                                      addExchanges(
+                                          context,
+                                          AddExchangeRateEntityModel(
+                                              fromCurrency:
+                                                  fromCurrencyController.text,
+                                              toCurrency:
+                                                  toCurrencyController.text,
+                                              rate: rateController.text));
+                                    } else {
+                                      updateExchanges(
+                                          context,
+                                          AddExchangeRateEntityModel(
+                                              fromCurrency:
+                                                  fromCurrencyController.text,
+                                              toCurrency:
+                                                  toCurrencyController.text,
+                                              rate: rateController.text),
+                                          d.id.toString());
+                                    }
+                                  }),
+                            ),
+                          ],
+                        ),
+                      )),
+                );
+              });
+        });
+  }
+
   shwRoleDialog(context) => showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -321,7 +587,7 @@ class AuthViewModel extends BaseViewModel {
               textAlign: TextAlign.center,
               fontSize: 19.2.sp,
             ),
-            titleTextStyle: TextStyle(),
+            titleTextStyle: const TextStyle(),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 20.w, horizontal: 20.w),
             content: SingleChildScrollView(
@@ -343,7 +609,7 @@ class AuthViewModel extends BaseViewModel {
                   SizedBox(
                     width: 10.w,
                   ),
-                  Divider(thickness: .3),
+                  const Divider(thickness: .3),
                   GestureDetector(
                     onTap: () {
                       roleController.text = 'Blogger';
@@ -360,6 +626,234 @@ class AuthViewModel extends BaseViewModel {
               ),
             ),
           );
+        },
+      );
+
+  shwFromCurrencyDialog(context) => showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ViewModelBuilder<AuthViewModel>.reactive(
+              viewModelBuilder: () => AuthViewModel(),
+              onViewModelReady: (model) {},
+              builder: (_, AuthViewModel model, __) {
+                return AlertDialog(
+                  title: TextView(
+                    text: 'Select Currency',
+                    color: AppColor.black,
+                    textAlign: TextAlign.center,
+                    fontSize: 19.2.sp,
+                  ),
+                  titleTextStyle: const TextStyle(),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 20.w, horizontal: 20.w),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        TextFormWidget(
+                          label: 'Search',
+                          border: 10,
+                          isFilled: true,
+                          fillColor: AppColor.white,
+                          onChange: (p0) {
+                            qFromCur = p0;
+                            model.notifyListeners();
+                          },
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        qFromCur != ''
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ...countryConst
+                                        .where((o) => o['code']!
+                                            .toLowerCase()
+                                            .contains(qFromCur.toLowerCase()))
+                                        .map(
+                                          (e) => GestureDetector(
+                                            onTap: () {
+                                              fromCurrencyController.text =
+                                                  e['code']!;
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsets.all(4.w),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  TextView(
+                                                    text: e['code'] ?? '',
+                                                    color: AppColor.black,
+                                                    fontSize: 16.2.sp,
+                                                  ),
+                                                  Divider(
+                                                      color: AppColor.greyNice,
+                                                      thickness: .3.sp)
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                  ],
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ...countryConst.map(
+                                      (e) => GestureDetector(
+                                        onTap: () {
+                                          fromCurrencyController.text =
+                                              e['code']!;
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.all(4.w),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextView(
+                                                text: e['code'] ?? '',
+                                                color: AppColor.black,
+                                                fontSize: 16.2.sp,
+                                              ),
+                                              Divider(
+                                                  color: AppColor.greyNice,
+                                                  thickness: .3.sp)
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                      ],
+                    ),
+                  ),
+                );
+              });
+        },
+      );
+
+  shwToCurrencyDialog(context) => showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ViewModelBuilder<AuthViewModel>.reactive(
+              viewModelBuilder: () => AuthViewModel(),
+              onViewModelReady: (model) {},
+              builder: (_, AuthViewModel model, __) {
+                return AlertDialog(
+                  title: TextView(
+                    text: 'Select Currency',
+                    color: AppColor.black,
+                    textAlign: TextAlign.center,
+                    fontSize: 19.2.sp,
+                  ),
+                  titleTextStyle: const TextStyle(),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 20.w, horizontal: 20.w),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        TextFormWidget(
+                          label: 'Search',
+                          border: 10,
+                          isFilled: true,
+                          fillColor: AppColor.white,
+                          onChange: (p0) {
+                            qToCur = p0;
+                            model.notifyListeners();
+                          },
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        qToCur != ''
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ...countryConst
+                                        .where((o) => o['code']!
+                                            .toLowerCase()
+                                            .contains(qToCur.toLowerCase()))
+                                        .map(
+                                          (e) => GestureDetector(
+                                            onTap: () {
+                                              toCurrencyController.text =
+                                                  e['code']!;
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsets.all(4.w),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  TextView(
+                                                    text: e['code'] ?? '',
+                                                    color: AppColor.black,
+                                                    fontSize: 16.2.sp,
+                                                  ),
+                                                  Divider(
+                                                      color: AppColor.greyNice,
+                                                      thickness: .3.sp)
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                  ],
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ...countryConst.map(
+                                      (e) => GestureDetector(
+                                        onTap: () {
+                                          toCurrencyController.text =
+                                              e['code']!;
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.all(4.w),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextView(
+                                                text: e['code'] ?? '',
+                                                color: AppColor.black,
+                                                fontSize: 16.2.sp,
+                                              ),
+                                              Divider(
+                                                  color: AppColor.greyNice,
+                                                  thickness: .3.sp)
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                      ],
+                    ),
+                  ),
+                );
+              });
         },
       );
 
@@ -716,14 +1210,10 @@ class AuthViewModel extends BaseViewModel {
 
   Future<void> enableCurrencies(context, String id) async {
     try {
-      _isLoading = true;
       _disableCurrencyResponseModel = await runBusyFuture(
           repositoryImply.enableCurrencies(id),
           throwException: true);
-      _isLoading = false;
-      getCurrencies(context);
     } catch (e) {
-      _isLoading = false;
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }
@@ -732,14 +1222,10 @@ class AuthViewModel extends BaseViewModel {
 
   Future<void> disableCurrencies(context, String id) async {
     try {
-      _isLoading = true;
       _disableCurrencyResponseModel = await runBusyFuture(
           repositoryImply.disableCurrencies(id),
           throwException: true);
-      _isLoading = false;
-      getCurrencies(context);
     } catch (e) {
-      _isLoading = false;
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }
@@ -840,8 +1326,10 @@ class AuthViewModel extends BaseViewModel {
                   onChanged: (v) {
                     if (d.status == 'enabled') {
                       d.status = 'disabled';
+                      disableCurrencies(context, d.id.toString());
                     } else {
                       d.status = 'enabled';
+                      enableCurrencies(context, d.id.toString());
                     }
                     notifyListeners();
                   },
@@ -882,6 +1370,9 @@ class AuthViewModel extends BaseViewModel {
       await runBusyFuture(repositoryImply.addExchangeRate(addExchangeRates),
           throwException: true);
       getExchanges(context);
+      fromCurrencyController.text = '';
+      toCurrencyController.text = '';
+      rateController.text = '';
       _isLoading = false;
     } catch (e) {
       _isLoading = false;
@@ -899,6 +1390,10 @@ class AuthViewModel extends BaseViewModel {
           repositoryImply.updateExchangeRate(addExchangeRates, id),
           throwException: true);
       getExchanges(context);
+
+      fromCurrencyController.text = '';
+      toCurrencyController.text = '';
+      rateController.text = '';
       _isLoading = false;
     } catch (e) {
       _isLoading = false;
@@ -982,7 +1477,6 @@ class AuthViewModel extends BaseViewModel {
       }
     } catch (e) {
       _isLoading = false;
-      // logger.d(e);
       AppUtils.snackbar(contxt, message: e.toString(), error: true);
     }
     notifyListeners();
