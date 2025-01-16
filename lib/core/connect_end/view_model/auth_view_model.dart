@@ -121,78 +121,183 @@ class AuthViewModel extends BaseViewModel {
         child: child,
       );
 
+  void modalBottomDeleteExchangeSheet({context, String? id}) {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return ViewModelBuilder<AuthViewModel>.reactive(
+              viewModelBuilder: () => locator<AuthViewModel>(),
+              onViewModelReady: (model) {},
+              disposeViewModel: false,
+              builder: (_, AuthViewModel model, __) {
+                return Container(
+                  height: 300.0,
+                  decoration: const BoxDecoration(
+                      color: AppColor.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(14.0),
+                          topRight: Radius.circular(14.0))),
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(14.0),
+                              topRight: Radius.circular(14.0))),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            paddedWing(
+                              value: 24.w,
+                              child: Center(
+                                child: TextView(
+                                  text: 'Delete Exchange Rate',
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: AppColor.inGrey,
+                              thickness: .5.r,
+                            ),
+                            paddedWing(
+                              value: 24.w,
+                              child: TextView(
+                                text:
+                                    'Are you sure you want to delete this exchange rate?',
+                                fontSize: 12.8.sp,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 40.h,
+                            ),
+                            paddedWing(
+                              value: 24.w,
+                              child: ButtonWidget(
+                                  buttonText: 'Delete Rate',
+                                  color: AppColor.white,
+                                  border: 8,
+                                  isLoading: isLoading,
+                                  buttonColor: AppColor.red,
+                                  buttonBorderColor: Colors.transparent,
+                                  onPressed: () =>
+                                      deleteExchanges(context, id!)),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                            ),
+                            paddedWing(
+                              value: 24.w,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.info_outline,
+                                    color: AppColor.yellow,
+                                    size: 30.sp,
+                                  ),
+                                  SizedBox(
+                                    width: 22.w,
+                                  ),
+                                  TextView(
+                                    text:
+                                        'This action will credit the user’s wallet',
+                                    fontSize: 14.2.sp,
+                                    color: AppColor.yellow,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
+                );
+              });
+        });
+  }
+
   exchangeConWidget(context, ex.Datum e) => Column(
         children: [
           paddWingEx(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextView(
-                          text: e.fromCurrency ?? '',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        TextView(
-                          text: '-',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        TextView(
-                          text: e.toCurrency ?? '',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ],
-                    ),
-                    TextView(
-                      text: DateFormat('yyyy-MM-dd hh:mm a')
-                          .format(DateTime.parse(e.createdAt.toString())),
-                      color: AppColor.greyKind,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextView(
-                      text: e.rate ?? '',
-                      color: AppColor.greyKind,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    TextView(
-                      text: 'Exchange Rate',
-                      color: AppColor.greyKind,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () => modalBottomExchangeSheet(context: context, d: e),
-                  child: SvgPicture.asset(
-                    AppImage.pen,
-                    color: AppColor.darkGrey,
+            child: GestureDetector(
+              onLongPress: () => modalBottomDeleteExchangeSheet(
+                  context: context, id: e.id.toString()),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextView(
+                            text: e.fromCurrency ?? '',
+                            color: AppColor.greyKind,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextView(
+                            text: '-',
+                            color: AppColor.greyKind,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextView(
+                            text: e.toCurrency ?? '',
+                            color: AppColor.greyKind,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ],
+                      ),
+                      TextView(
+                        text: DateFormat('yyyy-MM-dd hh:mm a')
+                            .format(DateTime.parse(e.createdAt.toString())),
+                        color: AppColor.greyKind,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ],
                   ),
-                )
-              ],
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextView(
+                        text: e.rate ?? '',
+                        color: AppColor.greyKind,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      TextView(
+                        text: 'Exchange Rate',
+                        color: AppColor.greyKind,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        modalBottomExchangeSheet(context: context, d: e),
+                    child: SvgPicture.asset(
+                      AppImage.pen,
+                      color: AppColor.darkGrey,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           Divider(
