@@ -1,3 +1,5 @@
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_entity_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_response_model/create_admin_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/disable_payment_response_model/disable_payment_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
@@ -8,8 +10,10 @@ import 'package:injectable/injectable.dart';
 
 import '../../api_folder/auth_api.dart';
 import '../../core_folder/app/app.locator.dart';
+import '../model/add_exchange_rate_entity_model.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
+import '../model/transfer_fee_entity_model.dart';
 
 @lazySingleton
 class AuthContractsImpl {
@@ -21,11 +25,16 @@ class AuthContractsImpl {
       await _api.superAdminStatistic();
   Future<GetAdminUserResponseModel> superAmdinUsers({String? page}) async =>
       await _api.getSuperAdminUser(page: page);
-
+  Future<CreateAdminResponseModel> createAdmin(
+          CreateAdminEntityModel createAdmin) async =>
+      await _api.createAdminUser(createAdmin);
   Future<GetCurrenciesResponseModel> getCurrencies() async =>
       await _api.getCurrencies();
   Future<GetExchangeRates> getExchangeRates() async =>
       await _api.getExchangeRate();
+  Future<dynamic> addExchangeRate(
+          AddExchangeRateEntityModel addExchangeEntity) async =>
+      await _api.addExchangeRate(addExchangeEntity);
   Future<DisablePaymentResponseModel> disablePayment(String id) async =>
       await _api.disablePayment(id);
   Future<DisablePaymentResponseModel> enablePayment(String id) async =>
@@ -37,4 +46,7 @@ class AuthContractsImpl {
           {String? id, String? reason}) async =>
       await _api.unsuspendAdmin(id: id, reason: reason);
   Future<dynamic> deleteAdmin(String id) async => await _api.deleteAdmin(id);
+  Future<dynamic> getTransferFee() async => await _api.getTransferFees();
+  Future<dynamic> makeTransferFees(TransferFeeEntityModel transfer) async =>
+      await _api.makeTransferFees(transfer);
 }

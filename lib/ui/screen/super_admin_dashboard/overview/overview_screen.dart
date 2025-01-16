@@ -432,7 +432,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
                                       TextView(
                                         text:
                                             '${getAllCurrency(o.fromCurrency)}${oCcy.format(double.parse(o.fromAmount!))} -> ${oCcy.format(double.parse(o.toAmount!))}${getAllCurrency(o.toCurrency)}',
-                                        color: AppColor.green,
+                                        color: o.status == 'approved'
+                                            ? AppColor.green
+                                            : o.status == 'rejected'
+                                                ? AppColor.red
+                                                : AppColor.yellow,
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -514,17 +518,24 @@ class _OverviewScreenState extends State<OverviewScreen> {
                                       AppImage.search,
                                     ),
                                   ),
+                                  onChange: (p0) {
+                                    model.queryCurrency = p0;
+                                    model.notifyListeners();
+                                  },
                                   // controller: emailController,
                                   // validator: AppValidator.validateEmail(),
                                 ),
                               ),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.add_circle_outline,
-                                    size: 26.sp,
-                                    color: AppColor.grey,
-                                  ))
+                              SizedBox(
+                                width: 22.w,
+                              )
+                              // IconButton(
+                              //     onPressed: () {},
+                              //     icon: Icon(
+                              //       Icons.add_circle_outline,
+                              //       size: 26.sp,
+                              //       color: AppColor.grey,
+                              //     ))
                             ],
                           ),
                         ),
@@ -565,8 +576,23 @@ class _OverviewScreenState extends State<OverviewScreen> {
                         if (model.filteredData.isEmpty)
                           const SizedBox.shrink()
                         else if (model.filteredData.isNotEmpty)
-                          ...model.filteredData
-                              .map((e) => model.currencyManWidget(e)),
+                          model.queryCurrency != ''
+                              ? Column(
+                                  children: [
+                                    ...model.filteredData
+                                        .where((o) => o.name!
+                                            .toLowerCase()
+                                            .contains(model.queryCurrency
+                                                .toLowerCase()))
+                                        .map((e) => model.currencyManWidget(e)),
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    ...model.filteredData
+                                        .map((e) => model.currencyManWidget(e)),
+                                  ],
+                                )
                       ],
                     ),
                   ),
@@ -585,11 +611,23 @@ class _OverviewScreenState extends State<OverviewScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextView(
-                          text: 'Exchange rates',
-                          color: AppColor.greyKind,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextView(
+                              text: 'Exchange rates',
+                              color: AppColor.greyKind,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.add_circle_outline,
+                                  size: 20.sp,
+                                  color: AppColor.grey,
+                                ))
+                          ],
                         ),
                         SizedBox(
                           height: 10.h,
@@ -604,7 +642,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (model.getExchangeRates != null)
-                                ...model.getExchangeRates!.data!
+                                ...model.getExchangeRates!.data!.reversed
                                     .map((e) => exchangeConWidget(e))
                             ],
                           ),
@@ -734,10 +772,10 @@ class _OverviewScreenState extends State<OverviewScreen> {
                     ),
                   ],
                 ),
-                // SvgPicture.asset(
-                //   AppImage.pen,
-                //   color: AppColor.darkGrey,
-                // )
+                SvgPicture.asset(
+                  AppImage.pen,
+                  color: AppColor.darkGrey,
+                )
               ],
             ),
           ),

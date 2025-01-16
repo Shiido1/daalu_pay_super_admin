@@ -1,11 +1,16 @@
+import 'package:daalu_pay_super_admin/core/connect_end/model/add_exchange_rate_entity_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_entity_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/disable_currency_response_model/disable_currency_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/disable_payment_response_model/disable_payment_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_response_model/suspend_admin_response_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/transfer_fee_entity_model.dart';
 import 'package:injectable/injectable.dart';
 
+import '../connect_end/model/create_admin_response_model/create_admin_response_model.dart';
 import '../connect_end/model/login_entity_model.dart';
 import '../connect_end/model/login_response_model/login_response_model.dart';
 import '../core_folder/app/app.locator.dart';
@@ -53,6 +58,19 @@ class AuthApi {
     }
   }
 
+  Future<CreateAdminResponseModel> createAdminUser(
+      CreateAdminEntityModel createAdminEntity) async {
+    try {
+      final response = await _service.call(UrlConfig.admins, RequestMethod.post,
+          data: createAdminEntity.toJson());
+      logger.d(response.data);
+      return CreateAdminResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
   Future<GetCurrenciesResponseModel> getCurrencies() async {
     try {
       final response =
@@ -65,12 +83,76 @@ class AuthApi {
     }
   }
 
+  Future<DisableCurrencyResponseModel> enableCurrencies(String id) async {
+    try {
+      final response = await _service.call(
+          '${UrlConfig.currencies}/$id/enable', RequestMethod.post);
+      logger.d(response.data);
+      return DisableCurrencyResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<DisableCurrencyResponseModel> disableCurrencies(String id) async {
+    try {
+      final response = await _service.call(
+          '${UrlConfig.currencies}/$id/disable', RequestMethod.post);
+      logger.d(response.data);
+      return DisableCurrencyResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
   Future<GetExchangeRates> getExchangeRate() async {
     try {
       final response =
           await _service.call(UrlConfig.exchange_rates, RequestMethod.get);
       logger.d(response.data);
       return GetExchangeRates.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> addExchangeRate(
+      AddExchangeRateEntityModel addExchangeEntity) async {
+    try {
+      final response = await _service.call(
+          UrlConfig.exchange_rates, RequestMethod.post,
+          data: addExchangeEntity.toJson());
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> updateExchangeRate(
+      AddExchangeRateEntityModel addExchangeEntity, String id) async {
+    try {
+      final response = await _service.call(
+          '${UrlConfig.exchange_rates}/$id', RequestMethod.post,
+          data: addExchangeEntity.toJson());
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> deleteExchangeRate(String id) async {
+    try {
+      final response = await _service.call(
+          '${UrlConfig.exchange_rates}/$id', RequestMethod.delete);
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d("response:$e");
       rethrow;
@@ -133,6 +215,31 @@ class AuthApi {
     try {
       final response = await _service.call(
           '${UrlConfig.admins}/$id/delete', RequestMethod.post);
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getTransferFees() async {
+    try {
+      final response =
+          await _service.call(UrlConfig.transfer_fees, RequestMethod.get);
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> makeTransferFees(TransferFeeEntityModel transfer) async {
+    try {
+      final response = await _service.call(
+          UrlConfig.transfer_fees, RequestMethod.post,
+          data: transfer.toJson());
       logger.d(response.data);
       return response.data;
     } catch (e) {

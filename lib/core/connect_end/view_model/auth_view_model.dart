@@ -1,22 +1,31 @@
 import "package:collection/collection.dart";
+import 'package:daalu_pay_super_admin/core/connect_end/model/add_exchange_rate_entity_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_entity_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_response_model/create_admin_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_response_model/suspend_admin_response_model.dart';
 import 'package:daalu_pay_super_admin/ui/app_assets/country_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import '../../../main.dart';
 import '../../../ui/app_assets/app_color.dart';
 import '../../../ui/app_assets/app_image.dart';
 import '../../../ui/app_assets/app_utils.dart';
+import '../../../ui/app_assets/app_validatiion.dart';
 import '../../../ui/app_assets/contant.dart';
+import '../../../ui/screen/widget/button_widget.dart';
 import '../../../ui/screen/widget/text_form_widget.dart';
 import '../../../ui/screen/widget/text_widget.dart';
+import '../../core_folder/app/app.locator.dart';
 import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
+import '../model/disable_currency_response_model/disable_currency_response_model.dart';
 import '../model/get_currencies_response_model/datum.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
@@ -32,6 +41,8 @@ class AuthViewModel extends BaseViewModel {
   // final session = locator<SharedPreferencesService>();
 
   AuthViewModel({this.context});
+
+  GlobalKey<FormState> susFormkey = GlobalKey<FormState>();
 
   bool get isLoading => _isLoading;
   bool _isLoading = false;
@@ -57,20 +68,371 @@ class AuthViewModel extends BaseViewModel {
   List<d.Datum> _adminUserResponseListModel = [];
   List<d.Datum> _adminUserResponseListCopyModel = [];
   List<d.Datum> userGroupList = [];
+  TextEditingController deleteController = TextEditingController();
 
   GetCurrenciesResponseModel? _currenciesResponseModel;
   GetCurrenciesResponseModel? get currenciesResponseModel =>
       _currenciesResponseModel;
   GetExchangeRates? get getExchangeRates => _getExchangeRates;
   GetExchangeRates? _getExchangeRates;
+  CreateAdminResponseModel? get createAdminResponseModel =>
+      _createAdminResponseModel;
+  CreateAdminResponseModel? _createAdminResponseModel;
+  SuspendAdminResponseModel? get suspendAdminResponse =>
+      _suspendAdminResponseModel;
+  SuspendAdminResponseModel? _suspendAdminResponseModel;
+  DisableCurrencyResponseModel? _disableCurrencyResponseModel;
+  DisableCurrencyResponseModel? get disableCurrencyResponseModel =>
+      _disableCurrencyResponseModel;
 
   TextEditingController controller = TextEditingController();
 
   String userStats = 'all';
   String query = '';
+  String queryCurrency = '';
+
+  Set<String> seenCodes = {};
+  List<Datum> filteredData = [];
 
   int page = 1;
   bool isLoadNoMore = false;
+
+  String? gender;
+  String? role;
+
+  TextEditingController genderController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
+
+  TextEditingController reasonController = TextEditingController();
+
+  DateTime selectedDOB = DateTime.now();
+
+  String? _formattedDob = DateFormat('EEEE, d MMM yyyy').format(DateTime.now());
+
+  void modalBottomDeleteUserSheet(context, {String? id}) {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return ViewModelBuilder<AuthViewModel>.reactive(
+              viewModelBuilder: () => locator<AuthViewModel>(),
+              onViewModelReady: (model) {},
+              disposeViewModel: false,
+              builder: (_, AuthViewModel model, __) {
+                return Container(
+                  height: 300.0,
+                  decoration: const BoxDecoration(
+                      color: AppColor.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(14.0),
+                          topRight: Radius.circular(14.0))),
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(14.0),
+                              topRight: Radius.circular(14.0))),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: Center(
+                                child: TextView(
+                                  text: 'Delete Admin',
+                                  fontSize: 15.4.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: AppColor.inGrey,
+                              thickness: .5.r,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: TextView(
+                                text:
+                                    'Kindly provide a reason for deleting this admin.',
+                                fontSize: 13.8.sp,
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: TextFormWidget(
+                                label: 'Reason',
+                                alignLabelWithHint: true,
+                                border: 10,
+                                isFilled: true,
+                                maxline: 3,
+                                fillColor: AppColor.white,
+                                controller: deleteController,
+                                validator: AppValidator.validateString(),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            paddedWing(
+                                value: 20.w,
+                                child: ButtonWidget(
+                                    buttonText: 'Delete Admin',
+                                    color: AppColor.white,
+                                    border: 8,
+                                    isLoading: isLoading,
+                                    buttonColor: AppColor.red,
+                                    buttonBorderColor: Colors.transparent,
+                                    onPressed: () =>
+                                        deleteAdmin(context, id: id)))
+                          ],
+                        ),
+                      )),
+                );
+              });
+        });
+  }
+
+  void modalBottomSuspendAndUnsuspendSheet(
+      {context, String? id, String? status}) {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return ViewModelBuilder<AuthViewModel>.reactive(
+              viewModelBuilder: () => AuthViewModel(),
+              onViewModelReady: (model) {},
+              disposeViewModel: false,
+              builder: (_, AuthViewModel model, __) {
+                return Container(
+                  height: 300.0,
+                  decoration: const BoxDecoration(
+                      color: AppColor.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(14.0),
+                          topRight: Radius.circular(14.0))),
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(14.0),
+                              topRight: Radius.circular(14.0))),
+                      child: SingleChildScrollView(
+                        child: Form(
+                          key: susFormkey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 16.h,
+                              ),
+                              paddedWing(
+                                value: 20.w,
+                                child: Center(
+                                  child: TextView(
+                                    text: status?.toLowerCase() == 'active'
+                                        ? 'Suspend Admin'
+                                        : 'Unsuspend Admin',
+                                    fontSize: 15.4.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              Divider(
+                                color: AppColor.inGrey,
+                                thickness: .5.r,
+                              ),
+                              paddedWing(
+                                value: 20.w,
+                                child: TextView(
+                                  text: status?.toLowerCase() == 'active'
+                                      ? 'Kindly provide a reason for suspending this admin.'
+                                      : 'Kindly provide a reason for unsuspending this admin.',
+                                  fontSize: 13.8.sp,
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              paddedWing(
+                                value: 20.w,
+                                child: TextFormWidget(
+                                  label: 'Reason',
+                                  alignLabelWithHint: true,
+                                  border: 10,
+                                  isFilled: true,
+                                  maxline: 3,
+                                  fillColor: AppColor.white,
+                                  controller: reasonController,
+                                  validator: AppValidator.validateString(),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              paddedWing(
+                                value: 20.w,
+                                child: ButtonWidget(
+                                    buttonText:
+                                        status?.toLowerCase() == 'active'
+                                            ? 'Suspend Admin'
+                                            : 'Unsuspend Admin',
+                                    color: AppColor.white,
+                                    border: 8,
+                                    isLoading: model.isLoading,
+                                    buttonColor: AppColor.red,
+                                    buttonBorderColor: Colors.transparent,
+                                    onPressed: () {
+                                      if (susFormkey.currentState!.validate()) {
+                                        status?.toLowerCase() == 'active'
+                                            ? suspendAdmin(context,
+                                                id: id,
+                                                text: reasonController.text)
+                                            : unSuspendAdmin(context,
+                                                id: id,
+                                                text: reasonController.text);
+                                        model.notifyListeners();
+                                      }
+                                    }),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
+                );
+              });
+        });
+  }
+
+  shwRoleDialog(context) => showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: TextView(
+              text: 'Select Role',
+              color: AppColor.black,
+              textAlign: TextAlign.center,
+              fontSize: 19.2.sp,
+            ),
+            titleTextStyle: TextStyle(),
+            contentPadding:
+                EdgeInsets.symmetric(vertical: 20.w, horizontal: 20.w),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      roleController.text = 'Processor';
+                      role = 'processor';
+                      Navigator.of(context).pop();
+                      notifyListeners();
+                    },
+                    child: TextView(
+                      text: 'Processor',
+                      color: AppColor.black,
+                      fontSize: 16.2.sp,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  Divider(thickness: .3),
+                  GestureDetector(
+                    onTap: () {
+                      roleController.text = 'Blogger';
+                      role = 'blogger';
+                      Navigator.of(context).pop();
+                    },
+                    child: TextView(
+                      text: 'Blogger',
+                      color: AppColor.black,
+                      fontSize: 16.2.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+  Future<void> selectDateOfBirth(BuildContext? context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context!,
+        initialDate: selectedDOB,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDOB) {
+      selectedDOB = picked;
+      _formattedDob = DateFormat('dd-MM-yyyy').format(selectedDOB);
+
+      dobController.text = _formattedDob!;
+      notifyListeners();
+    }
+  }
+
+  shwGenderDialog(context) => showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: TextView(
+              text: 'Gender',
+              color: AppColor.black,
+              textAlign: TextAlign.center,
+              fontSize: 19.2.sp,
+            ),
+            titleTextStyle: const TextStyle(),
+            contentPadding:
+                EdgeInsets.symmetric(vertical: 20.w, horizontal: 20.w),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      genderController.text = 'Male';
+                      gender = 'male';
+                      Navigator.of(context).pop();
+                      notifyListeners();
+                    },
+                    child: TextView(
+                      text: 'Male',
+                      color: AppColor.black,
+                      fontSize: 16.2.sp,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  const Divider(thickness: .3),
+                  GestureDetector(
+                    onTap: () {
+                      genderController.text = 'Female';
+                      gender = 'female';
+                      Navigator.of(context).pop();
+                      notifyListeners();
+                    },
+                    child: TextView(
+                      text: 'Female',
+                      color: AppColor.black,
+                      fontSize: 16.2.sp,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
 
   paddWing({child}) => Padding(
         padding: EdgeInsets.symmetric(
@@ -352,8 +714,37 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Set<String> seenCodes = {};
-  List<Datum> filteredData = [];
+  Future<void> enableCurrencies(context, String id) async {
+    try {
+      _isLoading = true;
+      _disableCurrencyResponseModel = await runBusyFuture(
+          repositoryImply.enableCurrencies(id),
+          throwException: true);
+      _isLoading = false;
+      getCurrencies(context);
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> disableCurrencies(context, String id) async {
+    try {
+      _isLoading = true;
+      _disableCurrencyResponseModel = await runBusyFuture(
+          repositoryImply.disableCurrencies(id),
+          throwException: true);
+      _isLoading = false;
+      getCurrencies(context);
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
 
   getProperCurrencies() {
     // Filter the list to include only one entry per `code`
@@ -410,7 +801,7 @@ class AuthViewModel extends BaseViewModel {
                           child: TextView(
                             maxLines: 1,
                             textOverflow: TextOverflow.ellipsis,
-                            text: d.name ?? '',
+                            text: d.name?.capitalize() ?? '',
                             color: AppColor.greyKind,
                             fontSize: 14.0.sp,
                             fontWeight: FontWeight.w500,
@@ -434,7 +825,7 @@ class AuthViewModel extends BaseViewModel {
                           : AppColor.grey.withOpacity(.17),
                       borderRadius: BorderRadius.circular(6)),
                   child: TextView(
-                    text: d.status ?? '',
+                    text: d.status?.capitalize() ?? '',
                     fontSize: d.status == 'enabled' ? 12.4.sp : 11.4.sp,
                     color: d.status == 'enabled'
                         ? AppColor.deeperGreen
@@ -484,6 +875,54 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> addExchanges(
+      context, AddExchangeRateEntityModel addExchangeRates) async {
+    try {
+      _isLoading = true;
+      await runBusyFuture(repositoryImply.addExchangeRate(addExchangeRates),
+          throwException: true);
+      getExchanges(context);
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateExchanges(
+      context, AddExchangeRateEntityModel addExchangeRates, String id) async {
+    try {
+      _isLoading = true;
+      await runBusyFuture(
+          repositoryImply.updateExchangeRate(addExchangeRates, id),
+          throwException: true);
+      getExchanges(context);
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> deleteExchanges(context, String id) async {
+    try {
+      _isLoading = true;
+      await runBusyFuture(repositoryImply.deleteExchangeRate(id),
+          throwException: true);
+      getExchanges(context);
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(context, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
   Future<void> superAdminUsers(contxt) async {
     try {
       _isLoading = true;
@@ -523,6 +962,88 @@ class AuthViewModel extends BaseViewModel {
     } else {
       isLoadNoMore = true;
       null;
+    }
+    notifyListeners();
+  }
+
+  Future<void> createAdmin(contxt,
+      {CreateAdminEntityModel? createAdmin}) async {
+    try {
+      _isLoading = true;
+      _createAdminResponseModel = await runBusyFuture(
+          repositoryImply.createAdminUsers(createAdmin!),
+          throwException: true);
+
+      if (_createAdminResponseModel?.status == 'success') {
+        _isLoading = false;
+        superAdminUsers(contxt);
+        AppUtils.snackbar(contxt,
+            message: _createAdminResponseModel!.message!.toString());
+      }
+    } catch (e) {
+      _isLoading = false;
+      // logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> suspendAdmin(contxt, {String? id, String? text}) async {
+    try {
+      _isLoading = true;
+      _suspendAdminResponseModel = await runBusyFuture(
+          repositoryImply.suspendAdmin(id: id, reason: text),
+          throwException: true);
+      reasonController.text = '';
+      _isLoading = false;
+      superAdminUsers(contxt);
+      AppUtils.snackbar(contxt,
+          message: _suspendAdminResponseModel?.message ?? '');
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> unSuspendAdmin(contxt, {String? id, String? text}) async {
+    try {
+      _isLoading = true;
+      _suspendAdminResponseModel = await runBusyFuture(
+          repositoryImply.unsuspendAdmin(id: id, reason: text),
+          throwException: true);
+      _isLoading = false;
+      superAdminUsers(contxt);
+      AppUtils.snackbar(
+        contxt,
+        message: _suspendAdminResponseModel?.message ?? '',
+      );
+
+      reasonController.text = '';
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> deleteAdmin(contxt, {String? id}) async {
+    try {
+      _isLoading = true;
+      var res = await runBusyFuture(repositoryImply.deleteAdmin(id),
+          throwException: true);
+      logger.d(res);
+
+      AppUtils.snackbar(contxt, message: res['message'].toString());
+      superAdminUsers(contxt);
+      deleteController.text = '';
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
     }
     notifyListeners();
   }

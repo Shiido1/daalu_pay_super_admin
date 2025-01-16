@@ -1,5 +1,6 @@
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
+import '../../../ui/screen/create_account_screen.dart';
 import '../../../ui/screen/onboarding/onboarding_screen.dart';
 import '../../../ui/screen/super_admin_dashboard/super_admin_dashboard.dart';
 import '../../api_folder/auth_api.dart';
@@ -12,6 +13,7 @@ import '../network/network_service.dart';
 @StackedApp(routes: [
   MaterialRoute(page: OnboardingScreen, initial: true),
   MaterialRoute(page: SuperAdminDashboard, initial: false),
+  MaterialRoute(page: CreateAccountScreen, initial: false),
 ], dependencies: [
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: DialogService),

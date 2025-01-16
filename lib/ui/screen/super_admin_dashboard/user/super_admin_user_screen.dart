@@ -1,3 +1,5 @@
+import 'package:daalu_pay_super_admin/core/core_folder/app/app.router.dart';
+import 'package:daalu_pay_super_admin/main.dart';
 import 'package:daalu_pay_super_admin/ui/app_assets/contant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -168,10 +170,23 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                   SizedBox(
                     height: 30.h,
                   ),
-                  TextView(
-                    text: 'App Users',
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w400,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextView(
+                        text: 'App Users',
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      IconButton(
+                          onPressed: () =>
+                              navigate.navigateTo(Routes.createAccountScreen),
+                          icon: Icon(
+                            Icons.add,
+                            size: 26.sp,
+                            color: AppColor.black,
+                          ))
+                    ],
                   ),
                   SizedBox(
                     height: 16.h,
@@ -388,13 +403,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/suspend',
-                                                                        // onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
-                                                                        //     context:
-                                                                        //         context,
-                                                                        //     id: i
-                                                                        //         .id,
-                                                                        //     status:
-                                                                        //         i.status),
+                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                            context:
+                                                                                context,
+                                                                            id: e.id
+                                                                                .toString(),
+                                                                            status:
+                                                                                e.status),
                                                                         child:
                                                                             TextView(
                                                                           text: e.status?.toLowerCase() == 'active'
@@ -409,12 +424,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/delete',
-                                                                        // onTap: () =>
-                                                                        //     model.modalBottomDeleteUserSheet(
-                                                                        //   context,
-                                                                        //   id: i
-                                                                        //       .id,
-                                                                        // ),
+                                                                        onTap: () =>
+                                                                            model.modalBottomDeleteUserSheet(
+                                                                          context,
+                                                                          id: e
+                                                                              .id
+                                                                              .toString(),
+                                                                        ),
                                                                         child:
                                                                             TextView(
                                                                           text:
@@ -552,13 +568,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/suspend',
-                                                                        // onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
-                                                                        //     context:
-                                                                        //         context,
-                                                                        //     id: i
-                                                                        //         .id,
-                                                                        //     status:
-                                                                        //         i.status),
+                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                            context:
+                                                                                context,
+                                                                            id: e.id
+                                                                                .toString(),
+                                                                            status:
+                                                                                e.status),
                                                                         child:
                                                                             TextView(
                                                                           text: e.status?.toLowerCase() == 'active'
@@ -573,12 +589,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/delete',
-                                                                        // onTap: () =>
-                                                                        //     model.modalBottomDeleteUserSheet(
-                                                                        //   context,
-                                                                        //   id: i
-                                                                        //       .id,
-                                                                        // ),
+                                                                        onTap: () =>
+                                                                            model.modalBottomDeleteUserSheet(
+                                                                          context,
+                                                                          id: e
+                                                                              .id
+                                                                              .toString(),
+                                                                        ),
                                                                         child:
                                                                             TextView(
                                                                           text:
@@ -717,13 +734,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/suspend',
-                                                                        // onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
-                                                                        //     context:
-                                                                        //         context,
-                                                                        //     id: i
-                                                                        //         .id,
-                                                                        //     status:
-                                                                        //         i.status),
+                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                            context:
+                                                                                context,
+                                                                            id: e.id
+                                                                                .toString(),
+                                                                            status:
+                                                                                e.status),
                                                                         child:
                                                                             TextView(
                                                                           text: e.status?.toLowerCase() == 'active'
@@ -738,12 +755,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/delete',
-                                                                        // onTap: () =>
-                                                                        //     model.modalBottomDeleteUserSheet(
-                                                                        //   context,
-                                                                        //   id: i
-                                                                        //       .id,
-                                                                        // ),
+                                                                        onTap: () =>
+                                                                            model.modalBottomDeleteUserSheet(
+                                                                          context,
+                                                                          id: e
+                                                                              .id
+                                                                              .toString(),
+                                                                        ),
                                                                         child:
                                                                             TextView(
                                                                           text:
@@ -877,13 +895,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/suspend',
-                                                                        // onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
-                                                                        //     context:
-                                                                        //         context,
-                                                                        //     id: i
-                                                                        //         .id,
-                                                                        //     status:
-                                                                        //         i.status),
+                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                            context:
+                                                                                context,
+                                                                            id: e.id
+                                                                                .toString(),
+                                                                            status:
+                                                                                e.status),
                                                                         child:
                                                                             TextView(
                                                                           text: e.status?.toLowerCase() == 'active'
@@ -898,12 +916,9 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/delete',
-                                                                        // onTap: () =>
-                                                                        //     model.modalBottomDeleteUserSheet(
-                                                                        //   context,
-                                                                        //   id: i
-                                                                        //       .id,
-                                                                        // ),
+                                                                        onTap: () => model.modalBottomDeleteUserSheet(
+                                                                            context,
+                                                                            id: e.id.toString()),
                                                                         child:
                                                                             TextView(
                                                                           text:

@@ -9,4 +9,6 @@ class UrlConfig {
   // ignore: constant_identifier_names
   static const String exchange_rates = 'exchange-rates';
   static const String currencies = 'currencies';
+  // ignore: constant_identifier_names
+  static const String transfer_fees = 'transfer-fees';
 }
