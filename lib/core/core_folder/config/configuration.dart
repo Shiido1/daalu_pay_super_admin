@@ -1,5 +1,5 @@
 enum AppEnvironment { development, production }
 
 class AppConfig {
-  static String get apiUrl => 'https://api.daalupay.com/super-admin/';
+  static String get apiUrl => 'https://api.daalupay.com/';
 }

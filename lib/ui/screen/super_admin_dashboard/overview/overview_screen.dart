@@ -1,3 +1,5 @@
+import 'package:daalu_pay_super_admin/core/core_folder/app/app.router.dart';
+import 'package:daalu_pay_super_admin/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -179,55 +181,86 @@ class _OverviewScreenState extends State<OverviewScreen> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 34.w, vertical: 6.w),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: AppColor.inGrey,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.r)),
-                              child: Row(
-                                children: [
-                                  TextView(
-                                    text: 'Deposit',
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  SizedBox(
-                                    width: 16.w,
-                                  ),
-                                  SvgPicture.asset(AppImage.arrowDown)
-                                ],
-                              ),
+                        GestureDetector(
+                          onTap: () =>
+                              navigate.navigateTo(Routes.transferFeeScreen),
+                          child: Container(
+                            width: 140.w,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 14.w, vertical: 6.w),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColor.inGrey,
+                                ),
+                                borderRadius: BorderRadius.circular(8.r)),
+                            child: Row(
+                              children: [
+                                TextView(
+                                  text: 'Transfer Fee',
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                SizedBox(
+                                  width: 16.w,
+                                ),
+                                SvgPicture.asset(
+                                  AppImage.arrowDown,
+                                  height: 12.h,
+                                  width: 12.w,
+                                )
+                              ],
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 34.w, vertical: 6.w),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: AppColor.inGrey,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.r)),
-                              child: Row(
-                                children: [
-                                  TextView(
-                                    text: 'Withdraw',
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  SizedBox(
-                                    width: 16.w,
-                                  ),
-                                  SvgPicture.asset(AppImage.arrowUp)
-                                ],
-                              ),
-                            )
-                          ],
-                        )
+                          ),
+                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        // Container(
+                        //   padding: EdgeInsets.symmetric(
+                        //       horizontal: 34.w, vertical: 6.w),
+                        //   decoration: BoxDecoration(
+                        //       border: Border.all(
+                        //         color: AppColor.inGrey,
+                        //       ),
+                        //       borderRadius: BorderRadius.circular(8.r)),
+                        //   child: Row(
+                        //     children: [
+                        //       TextView(
+                        //         text: 'Deposit',
+                        //         fontSize: 14.sp,
+                        //         fontWeight: FontWeight.w400,
+                        //       ),
+                        //       SizedBox(
+                        //         width: 16.w,
+                        //       ),
+                        //       SvgPicture.asset(AppImage.arrowDown)
+                        //     ],
+                        //   ),
+                        // ),
+                        //     Container(
+                        //       padding: EdgeInsets.symmetric(
+                        //           horizontal: 34.w, vertical: 6.w),
+                        //       decoration: BoxDecoration(
+                        //           border: Border.all(
+                        //             color: AppColor.inGrey,
+                        //           ),
+                        //           borderRadius: BorderRadius.circular(8.r)),
+                        //       child: Row(
+                        //         children: [
+                        //           TextView(
+                        //             text: 'Withdraw',
+                        //             fontSize: 14.sp,
+                        //             fontWeight: FontWeight.w400,
+                        //           ),
+                        //           SizedBox(
+                        //             width: 16.w,
+                        //           ),
+                        //           SvgPicture.asset(AppImage.arrowUp)
+                        //         ],
+                        //       ),
+                        //     )
+                        //   ],
+                        // )
                       ],
                     ),
                   ),
@@ -358,11 +391,15 @@ class _OverviewScreenState extends State<OverviewScreen> {
                               fontSize: 18.sp,
                               fontWeight: FontWeight.w500,
                             ),
-                            TextView(
-                              text: 'View All',
-                              color: AppColor.grey,
-                              fontSize: 13.2.sp,
-                              fontWeight: FontWeight.w400,
+                            GestureDetector(
+                              onTap: () => navigate.navigateTo(
+                                  Routes.superAdminTransactionScreen),
+                              child: TextView(
+                                text: 'View All',
+                                color: AppColor.grey,
+                                fontSize: 13.2.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           ],
                         ),

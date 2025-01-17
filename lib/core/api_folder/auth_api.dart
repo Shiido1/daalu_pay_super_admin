@@ -10,6 +10,9 @@ import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_respo
 import 'package:daalu_pay_super_admin/core/connect_end/model/transfer_fee_entity_model.dart';
 import 'package:injectable/injectable.dart';
 import '../connect_end/model/create_admin_response_model/create_admin_response_model.dart';
+import '../connect_end/model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
+import '../connect_end/model/get_all_user_response_model/get_all_user_response_model.dart';
+import '../connect_end/model/get_payment_method/get_payment_method.dart';
 import '../connect_end/model/login_entity_model.dart';
 import '../connect_end/model/login_response_model/login_response_model.dart';
 import '../core_folder/app/app.locator.dart';
@@ -182,6 +185,18 @@ class AuthApi {
     }
   }
 
+  Future<GetPaymentMethod> getPayment() async {
+    try {
+      final response =
+          await _service.call(UrlConfig.disable_payment, RequestMethod.get);
+      logger.d(response.data);
+      return GetPaymentMethod.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
   Future<SuspendAdminResponseModel> suspendAdmin(
       {String? id, String? reason}) async {
     try {
@@ -243,6 +258,124 @@ class AuthApi {
       return response.data;
     } catch (e) {
       logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetAllUserResponseModel> allUsers() async {
+    try {
+      final response = await _service.call(UrlConfig.users, RequestMethod.get);
+      logger.d(response.data);
+      return GetAllUserResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetAdminTransactionsResponseModel> adminTransactions() async {
+    try {
+      final response =
+          await _service.call(UrlConfig.transactions, RequestMethod.get);
+      logger.d(response.data);
+      return GetAdminTransactionsResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<dynamic> approveUser(String? id) async {
+    try {
+      final response = await _service.call(
+          'admin/users/$id/approve', RequestMethod.post,
+          data: {"status": "approved"});
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<dynamic> denyUser(
+    String? id,
+  ) async {
+    try {
+      final response = await _service.call(
+          'admin/users/$id/deny', RequestMethod.post,
+          data: {"status": "rejected"});
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<dynamic> suspendUser({String? id, String? text}) async {
+    try {
+      final response = await _service.call(
+          'admin/users/$id/suspend', RequestMethod.post,
+          data: {"reason": text});
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<dynamic> unsuspendUser({String? id, String? text}) async {
+    try {
+      final response = await _service.call(
+          'admin/users/$id/unsuspend', RequestMethod.post,
+          data: {"reason": text});
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<dynamic> delete(
+    String? id,
+  ) async {
+    try {
+      final response = await _service.call(
+        'admin/users/$id/delete',
+        RequestMethod.post,
+      );
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<dynamic> approveTransactions(String? id) async {
+    try {
+      final response = await _service.call(
+          'admin/transactions/$id/approve', RequestMethod.post);
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<dynamic> denyTransactions({String? id, String? text}) async {
+    try {
+      final response = await _service.call(
+          'admin/transactions/$id/deny', RequestMethod.post,
+          data: {"reason": text});
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d(e);
       rethrow;
     }
   }

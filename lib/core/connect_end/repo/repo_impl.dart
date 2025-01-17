@@ -12,6 +12,9 @@ import '../../core_folder/manager/shared_preference.dart';
 import '../contract/contract_impl.dart';
 import '../model/add_exchange_rate_entity_model.dart';
 import '../model/disable_currency_response_model/disable_currency_response_model.dart';
+import '../model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
+import '../model/get_all_user_response_model/get_all_user_response_model.dart';
+import '../model/get_payment_method/get_payment_method.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../model/transfer_fee_entity_model.dart';
@@ -91,6 +94,11 @@ class AuthRepoImpl {
     return response;
   }
 
+  Future<GetPaymentMethod> getPaymentMethod() async {
+    final response = await _contract.getPaymentMethod();
+    return response;
+  }
+
   Future<SuspendAdminResponseModel> suspendAdmin(
       {String? id, String? reason}) async {
     final response = await _contract.suspendAdmin(id: id, reason: reason);
@@ -115,6 +123,51 @@ class AuthRepoImpl {
 
   Future<dynamic> makeTransferFees(TransferFeeEntityModel transfer) async {
     final response = await _contract.makeTransferFees(transfer);
+    return response;
+  }
+
+  Future<GetAllUserResponseModel> getAllUsers() async {
+    final response = await _contract.getAllUsers();
+    return response;
+  }
+
+  Future<GetAdminTransactionsResponseModel> getTransactions() async {
+    final response = await _contract.adminTransactions();
+    return response;
+  }
+
+  Future<dynamic> approveUser(String id) async {
+    final response = await _contract.approveUser(id);
+    return response;
+  }
+
+  Future<dynamic> denyUser(String id) async {
+    final response = await _contract.denyUser(id);
+    return response;
+  }
+
+  Future<dynamic> suspendUser({String? id, String? text}) async {
+    final response = await _contract.suspendUser(id: id, text: text);
+    return response;
+  }
+
+  Future<dynamic> unsuspendUser({String? id, String? text}) async {
+    final response = await _contract.unsuspendUser(id: id, text: text);
+    return response;
+  }
+
+  Future<dynamic> delete(String id) async {
+    final response = await _contract.delete(id);
+    return response;
+  }
+
+  Future<dynamic> approveTransaction(String id) async {
+    final response = await _contract.approveTransaction(id);
+    return response;
+  }
+
+  Future<dynamic> denyTransaction({String? id, String? text}) async {
+    final response = await _contract.denyTransaction(id: id, text: text);
     return response;
   }
 

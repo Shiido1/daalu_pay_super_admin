@@ -1,43 +1,33 @@
-import 'package:daalu_pay_super_admin/core/core_folder/app/app.router.dart';
-import 'package:daalu_pay_super_admin/main.dart';
 import 'package:daalu_pay_super_admin/ui/app_assets/contant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
+import '../../../../core/core_folder/app/app.locator.dart';
 import '../../../app_assets/app_color.dart';
 import '../../../app_assets/app_image.dart';
 import '../../widget/text_form_widget.dart';
 import '../../widget/text_widget.dart';
 
-class SuperAdminUsersScreen extends StatefulWidget {
-  const SuperAdminUsersScreen({super.key});
+class SuperAdminUserScreen extends StatelessWidget {
+  const SuperAdminUserScreen({super.key});
 
-  @override
-  State<SuperAdminUsersScreen> createState() => _SuperAdminUsersScreenState();
-}
-
-class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
-  RefreshController refreshController = RefreshController();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AuthViewModel>.reactive(
-        viewModelBuilder: () => AuthViewModel(),
+        viewModelBuilder: () => locator<AuthViewModel>(),
         onViewModelReady: (model) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            model.superAdminUsers(context);
-          });
+          WidgetsBinding.instance
+              .addPostFrameCallback((_) => model.getAllUser(context));
         },
         disposeViewModel: false,
         builder: (_, AuthViewModel model, __) {
           return Scaffold(
             backgroundColor: AppColor.light,
             body: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 50.w),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 50.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -67,23 +57,25 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                     children: [
                       Expanded(
                         child: TextFormWidget(
-                          label: 'Search',
+                          label: 'Search name',
                           labelColor: AppColor.grey,
                           hint: null,
                           border: 10,
                           borderColor: AppColor.transparent,
                           isFilled: true,
                           fillColor: AppColor.inGreyOut,
+                          onChange: (p0) {
+                            model.query = p0;
+                            model.notifyListeners();
+                          },
                           prefixWidget: Padding(
                             padding: EdgeInsets.all(12.w),
                             child: SvgPicture.asset(
                               AppImage.search,
                             ),
                           ),
-                          onChange: (p0) {
-                            model.query = p0;
-                            model.notifyListeners();
-                          },
+                          controller: model.usernameController,
+                          // validator: AppValidator.validateEmail(),
                         ),
                       ),
                       SizedBox(
@@ -101,7 +93,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                               value: '/all',
                               onTap: () {
                                 model.userStats = 'all';
-                                model.usergroupStatus();
+                                model.usergroupTransationStatus();
                                 model.notifyListeners();
                               },
                               child: TextView(
@@ -114,7 +106,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                               value: '/active',
                               onTap: () {
                                 model.userStats = 'active';
-                                model.usergroupStatus();
+                                model.usergroupTransationStatus();
                                 model.notifyListeners();
                               },
                               child: TextView(
@@ -127,7 +119,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                               value: '/suspended',
                               onTap: () {
                                 model.userStats = 'suspended';
-                                model.usergroupStatus();
+                                model.usergroupTransationStatus();
                                 model.notifyListeners();
                               },
                               child: TextView(
@@ -140,7 +132,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                               value: '/band',
                               onTap: () {
                                 model.userStats = 'band';
-                                model.usergroupStatus();
+                                model.usergroupTransationStatus();
                                 model.notifyListeners();
                               },
                               child: TextView(
@@ -153,7 +145,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                               value: '/unverified',
                               onTap: () {
                                 model.userStats = 'unverified';
-                                model.usergroupStatus();
+                                model.usergroupTransationStatus();
                                 model.notifyListeners();
                               },
                               child: TextView(
@@ -168,153 +160,102 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 30.h,
+                    height: 50.h,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextView(
-                        text: 'App Users',
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      IconButton(
-                          onPressed: () =>
-                              navigate.navigateTo(Routes.createAccountScreen),
-                          icon: Icon(
-                            Icons.add,
-                            size: 26.sp,
-                            color: AppColor.black,
-                          ))
-                    ],
-                  ),
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.w, horizontal: 14.w),
-                    decoration: BoxDecoration(
-                        color: AppColor.white,
-                        border: Border.all(color: AppColor.inGrey),
-                        borderRadius: BorderRadius.circular(4)),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextView(
-                                text: 'Name',
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
+                  model.allUserResponseModel == null
+                      ? SpinKitPouringHourGlassRefined(
+                          color: AppColor.primary,
+                          size: 43.0.sp,
+                        )
+                      : model.allUserResponseModel!.data!.isEmpty
+                          ? Center(
+                              child: TextView(
+                                text: 'No User',
+                                fontSize: 20.sp,
                               ),
-                              TextView(
-                                text: 'Email',
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 80.w),
-                                child: TextView(
-                                  text: 'Status',
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              TextView(
-                                text: 'Actions',
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          color: AppColor.inGrey,
-                          thickness: .3.sp,
-                        ),
-                        SizedBox(
-                          height: 430,
-                          child: SmartRefresher(
-                            key: const PageStorageKey('storage_key_add_sales'),
-                            enablePullUp: true,
-                            enablePullDown: false,
-                            onRefresh: () async {
-                              await model.onRefresh();
-                              model.superAdminUsers(context);
-                              refreshController.refreshCompleted();
-                            },
-                            onLoading: () async {
-                              await model.onLoading();
-                              refreshController.loadComplete();
-                            },
-                            controller: refreshController,
-                            footer: CustomFooter(builder: ((context, m) {
-                              Widget body;
-                              if (model.adminUserResponseModel != null &&
-                                  model.adminUserResponseModel!.data!.data!
-                                      .isEmpty) {
-                                body = TextView(
-                                    text: "You're caught up",
-                                    color: AppColor.textColor);
-                              } else if (m == LoadStatus.idle &&
-                                  model.isLoadNoMore == false) {
-                                body = TextView(
-                                  text: "Pull up load",
-                                  color: AppColor.textColor,
-                                );
-                              } else if (m == LoadStatus.loading) {
-                                body = const CupertinoActivityIndicator();
-                              } else if (m == LoadStatus.failed) {
-                                body = TextView(
-                                    text: "Load Failed!Click retry!",
-                                    color: AppColor.textColor);
-                              } else if (m == LoadStatus.canLoading) {
-                                body = TextView(
-                                    text: "release to load more",
-                                    color: AppColor.textColor);
-                              } else {
-                                body = TextView(
-                                    text: "You're caught up",
-                                    color: AppColor.textColor);
-                              }
-                              return SizedBox(
-                                height: 50.0,
-                                child: Center(child: body),
-                              );
-                            })),
-                            child: SingleChildScrollView(
+                            )
+                          : Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 8.w, horizontal: 14.w),
+                              decoration: BoxDecoration(
+                                  color: AppColor.white,
+                                  border: Border.all(color: AppColor.inGrey),
+                                  borderRadius: BorderRadius.circular(4)),
                               child: Column(
                                 children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 4.w),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextView(
+                                          text: 'Name',
+                                          fontSize: 14.sp,
+                                          color: AppColor.navyBlueGrey,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                        TextView(
+                                          text: 'Email',
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.navyBlueGrey,
+                                        ),
+                                        SizedBox(
+                                          width: 30.w,
+                                        ),
+                                        TextView(
+                                          text: 'Status',
+                                          fontSize: 14.sp,
+                                          color: AppColor.navyBlueGrey,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        TextView(
+                                          text: 'Actions',
+                                          fontSize: 14.sp,
+                                          color: AppColor.navyBlueGrey,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: AppColor.inGrey,
+                                    thickness: .3.sp,
+                                  ),
                                   model.query != ''
                                       ? Column(
                                           children: [
-                                            if (model.userGroupList.isNotEmpty)
-                                              ...model.userGroupList
+                                            if (model.userListData!.isNotEmpty)
+                                              ...model.userListData!
                                                   .where((o) => o.firstName!
                                                       .toLowerCase()
                                                       .contains(model.query
                                                           .toLowerCase()))
-                                                  .map((e) => Column(
+                                                  .map((i) => Column(
                                                         children: [
                                                           GestureDetector(
-                                                            onTap: () =>
-                                                                openDialog(
-                                                                    context),
+                                                            onTap: () => model
+                                                                .openUserDialog(
+                                                                    context:
+                                                                        context,
+                                                                    data: i),
                                                             child: Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
                                                               children: [
                                                                 SizedBox(
-                                                                  width: 50.w,
+                                                                  width: 60.w,
                                                                   child:
                                                                       TextView(
                                                                     text:
-                                                                        e.firstName ??
+                                                                        i.firstName ??
                                                                             '',
                                                                     fontSize:
                                                                         14.sp,
@@ -328,10 +269,11 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                   ),
                                                                 ),
                                                                 SizedBox(
-                                                                  width: 140.w,
+                                                                  width:
+                                                                      134.0.w,
                                                                   child:
                                                                       TextView(
-                                                                    text: e.email
+                                                                    text: i.email
                                                                             ?.toLowerCase() ??
                                                                         '',
                                                                     fontSize:
@@ -347,41 +289,45 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal: e.status ==
+                                                                      horizontal: i.status ==
                                                                               'active'
                                                                           ? 8.w
-                                                                          : 4.w,
+                                                                          : 3.2
+                                                                              .w,
                                                                       vertical:
-                                                                          4.8.w),
+                                                                          5.2.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: e.status ==
+                                                                      color: i.status ==
                                                                               'active'
                                                                           ? AppColor.green.withOpacity(
                                                                               .17)
-                                                                          : AppColor.grey.withOpacity(
+                                                                          : AppColor.greyKind.withOpacity(
                                                                               .17),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
                                                                               4)),
                                                                   child:
                                                                       TextView(
-                                                                    text: e.status
+                                                                    text: i.status
                                                                             ?.capitalize() ??
                                                                         '',
-                                                                    fontSize:
-                                                                        12.4.sp,
-                                                                    color: e.status ==
+                                                                    fontSize: i.status ==
+                                                                            'active'
+                                                                        ? 12.4
+                                                                            .sp
+                                                                        : 10.sp,
+                                                                    color: i.status ==
                                                                             'active'
                                                                         ? AppColor
                                                                             .deeperGreen
                                                                         : AppColor
-                                                                            .grey,
-                                                                    fontWeight: e.status ==
+                                                                            .greyKind,
+                                                                    fontWeight: i.status ==
                                                                             'active'
                                                                         ? FontWeight
-                                                                            .w600
+                                                                            .w500
                                                                         : FontWeight
-                                                                            .w500,
+                                                                            .w600,
                                                                   ),
                                                                 ),
                                                                 PopupMenuButton(
@@ -403,16 +349,16 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/suspend',
-                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendUserSheet(
                                                                             context:
                                                                                 context,
-                                                                            id: e.id
-                                                                                .toString(),
+                                                                            id: i
+                                                                                .id,
                                                                             status:
-                                                                                e.status),
+                                                                                i.status),
                                                                         child:
                                                                             TextView(
-                                                                          text: e.status?.toLowerCase() == 'active'
+                                                                          text: i.status?.toLowerCase() == 'active'
                                                                               ? 'Suspend'
                                                                               : "Unsuspend",
                                                                           fontSize:
@@ -427,9 +373,8 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                         onTap: () =>
                                                                             model.modalBottomDeleteUserSheet(
                                                                           context,
-                                                                          id: e
-                                                                              .id
-                                                                              .toString(),
+                                                                          id: i
+                                                                              .id,
                                                                         ),
                                                                         child:
                                                                             TextView(
@@ -455,31 +400,35 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                         ],
                                                       ))
                                             else if (model
-                                                .adminUserResponseListModel
-                                                .isNotEmpty)
+                                                        .allUserResponseModel !=
+                                                    null &&
+                                                model.allUserResponseModel!
+                                                    .data!.isNotEmpty)
                                               ...model
-                                                  .adminUserResponseListModel
+                                                  .allUserResponseModel!.data!
                                                   .where((o) => o.firstName!
                                                       .toLowerCase()
                                                       .contains(model.query
                                                           .toLowerCase()))
-                                                  .map((e) => Column(
+                                                  .map((i) => Column(
                                                         children: [
                                                           GestureDetector(
-                                                            onTap: () =>
-                                                                openDialog(
-                                                                    context),
+                                                            onTap: () => model
+                                                                .openUserDialog(
+                                                                    context:
+                                                                        context,
+                                                                    data: i),
                                                             child: Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
                                                               children: [
                                                                 SizedBox(
-                                                                  width: 50.w,
+                                                                  width: 60.w,
                                                                   child:
                                                                       TextView(
                                                                     text:
-                                                                        e.firstName ??
+                                                                        i.firstName ??
                                                                             '',
                                                                     fontSize:
                                                                         14.sp,
@@ -493,10 +442,11 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                   ),
                                                                 ),
                                                                 SizedBox(
-                                                                  width: 140.w,
+                                                                  width:
+                                                                      134.0.w,
                                                                   child:
                                                                       TextView(
-                                                                    text: e.email
+                                                                    text: i.email
                                                                             ?.toLowerCase() ??
                                                                         '',
                                                                     fontSize:
@@ -512,41 +462,45 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal: e.status ==
+                                                                      horizontal: i.status ==
                                                                               'active'
                                                                           ? 8.w
-                                                                          : 4.w,
+                                                                          : 3.2
+                                                                              .w,
                                                                       vertical:
-                                                                          4.8.w),
+                                                                          5.2.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: e.status ==
+                                                                      color: i.status ==
                                                                               'active'
                                                                           ? AppColor.green.withOpacity(
                                                                               .17)
-                                                                          : AppColor.grey.withOpacity(
+                                                                          : AppColor.greyKind.withOpacity(
                                                                               .17),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
                                                                               4)),
                                                                   child:
                                                                       TextView(
-                                                                    text: e.status
+                                                                    text: i.status
                                                                             ?.capitalize() ??
                                                                         '',
-                                                                    fontSize:
-                                                                        12.4.sp,
-                                                                    color: e.status ==
+                                                                    fontSize: i.status ==
+                                                                            'active'
+                                                                        ? 12.4
+                                                                            .sp
+                                                                        : 10.sp,
+                                                                    color: i.status ==
                                                                             'active'
                                                                         ? AppColor
                                                                             .deeperGreen
                                                                         : AppColor
-                                                                            .grey,
-                                                                    fontWeight: e.status ==
+                                                                            .greyKind,
+                                                                    fontWeight: i.status ==
                                                                             'active'
                                                                         ? FontWeight
-                                                                            .w600
+                                                                            .w500
                                                                         : FontWeight
-                                                                            .w500,
+                                                                            .w600,
                                                                   ),
                                                                 ),
                                                                 PopupMenuButton(
@@ -568,16 +522,16 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/suspend',
-                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendUserSheet(
                                                                             context:
                                                                                 context,
-                                                                            id: e.id
-                                                                                .toString(),
+                                                                            id: i
+                                                                                .id,
                                                                             status:
-                                                                                e.status),
+                                                                                i.status),
                                                                         child:
                                                                             TextView(
-                                                                          text: e.status?.toLowerCase() == 'active'
+                                                                          text: i.status?.toLowerCase() == 'active'
                                                                               ? 'Suspend'
                                                                               : "Unsuspend",
                                                                           fontSize:
@@ -592,9 +546,8 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                         onTap: () =>
                                                                             model.modalBottomDeleteUserSheet(
                                                                           context,
-                                                                          id: e
-                                                                              .id
-                                                                              .toString(),
+                                                                          id: i
+                                                                              .id,
                                                                         ),
                                                                         child:
                                                                             TextView(
@@ -623,29 +576,31 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                         )
                                       : Column(
                                           children: [
-                                            if (model.userGroupList.isNotEmpty)
-                                              ...model.userGroupList
+                                            if (model.userListData!.isNotEmpty)
+                                              ...model.userListData!
                                                   .where((o) => o.firstName!
                                                       .toLowerCase()
                                                       .contains(model.query
                                                           .toLowerCase()))
-                                                  .map((e) => Column(
+                                                  .map((i) => Column(
                                                         children: [
                                                           GestureDetector(
-                                                            onTap: () =>
-                                                                openDialog(
-                                                                    context),
+                                                            onTap: () => model
+                                                                .openUserDialog(
+                                                                    context:
+                                                                        context,
+                                                                    data: i),
                                                             child: Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
                                                               children: [
                                                                 SizedBox(
-                                                                  width: 50.w,
+                                                                  width: 60.w,
                                                                   child:
                                                                       TextView(
                                                                     text:
-                                                                        e.firstName ??
+                                                                        i.firstName ??
                                                                             '',
                                                                     fontSize:
                                                                         14.sp,
@@ -659,10 +614,11 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                   ),
                                                                 ),
                                                                 SizedBox(
-                                                                  width: 140.w,
+                                                                  width:
+                                                                      134.0.w,
                                                                   child:
                                                                       TextView(
-                                                                    text: e.email
+                                                                    text: i.email
                                                                             ?.toLowerCase() ??
                                                                         '',
                                                                     fontSize:
@@ -678,41 +634,45 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal: e.status ==
+                                                                      horizontal: i.status ==
                                                                               'active'
                                                                           ? 8.w
-                                                                          : 4.w,
+                                                                          : 3.2
+                                                                              .w,
                                                                       vertical:
-                                                                          4.8.w),
+                                                                          5.2.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: e.status ==
+                                                                      color: i.status ==
                                                                               'active'
                                                                           ? AppColor.green.withOpacity(
                                                                               .17)
-                                                                          : AppColor.grey.withOpacity(
+                                                                          : AppColor.greyKind.withOpacity(
                                                                               .17),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
                                                                               4)),
                                                                   child:
                                                                       TextView(
-                                                                    text: e.status
+                                                                    text: i.status
                                                                             ?.capitalize() ??
                                                                         '',
-                                                                    fontSize:
-                                                                        12.4.sp,
-                                                                    color: e.status ==
+                                                                    fontSize: i.status ==
+                                                                            'active'
+                                                                        ? 12.4
+                                                                            .sp
+                                                                        : 10.sp,
+                                                                    color: i.status ==
                                                                             'active'
                                                                         ? AppColor
                                                                             .deeperGreen
                                                                         : AppColor
-                                                                            .grey,
-                                                                    fontWeight: e.status ==
+                                                                            .greyKind,
+                                                                    fontWeight: i.status ==
                                                                             'active'
                                                                         ? FontWeight
-                                                                            .w600
+                                                                            .w500
                                                                         : FontWeight
-                                                                            .w500,
+                                                                            .w600,
                                                                   ),
                                                                 ),
                                                                 PopupMenuButton(
@@ -734,16 +694,16 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/suspend',
-                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendUserSheet(
                                                                             context:
                                                                                 context,
-                                                                            id: e.id
-                                                                                .toString(),
+                                                                            id: i
+                                                                                .id,
                                                                             status:
-                                                                                e.status),
+                                                                                i.status),
                                                                         child:
                                                                             TextView(
-                                                                          text: e.status?.toLowerCase() == 'active'
+                                                                          text: i.status?.toLowerCase() == 'active'
                                                                               ? 'Suspend'
                                                                               : "Unsuspend",
                                                                           fontSize:
@@ -758,9 +718,8 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                         onTap: () =>
                                                                             model.modalBottomDeleteUserSheet(
                                                                           context,
-                                                                          id: e
-                                                                              .id
-                                                                              .toString(),
+                                                                          id: i
+                                                                              .id,
                                                                         ),
                                                                         child:
                                                                             TextView(
@@ -786,27 +745,31 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                         ],
                                                       ))
                                             else if (model
-                                                .adminUserResponseListModel
-                                                .isNotEmpty)
+                                                        .allUserResponseModel !=
+                                                    null &&
+                                                model.allUserResponseModel!
+                                                    .data!.isNotEmpty)
                                               ...model
-                                                  .adminUserResponseListModel
-                                                  .map((e) => Column(
+                                                  .allUserResponseModel!.data!
+                                                  .map((i) => Column(
                                                         children: [
                                                           GestureDetector(
-                                                            onTap: () =>
-                                                                openDialog(
-                                                                    context),
+                                                            onTap: () => model
+                                                                .openUserDialog(
+                                                                    context:
+                                                                        context,
+                                                                    data: i),
                                                             child: Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
                                                               children: [
                                                                 SizedBox(
-                                                                  width: 50.w,
+                                                                  width: 60.w,
                                                                   child:
                                                                       TextView(
                                                                     text:
-                                                                        e.firstName ??
+                                                                        i.firstName ??
                                                                             '',
                                                                     fontSize:
                                                                         14.sp,
@@ -820,10 +783,11 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                   ),
                                                                 ),
                                                                 SizedBox(
-                                                                  width: 140.w,
+                                                                  width:
+                                                                      134.0.w,
                                                                   child:
                                                                       TextView(
-                                                                    text: e.email
+                                                                    text: i.email
                                                                             ?.toLowerCase() ??
                                                                         '',
                                                                     fontSize:
@@ -839,41 +803,45 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal: e.status ==
+                                                                      horizontal: i.status ==
                                                                               'active'
                                                                           ? 8.w
-                                                                          : 4.w,
+                                                                          : 3.2
+                                                                              .w,
                                                                       vertical:
-                                                                          4.8.w),
+                                                                          5.2.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: e.status ==
+                                                                      color: i.status ==
                                                                               'active'
                                                                           ? AppColor.green.withOpacity(
                                                                               .17)
-                                                                          : AppColor.grey.withOpacity(
+                                                                          : AppColor.greyKind.withOpacity(
                                                                               .17),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
                                                                               4)),
                                                                   child:
                                                                       TextView(
-                                                                    text: e.status
+                                                                    text: i.status
                                                                             ?.capitalize() ??
                                                                         '',
-                                                                    fontSize:
-                                                                        12.4.sp,
-                                                                    color: e.status ==
+                                                                    fontSize: i.status ==
+                                                                            'active'
+                                                                        ? 12.4
+                                                                            .sp
+                                                                        : 10.sp,
+                                                                    color: i.status ==
                                                                             'active'
                                                                         ? AppColor
                                                                             .deeperGreen
                                                                         : AppColor
-                                                                            .grey,
-                                                                    fontWeight: e.status ==
+                                                                            .greyKind,
+                                                                    fontWeight: i.status ==
                                                                             'active'
                                                                         ? FontWeight
-                                                                            .w600
+                                                                            .w500
                                                                         : FontWeight
-                                                                            .w500,
+                                                                            .w600,
                                                                   ),
                                                                 ),
                                                                 PopupMenuButton(
@@ -895,16 +863,16 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/suspend',
-                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendSheet(
+                                                                        onTap: () => model.modalBottomSuspendAndUnsuspendUserSheet(
                                                                             context:
                                                                                 context,
-                                                                            id: e.id
-                                                                                .toString(),
+                                                                            id: i
+                                                                                .id,
                                                                             status:
-                                                                                e.status),
+                                                                                i.status),
                                                                         child:
                                                                             TextView(
-                                                                          text: e.status?.toLowerCase() == 'active'
+                                                                          text: i.status?.toLowerCase() == 'active'
                                                                               ? 'Suspend'
                                                                               : "Unsuspend",
                                                                           fontSize:
@@ -916,9 +884,12 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                       PopupMenuItem(
                                                                         value:
                                                                             '/delete',
-                                                                        onTap: () => model.modalBottomDeleteUserSheet(
-                                                                            context,
-                                                                            id: e.id.toString()),
+                                                                        onTap: () =>
+                                                                            model.modalBottomDeleteUserSheet(
+                                                                          context,
+                                                                          id: i
+                                                                              .id,
+                                                                        ),
                                                                         child:
                                                                             TextView(
                                                                           text:
@@ -946,12 +917,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                         )
                                 ],
                               ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
+                            )
                 ],
               ),
             ),
@@ -962,280 +928,5 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
   paddedWing({child}) => Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: child,
-      );
-
-  Future openDialog(context) => showDialog(
-        context: context,
-        builder: (context) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 100.w),
-          decoration: BoxDecoration(
-              color: AppColor.white, borderRadius: BorderRadius.circular(12)),
-          width: double.infinity,
-          child: Scaffold(
-            backgroundColor: AppColor.transparent,
-            body: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(vertical: 33.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  paddedWing(
-                    child: Container(
-                      padding: EdgeInsets.all(10.w),
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: AppColor.navyBlueGrey),
-                      child: TextView(
-                        text: 'JD',
-                        fontSize: 16.4.sp,
-                        color: AppColor.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.2.h,
-                  ),
-                  paddedWing(
-                    child: TextView(
-                      text: 'Active',
-                      fontSize: 14.4.sp,
-                      color: AppColor.deeperGreen,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8.2.h,
-                  ),
-                  paddedWing(
-                    child: TextView(
-                      text: 'Last Active - 2 secs ago',
-                      fontSize: 14.4.sp,
-                      color: AppColor.black,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 6.2.h,
-                  ),
-                  paddedWing(
-                    child: TextView(
-                      text: 'Jane Doe',
-                      fontSize: 15.4.sp,
-                      color: AppColor.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 6.2.h,
-                  ),
-                  paddedWing(
-                    child: TextView(
-                      text: 'jane.doe@example.com',
-                      fontSize: 14.sp,
-                      color: AppColor.black,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 6.2.h,
-                  ),
-                  paddedWing(
-                    child: TextView(
-                      text: 'ID- #81671ABO',
-                      fontSize: 14.sp,
-                      color: AppColor.black,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8.h,
-                  ),
-                  paddedWing(
-                    child: TextView(
-                      text: 'Recent Transactions',
-                      fontSize: 15.4.sp,
-                      color: AppColor.black,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4.2.h,
-                  ),
-                  Divider(
-                    color: AppColor.grey,
-                    thickness: .3.sp,
-                  ),
-                  SizedBox(
-                    height: 4.2.h,
-                  ),
-                  paddedWing(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextView(
-                          text: 'Txn ID',
-                          fontSize: 14.sp,
-                          color: AppColor.black,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        TextView(
-                          text: 'Amount',
-                          fontSize: 14.sp,
-                          color: AppColor.black,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        TextView(
-                          text: 'Status',
-                          fontSize: 14.sp,
-                          color: AppColor.black,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        TextView(
-                          text: 'Date',
-                          fontSize: 14.sp,
-                          color: AppColor.black,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4.2.h,
-                  ),
-                  ...[
-                    1,
-                    2,
-                    3,
-                    4,
-                  ].map((e) => contRecentTranWidget()),
-                  SizedBox(
-                    height: 12.2.h,
-                  ),
-                  paddedWing(
-                    child: TextFormWidget(
-                      label: 'Add Notes',
-                      hint: null,
-                      border: 10,
-                      maxline: 4,
-                      isFilled: true,
-                      fillColor: AppColor.white,
-                      alignLabelWithHint: true,
-                      // controller: emailController,
-                      // validator: AppValidator.validateEmail(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  paddedWing(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 6.w, horizontal: 22.w),
-                          decoration: BoxDecoration(
-                              color: AppColor.yellow.withOpacity(.2),
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(AppImage.flag),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              TextView(
-                                text: 'Flag',
-                                fontSize: 14.sp,
-                                color: AppColor.yellow,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 6.w, horizontal: 22.w),
-                          decoration: BoxDecoration(
-                              color: AppColor.grey.withOpacity(.2),
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.pause_circle_outline,
-                                color: AppColor.darkGrey,
-                                size: 24.sp,
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              TextView(
-                                text: 'Suspend',
-                                fontSize: 14.sp,
-                                color: AppColor.darkGrey,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-
-  contRecentTranWidget() => Column(
-        children: [
-          Divider(
-            color: AppColor.grey,
-            thickness: .3.sp,
-          ),
-          SizedBox(
-            height: 4.2.h,
-          ),
-          paddedWing(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextView(
-                  text: '#81671',
-                  fontSize: 14.sp,
-                  color: AppColor.greyNice,
-                  fontWeight: FontWeight.w500,
-                ),
-                TextView(
-                  text: '100,000,000 NGN',
-                  fontSize: 14.sp,
-                  color: AppColor.black,
-                  fontWeight: FontWeight.w500,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 6.w),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: AppColor.green.withOpacity(.2)),
-                  child: TextView(
-                    text: 'Approved',
-                    fontSize: 12.sp,
-                    color: AppColor.deeperGreen,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                TextView(
-                  text: '99/99/2025',
-                  fontSize: 12.sp,
-                  color: AppColor.black,
-                  fontWeight: FontWeight.w500,
-                ),
-              ],
-            ),
-          ),
-        ],
       );
 }

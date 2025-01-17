@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:daalu_pay_super_admin/ui/screen/super_admin_dashboard/user/super_admin_user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +12,7 @@ import '../widget/text_widget.dart';
 import 'notification/super_admin_notification_screen.dart';
 import 'overview/overview_screen.dart';
 import 'transactions/super_admin_transaction_screen.dart';
-import 'user/super_admin_user_screen.dart';
+import 'admin_user/super_admin_admin_screen.dart';
 
 class SuperAdminDashboard extends StatefulWidget {
   const SuperAdminDashboard({super.key});
@@ -27,6 +28,7 @@ class _SuperAdminDashboardState extends State<SuperAdminDashboard> {
     OverviewScreen(),
     SuperAdminUsersScreen(),
     SuperAdminTransactionScreen(),
+    SuperAdminUserScreen(),
     SuperAdminNotificationScreen(),
   ];
 
@@ -116,7 +118,7 @@ class _SuperAdminDashboardState extends State<SuperAdminDashboard> {
                     color:
                         _currentIndex == 1 ? AppColor.primary : AppColor.black,
                   ),
-                  label: 'Users',
+                  label: 'Admin',
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
@@ -128,9 +130,17 @@ class _SuperAdminDashboardState extends State<SuperAdminDashboard> {
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
-                    AppImage.bell,
+                    AppImage.person,
                     color:
                         _currentIndex == 3 ? AppColor.primary : AppColor.black,
+                  ),
+                  label: 'User',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    AppImage.bell,
+                    color:
+                        _currentIndex == 4 ? AppColor.primary : AppColor.black,
                   ),
                   label: 'Notifications',
                 ),

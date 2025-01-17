@@ -12,6 +12,9 @@ import '../../api_folder/auth_api.dart';
 import '../../core_folder/app/app.locator.dart';
 import '../model/add_exchange_rate_entity_model.dart';
 import '../model/disable_currency_response_model/disable_currency_response_model.dart';
+import '../model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
+import '../model/get_all_user_response_model/get_all_user_response_model.dart';
+import '../model/get_payment_method/get_payment_method.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../model/transfer_fee_entity_model.dart';
@@ -47,6 +50,7 @@ class AuthContractsImpl {
       await _api.deleteExchangeRate(id);
   Future<DisablePaymentResponseModel> disablePayment(String id) async =>
       await _api.disablePayment(id);
+  Future<GetPaymentMethod> getPaymentMethod() async => await _api.getPayment();
   Future<DisablePaymentResponseModel> enablePayment(String id) async =>
       await _api.enablePayment(id);
   Future<SuspendAdminResponseModel> suspendAdmin(
@@ -59,4 +63,18 @@ class AuthContractsImpl {
   Future<dynamic> getTransferFee() async => await _api.getTransferFees();
   Future<dynamic> makeTransferFees(TransferFeeEntityModel transfer) async =>
       await _api.makeTransferFees(transfer);
+  Future<GetAllUserResponseModel> getAllUsers() async => await _api.allUsers();
+  Future<GetAdminTransactionsResponseModel> adminTransactions() async =>
+      await _api.adminTransactions();
+  Future<dynamic> approveUser(String id) async => await _api.approveUser(id);
+  Future<dynamic> denyUser(String id) async => await _api.denyUser(id);
+  Future<dynamic> suspendUser({String? id, String? text}) async =>
+      await _api.suspendUser(id: id, text: text);
+  Future<dynamic> unsuspendUser({String? id, String? text}) async =>
+      await _api.unsuspendUser(id: id, text: text);
+  Future<dynamic> delete(String id) async => await _api.delete(id);
+  Future<dynamic> approveTransaction(String id) async =>
+      await _api.approveTransactions(id);
+  Future<dynamic> denyTransaction({String? id, String? text}) async =>
+      await _api.denyTransactions(id: id, text: text);
 }
