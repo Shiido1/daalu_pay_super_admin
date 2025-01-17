@@ -79,6 +79,12 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextView(
+                              text:
+                                  '${e.user?.firstName ?? ''} ${e.user?.lastName ?? ''}',
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            TextView(
                               text: DateFormat('yyyy-MM-dd hh:mm a').format(
                                   DateTime.parse(e.createdAt.toString())),
                               fontSize: 14.sp,
@@ -88,11 +94,11 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                             // Row(
                             //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             //   children: [
-                            //     // TextView(
-                            //     //   text: 'Jane Doe',
-                            //     //   fontSize: 14.sp,
-                            //     //   fontWeight: FontWeight.w500,
-                            //     // ),
+                            // TextView(
+                            //   text: 'Jane Doe',
+                            //   fontSize: 14.sp,
+                            //   fontWeight: FontWeight.w500,
+                            // ),
                             //     TextView(
                             //       text: DateFormat('yyyy-MM-dd hh:mm a')
                             //                     .format(DateTime.parse(
@@ -123,54 +129,62 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 12.w, vertical: 6.w),
-                                  decoration: BoxDecoration(
-                                      color: AppColor.green.withOpacity(.17),
-                                      borderRadius: BorderRadius.circular(4)),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.check_circle_outline_outlined,
-                                        size: 24.sp,
-                                        color: AppColor.deeperGreen,
-                                      ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      TextView(
-                                        text: 'Approved',
-                                        fontSize: 12.4.sp,
-                                        color: AppColor.deeperGreen,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ],
+                                GestureDetector(
+                                  onTap: () => model.modalBottomApproveSheet(
+                                      context: context, id: e.id.toString()),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w, vertical: 6.w),
+                                    decoration: BoxDecoration(
+                                        color: AppColor.green.withOpacity(.17),
+                                        borderRadius: BorderRadius.circular(4)),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.check_circle_outline_outlined,
+                                          size: 24.sp,
+                                          color: AppColor.deeperGreen,
+                                        ),
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                        TextView(
+                                          text: 'Approved',
+                                          fontSize: 12.4.sp,
+                                          color: AppColor.deeperGreen,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 12.w, vertical: 6.w),
-                                  decoration: BoxDecoration(
-                                      color: AppColor.red.withOpacity(.17),
-                                      borderRadius: BorderRadius.circular(4)),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.cancel_outlined,
-                                        size: 24.sp,
-                                        color: AppColor.red,
-                                      ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      TextView(
-                                        text: 'Reject',
-                                        fontSize: 12.4.sp,
-                                        color: AppColor.red,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ],
+                                GestureDetector(
+                                  onTap: () => model.modalBottomRejectSheet(
+                                      context: context, id: e.id.toString()),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w, vertical: 6.w),
+                                    decoration: BoxDecoration(
+                                        color: AppColor.red.withOpacity(.17),
+                                        borderRadius: BorderRadius.circular(4)),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.cancel_outlined,
+                                          size: 24.sp,
+                                          color: AppColor.red,
+                                        ),
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                        TextView(
+                                          text: 'Reject',
+                                          fontSize: 12.4.sp,
+                                          color: AppColor.red,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -231,23 +245,23 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                   SizedBox(
                     height: 30.h,
                   ),
-                  if (model.getStatistisResponseModell == null ||
+                  if (model.adminTransactionsResponseModel == null ||
                       model.isLoading)
                     SpinKitPouringHourGlassRefined(
                       color: AppColor.primary,
                       size: 43.0.sp,
                     )
-                  else if (model.getStatistisResponseModell != null &&
-                      model.getStatistisResponseModell!.data!.swaps!.isEmpty)
+                  else if (model.adminTransactionsResponseModel != null &&
+                      model.adminTransactionsResponseModel!.data!.isEmpty)
                     Center(
                       child: TextView(
                         text: 'No Transations',
                         fontSize: 20.sp,
                       ),
                     )
-                  else if (model.getStatistisResponseModell != null ||
-                      model.getStatistisResponseModell!.data!.swaps!.isNotEmpty)
-                    ...model.getStatistisResponseModell!.data!.swaps!.map((o) =>
+                  else if (model.adminTransactionsResponseModel != null ||
+                      model.adminTransactionsResponseModel!.data!.isNotEmpty)
+                    ...model.adminTransactionsResponseModel!.data!.map((o) =>
                         Container(
                           padding: EdgeInsets.all(10.w),
                           margin: EdgeInsets.only(bottom: 16.w),
@@ -262,11 +276,12 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // TextView(
-                                  //   text: 'Jane Doe',
-                                  //   fontSize: 14.sp,
-                                  //   fontWeight: FontWeight.w500,
-                                  // ),
+                                  TextView(
+                                    text:
+                                        '${o.user?.firstName ?? ''} ${o.user?.lastName ?? ''}',
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                   TextView(
                                     text: 'ID- #${o.transactionId}',
                                     fontSize: 14.sp,

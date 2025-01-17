@@ -277,7 +277,7 @@ class AuthApi {
     try {
       final response =
           await _service.call(UrlConfig.transactions, RequestMethod.get);
-      logger.d(response.data);
+      logger.d('response.data${response.data}');
       return GetAdminTransactionsResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");

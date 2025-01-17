@@ -109,11 +109,8 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i7.TransferFeeScreen: (data) {
-      final args = data.getArgs<TransferFeeScreenArguments>(
-        orElse: () => const TransferFeeScreenArguments(),
-      );
       return _i8.MaterialPageRoute<dynamic>(
-        builder: (context) => _i7.TransferFeeScreen(key: args.key),
+        builder: (context) => const _i7.TransferFeeScreen(),
         settings: data,
       );
     },
@@ -138,28 +135,6 @@ class CreateAccountScreenArguments {
 
   @override
   bool operator ==(covariant CreateAccountScreenArguments other) {
-    if (identical(this, other)) return true;
-    return other.key == key;
-  }
-
-  @override
-  int get hashCode {
-    return key.hashCode;
-  }
-}
-
-class TransferFeeScreenArguments {
-  const TransferFeeScreenArguments({this.key});
-
-  final _i8.Key? key;
-
-  @override
-  String toString() {
-    return '{"key": "$key"}';
-  }
-
-  @override
-  bool operator ==(covariant TransferFeeScreenArguments other) {
     if (identical(this, other)) return true;
     return other.key == key;
   }
@@ -243,16 +218,14 @@ extension NavigatorStateExtension on _i9.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToTransferFeeScreen({
-    _i8.Key? key,
+  Future<dynamic> navigateToTransferFeeScreen([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return navigateTo<dynamic>(Routes.transferFeeScreen,
-        arguments: TransferFeeScreenArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -331,16 +304,14 @@ extension NavigatorStateExtension on _i9.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithTransferFeeScreen({
-    _i8.Key? key,
+  Future<dynamic> replaceWithTransferFeeScreen([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return replaceWith<dynamic>(Routes.transferFeeScreen,
-        arguments: TransferFeeScreenArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

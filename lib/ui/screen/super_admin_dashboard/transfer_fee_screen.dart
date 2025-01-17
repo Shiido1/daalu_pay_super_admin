@@ -80,7 +80,7 @@ class _TransferFeeScreenState extends State<TransferFeeScreen> {
                       height: 20.h,
                     ),
                     ButtonWidget(
-                      buttonText: 'Login',
+                      buttonText: 'Transfer Fee',
                       color: AppColor.grey,
                       border: 8,
                       isLoading: model.isLoading,

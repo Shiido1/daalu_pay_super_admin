@@ -28,10 +28,10 @@ import '../../core_folder/app/app.logger.dart';
 import '../../core_folder/app/app.router.dart';
 import '../model/disable_currency_response_model/disable_currency_response_model.dart';
 import '../model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
+import '../model/get_admin_transactions_response_model/datum.dart' as ts;
 import '../model/get_all_user_response_model/get_all_user_response_model.dart';
 import '../model/get_currencies_response_model/datum.dart';
 import '../model/get_payment_method/get_payment_method.dart';
-import '../model/get_statistis_response_modell/swap.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../repo/repo_impl.dart';
@@ -91,7 +91,7 @@ class AuthViewModel extends BaseViewModel {
   DisableCurrencyResponseModel? _disableCurrencyResponseModel;
   DisableCurrencyResponseModel? get disableCurrencyResponseModel =>
       _disableCurrencyResponseModel;
-  List<Swap>? pendingTransactons = [];
+  List<ts.Datum>? pendingTransactons = [];
   DisablePaymentResponseModel? _disablePaymentResponseModel;
   DisablePaymentResponseModel? get disablePaymentResponseModel =>
       _disablePaymentResponseModel;
@@ -1975,8 +1975,8 @@ class AuthViewModel extends BaseViewModel {
       _adminTransactionsResponseModel = await runBusyFuture(
           repositoryImply.getTransactions(),
           throwException: true);
-      groupValue = groupBy(
-          _getStatistisResponseModell!.data!.swaps!, (obj) => obj.status);
+      groupValue =
+          groupBy(_adminTransactionsResponseModel!.data!, (obj) => obj.status);
       if (groupValue['pending'] != null) {
         pendingTransactons?.addAll(groupValue['pending']);
       }
