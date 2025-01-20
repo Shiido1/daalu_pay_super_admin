@@ -120,8 +120,10 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                             TextView(
                               text:
                                   '${getAllCurrency(e.fromCurrency)}${oCcy.format(double.parse(e.fromAmount!))} -> ${oCcy.format(double.parse(e.toAmount!))}${getAllCurrency(e.toCurrency)}',
-                              fontSize: 26.sp,
-                              fontWeight: FontWeight.w500,
+                              textStyle: TextStyle(
+                                fontSize: 26.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             SizedBox(
                               height: 20.h,
@@ -306,13 +308,15 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                                   TextView(
                                     text:
                                         '${getAllCurrency(o.fromCurrency)}${oCcy.format(double.parse(o.fromAmount!))} -> ${oCcy.format(double.parse(o.toAmount!))}${getAllCurrency(o.toCurrency)}',
-                                    color: o.status == 'approved'
-                                        ? AppColor.green
-                                        : o.status == 'rejected'
-                                            ? AppColor.red
-                                            : AppColor.yellow,
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
+                                    textStyle: TextStyle(
+                                      color: o.status == 'approved'
+                                          ? AppColor.green
+                                          : o.status == 'rejected'
+                                              ? AppColor.red
+                                              : AppColor.yellow,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 20.h,

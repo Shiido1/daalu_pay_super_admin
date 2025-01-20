@@ -162,9 +162,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
                                       text: isTapped
                                           ? '${getCurrency()}${oCcy.format(double.parse(model.getStatistisResponseModell?.data?.nairaBalance?.toString() ?? '0'))}'
                                           : '********',
-                                      fontSize: 28.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: AppColor.white,
+                                      textStyle: TextStyle(
+                                        fontSize: 28.sp,
+                                        fontWeight: FontWeight.w400,
+                                        color: AppColor.white,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -464,13 +466,15 @@ class _OverviewScreenState extends State<OverviewScreen> {
                                       TextView(
                                         text:
                                             '${getAllCurrency(o.fromCurrency)}${oCcy.format(double.parse(o.fromAmount!))} -> ${oCcy.format(double.parse(o.toAmount!))}${getAllCurrency(o.toCurrency)}',
-                                        color: o.status == 'approved'
-                                            ? AppColor.green
-                                            : o.status == 'rejected'
-                                                ? AppColor.red
-                                                : AppColor.yellow,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
+                                        textStyle: TextStyle(
+                                          color: o.status == 'approved'
+                                              ? AppColor.green
+                                              : o.status == 'rejected'
+                                                  ? AppColor.red
+                                                  : AppColor.yellow,
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                       SizedBox(
                                         height: 20.h,
