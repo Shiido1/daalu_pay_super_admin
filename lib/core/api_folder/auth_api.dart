@@ -1,13 +1,15 @@
 import 'package:daalu_pay_super_admin/core/connect_end/model/add_exchange_rate_entity_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_entity_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_transfer_fees_entity_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_transfer_fees_response_model/create_transfer_fees_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/disable_currency_response_model/disable_currency_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/disable_payment_response_model/disable_payment_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/get_transfer_fees_model_response/get_transfer_fees_model_response.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_response_model/suspend_admin_response_model.dart';
-import 'package:daalu_pay_super_admin/core/connect_end/model/transfer_fee_entity_model.dart';
 import 'package:injectable/injectable.dart';
 import '../connect_end/model/create_admin_response_model/create_admin_response_model.dart';
 import '../connect_end/model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
@@ -237,31 +239,6 @@ class AuthApi {
     }
   }
 
-  Future<dynamic> getTransferFees() async {
-    try {
-      final response =
-          await _service.call(UrlConfig.transfer_fees, RequestMethod.get);
-      logger.d(response.data);
-      return response.data;
-    } catch (e) {
-      logger.d("response:$e");
-      rethrow;
-    }
-  }
-
-  Future<dynamic> makeTransferFees(TransferFeeEntityModel transfer) async {
-    try {
-      final response = await _service.call(
-          UrlConfig.transfer_fees, RequestMethod.post,
-          data: transfer.toJson());
-      logger.d(response.data);
-      return response.data;
-    } catch (e) {
-      logger.d("response:$e");
-      rethrow;
-    }
-  }
-
   Future<GetAllUserResponseModel> allUsers() async {
     try {
       final response = await _service.call(UrlConfig.users, RequestMethod.get);
@@ -374,6 +351,34 @@ class AuthApi {
           data: {"reason": text});
       logger.d(response.data);
       return response.data;
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<GetTransferFeesModelResponse> getAllTransferFees() async {
+    try {
+      final response = await _service.call(
+        UrlConfig.transfer_fees,
+        RequestMethod.get,
+      );
+      logger.d(response.data);
+      return GetTransferFeesModelResponse.fromJson(response.data);
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<CreateTransferFeesResponseModel> createTransferFees(
+      CreateTransferFeesEntityModel createTransaferEntity) async {
+    try {
+      final response = await _service.call(
+          UrlConfig.transfer_fees, RequestMethod.put,
+          data: createTransaferEntity.toJson());
+      logger.d(response.data);
+      return CreateTransferFeesResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d(e);
       rethrow;

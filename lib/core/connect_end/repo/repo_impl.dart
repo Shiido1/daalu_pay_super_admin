@@ -1,10 +1,13 @@
 import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_entity_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_response_model/create_admin_response_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_transfer_fees_entity_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_transfer_fees_response_model/create_transfer_fees_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/disable_payment_response_model/disable_payment_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/get_transfer_fees_model_response/get_transfer_fees_model_response.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_response_model/suspend_admin_response_model.dart';
 import 'package:injectable/injectable.dart';
 import '../../core_folder/app/app.locator.dart';
@@ -17,7 +20,6 @@ import '../model/get_all_user_response_model/get_all_user_response_model.dart';
 import '../model/get_payment_method/get_payment_method.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
-import '../model/transfer_fee_entity_model.dart';
 
 @lazySingleton
 class AuthRepoImpl {
@@ -116,16 +118,6 @@ class AuthRepoImpl {
     return response;
   }
 
-  Future<dynamic> getTransferFee() async {
-    final response = await _contract.getTransferFee();
-    return response;
-  }
-
-  Future<dynamic> makeTransferFees(TransferFeeEntityModel transfer) async {
-    final response = await _contract.makeTransferFees(transfer);
-    return response;
-  }
-
   Future<GetAllUserResponseModel> getAllUsers() async {
     final response = await _contract.getAllUsers();
     return response;
@@ -168,6 +160,17 @@ class AuthRepoImpl {
 
   Future<dynamic> denyTransaction({String? id, String? text}) async {
     final response = await _contract.denyTransaction(id: id, text: text);
+    return response;
+  }
+
+  Future<GetTransferFeesModelResponse> getTransferFees() async {
+    final response = await _contract.getTransferFees();
+    return response;
+  }
+
+  Future<CreateTransferFeesResponseModel> createTransferFees(
+      CreateTransferFeesEntityModel createTransferEntity) async {
+    final response = await _contract.createTransferFees(createTransferEntity);
     return response;
   }
 

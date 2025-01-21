@@ -205,10 +205,12 @@ class _OverviewScreenState extends State<OverviewScreen> {
                                 SizedBox(
                                   width: 16.w,
                                 ),
-                                SvgPicture.asset(
-                                  AppImage.arrowDown,
-                                  height: 12.h,
-                                  width: 12.w,
+                                Expanded(
+                                  child: SvgPicture.asset(
+                                    AppImage.arrowDown,
+                                    height: 12.h,
+                                    width: 12.w,
+                                  ),
                                 )
                               ],
                             ),

@@ -2,11 +2,14 @@ import "package:collection/collection.dart";
 import 'package:daalu_pay_super_admin/core/connect_end/model/add_exchange_rate_entity_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_entity_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_response_model/create_admin_response_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_transfer_fees_entity_model.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/create_transfer_fees_response_model/create_transfer_fees_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/disable_payment_response_model/disable_payment_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/get_admin_user_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_response_model/get_currencies_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/get_transfer_fees_model_response/get_transfer_fees_model_response.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_response_model/suspend_admin_response_model.dart';
 import 'package:daalu_pay_super_admin/ui/app_assets/country_const.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +56,8 @@ class AuthViewModel extends BaseViewModel {
 
   bool get isLoading => _isLoading;
   bool _isLoading = false;
+  bool get isLoadingTr => _isLoadingTr;
+  bool _isLoadingTr = false;
 
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
@@ -104,6 +109,13 @@ class AuthViewModel extends BaseViewModel {
   GetAdminTransactionsResponseModel? _adminTransactionsResponseModel;
   GetAdminTransactionsResponseModel? get adminTransactionsResponseModel =>
       _adminTransactionsResponseModel;
+
+  GetTransferFeesModelResponse? _getTransferFeesModelResponse;
+  GetTransferFeesModelResponse? get getTransferFeesModelResponse =>
+      _getTransferFeesModelResponse;
+  CreateTransferFeesResponseModel? _createTransferFeesResponseModel;
+  CreateTransferFeesResponseModel? get createTransferFeesResponseModel =>
+      _createTransferFeesResponseModel;
 
   String userStats = 'all';
   String userStats1 = 'all';
@@ -1377,6 +1389,18 @@ class AuthViewModel extends BaseViewModel {
                   SizedBox(
                     height: 8.h,
                   ),
+                  paddedWing(
+                    value: 20,
+                    child: TextView(
+                      text: 'file-: ${data.kyc?.documentImage}'.capitalize(),
+                      fontSize: 14.sp,
+                      color: AppColor.black,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8.h,
+                  ),
                   // paddedWing(
                   //   value: 20,
                   //   child: TextView(
@@ -2531,6 +2555,42 @@ class AuthViewModel extends BaseViewModel {
       Navigator.pop(contxt);
     } catch (e) {
       _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getTransferFees(contxt) async {
+    try {
+      _isLoading = true;
+      _getTransferFeesModelResponse = await runBusyFuture(
+          repositoryImply.getTransferFees(),
+          throwException: true);
+      AppUtils.snackbar(contxt,
+          message: _getTransferFeesModelResponse?.message ?? '');
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> createTransferFees(
+      contxt, CreateTransferFeesEntityModel createTransferEntity) async {
+    try {
+      _isLoadingTr = true;
+      _createTransferFeesResponseModel = await runBusyFuture(
+          repositoryImply.createTransferFees(createTransferEntity),
+          throwException: true);
+      AppUtils.snackbar(contxt,
+          message: _createTransferFeesResponseModel?.message ?? '');
+      getTransferFees(contxt);
+      _isLoadingTr = false;
+    } catch (e) {
+      _isLoadingTr = false;
       logger.d(e);
       AppUtils.snackbar(contxt, message: e.toString(), error: true);
     }

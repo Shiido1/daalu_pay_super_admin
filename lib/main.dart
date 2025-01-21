@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -9,7 +10,8 @@ import 'core/core_folder/manager/shared_preference.dart';
 
 final navigate = locator<NavigationService>();
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   setupLocator();
@@ -17,8 +19,25 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    initialization();
+    super.initState();
+  }
+
+  void initialization() async {
+    await Future.delayed(const Duration(seconds: 3));
+    FlutterNativeSplash.remove();
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
