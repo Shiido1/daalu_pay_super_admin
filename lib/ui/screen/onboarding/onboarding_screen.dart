@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
-import '../create_account_screen.dart';
 import '../login_screen.dart';
 import '../widget/button_widget.dart';
 import '../widget/text_widget.dart';
@@ -160,13 +159,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   setState(() {
                     if (i < 3) {
                       i++;
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CreateAccountScreen()),
-                      );
                     }
+                    // else {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => CreateAccountScreen()),
+                    //   );
+                    // }
                   });
                 }),
             SizedBox(
