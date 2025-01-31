@@ -35,6 +35,7 @@ import '../model/get_admin_transactions_response_model/datum.dart' as ts;
 import '../model/get_all_user_response_model/get_all_user_response_model.dart';
 import '../model/get_currencies_response_model/datum.dart';
 import '../model/get_payment_method/get_payment_method.dart';
+import '../model/get_users_receipt_response_model/get_users_receipt_response_model.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../repo/repo_impl.dart';
@@ -58,6 +59,9 @@ class AuthViewModel extends BaseViewModel {
   bool _isLoading = false;
   bool get isLoadingTr => _isLoadingTr;
   bool _isLoadingTr = false;
+
+  bool get isLoadingReceipts => _isLoadingReceipts;
+  bool _isLoadingReceipts = false;
 
   bool get isTogglePassword => _isTogglePassword;
   bool _isTogglePassword = false;
@@ -116,6 +120,10 @@ class AuthViewModel extends BaseViewModel {
   CreateTransferFeesResponseModel? _createTransferFeesResponseModel;
   CreateTransferFeesResponseModel? get createTransferFeesResponseModel =>
       _createTransferFeesResponseModel;
+
+  GetUsersReceiptResponseModel? _getUsersReceiptResponseModel;
+  GetUsersReceiptResponseModel? get getUsersReceiptResponseMode =>
+      _getUsersReceiptResponseModel;
 
   String userStats = 'all';
   String userStats1 = 'all';
@@ -2628,6 +2636,68 @@ class AuthViewModel extends BaseViewModel {
       }
     } else {
       userListData!.clear();
+    }
+    notifyListeners();
+  }
+
+  Future<void> getUsersReceipt(contxt) async {
+    try {
+      _isLoading = true;
+      _getUsersReceiptResponseModel = await runBusyFuture(
+          repositoryImply.getUsersReceipts(),
+          throwException: true);
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> approveReceipts(contxt, {String? id}) async {
+    try {
+      _isLoadingReceipts = true;
+      var res = await runBusyFuture(repositoryImply.approveReceipts(id!),
+          throwException: true);
+      if (res['status'] == 'success') {
+        AppUtils.snackbar(
+          contxt,
+          message: 'Users receipts has been approved.',
+        );
+
+        getUsersReceipt(contxt);
+      }
+
+      _isLoadingReceipts = false;
+    } catch (e) {
+      _isLoadingReceipts = false;
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> denyReceipts(contxt, {String? id}) async {
+    try {
+      _isLoadingReceipts = true;
+      var v = await runBusyFuture(
+          repositoryImply.denyReceipts(
+            id,
+          ),
+          throwException: true);
+      if (v['status'] == 'success') {
+        AppUtils.snackbar(
+          contxt,
+          message: 'Users receipts has been denied.',
+        );
+        getUsersReceipt(contxt);
+      }
+      _isLoadingReceipts = false;
+    } catch (e) {
+      _isLoadingReceipts = false;
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
     }
     notifyListeners();
   }

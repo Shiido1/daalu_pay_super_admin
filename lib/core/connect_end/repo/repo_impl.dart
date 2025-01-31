@@ -18,6 +18,7 @@ import '../model/disable_currency_response_model/disable_currency_response_model
 import '../model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
 import '../model/get_all_user_response_model/get_all_user_response_model.dart';
 import '../model/get_payment_method/get_payment_method.dart';
+import '../model/get_users_receipt_response_model/get_users_receipt_response_model.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
 
@@ -171,6 +172,21 @@ class AuthRepoImpl {
   Future<CreateTransferFeesResponseModel> createTransferFees(
       CreateTransferFeesEntityModel createTransferEntity) async {
     final response = await _contract.createTransferFees(createTransferEntity);
+    return response;
+  }
+
+  Future<GetUsersReceiptResponseModel> getUsersReceipts() async {
+    final response = await _contract.getUsersReceipts();
+    return response;
+  }
+
+  Future<dynamic> approveReceipts(String id) async {
+    final response = await _contract.approveReceipts(id);
+    return response;
+  }
+
+  Future<dynamic> denyReceipts(String? id) async {
+    final response = await _contract.denyReceipts(id);
     return response;
   }
 

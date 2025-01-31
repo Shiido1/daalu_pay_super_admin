@@ -94,9 +94,30 @@ class _OverviewScreenState extends State<OverviewScreen> {
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w500,
                       ),
-                      SvgPicture.asset(
-                        AppImage.person,
-                        color: AppColor.primary,
+                      PopupMenuButton(
+                        onSelected: (value) {
+                          // your logic
+                        },
+                        color: AppColor.white,
+                        icon: Icon(
+                          Icons.more_vert_rounded,
+                          size: 24.sp,
+                          color: AppColor.primary,
+                        ),
+                        itemBuilder: (BuildContext bc) {
+                          return [
+                            PopupMenuItem(
+                              value: '/receipt',
+                              onTap: () => navigate
+                                  .navigateTo(Routes.viewUsersReceiptScreen),
+                              child: TextView(
+                                text: 'View Receipts',
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ];
+                        },
                       )
                     ],
                   ),

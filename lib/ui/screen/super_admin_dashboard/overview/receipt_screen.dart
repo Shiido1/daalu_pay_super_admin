@@ -1,5 +1,3 @@
-import 'package:daalu_pay_admin/ui/app_assets/app_color.dart';
-import 'package:daalu_pay_admin/ui/widget/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,7 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
+import '../../../app_assets/app_color.dart';
 import '../../../app_assets/contant.dart';
+import '../../widget/text_widget.dart';
 
 class ViewUsersReceiptScreen extends StatelessWidget {
   const ViewUsersReceiptScreen({super.key});

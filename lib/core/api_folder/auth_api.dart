@@ -15,6 +15,7 @@ import '../connect_end/model/create_admin_response_model/create_admin_response_m
 import '../connect_end/model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
 import '../connect_end/model/get_all_user_response_model/get_all_user_response_model.dart';
 import '../connect_end/model/get_payment_method/get_payment_method.dart';
+import '../connect_end/model/get_users_receipt_response_model/get_users_receipt_response_model.dart';
 import '../connect_end/model/login_entity_model.dart';
 import '../connect_end/model/login_response_model/login_response_model.dart';
 import '../core_folder/app/app.locator.dart';
@@ -379,6 +380,43 @@ class AuthApi {
           data: createTransaferEntity.toJson());
       logger.d(response.data);
       return CreateTransferFeesResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<GetUsersReceiptResponseModel> getUsersReceipts() async {
+    try {
+      final response = await _service.call('admin/receipts', RequestMethod.get);
+      logger.d(response.data);
+      return GetUsersReceiptResponseModel.fromJson(response.data);
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<dynamic> approveReceipts(String? id) async {
+    try {
+      final response =
+          await _service.call('admin/receipts/$id/approve', RequestMethod.post);
+      logger.d(response.data);
+      return response.data;
+    } catch (e) {
+      logger.d(e);
+      rethrow;
+    }
+  }
+
+  Future<dynamic> denyReceipts(String? id) async {
+    try {
+      final response = await _service.call(
+        'admin/receipts/$id/deny',
+        RequestMethod.post,
+      );
+      logger.d(response.data);
+      return response.data;
     } catch (e) {
       logger.d(e);
       rethrow;

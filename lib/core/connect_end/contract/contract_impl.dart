@@ -18,6 +18,7 @@ import '../model/disable_currency_response_model/disable_currency_response_model
 import '../model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
 import '../model/get_all_user_response_model/get_all_user_response_model.dart';
 import '../model/get_payment_method/get_payment_method.dart';
+import '../model/get_users_receipt_response_model/get_users_receipt_response_model.dart';
 import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
 
@@ -81,4 +82,9 @@ class AuthContractsImpl {
   Future<CreateTransferFeesResponseModel> createTransferFees(
           CreateTransferFeesEntityModel createTransaferEntity) async =>
       await _api.createTransferFees(createTransaferEntity);
+  Future<GetUsersReceiptResponseModel> getUsersReceipts() async =>
+      await _api.getUsersReceipts();
+  Future<dynamic> approveReceipts(String id) async =>
+      await _api.approveReceipts(id);
+  Future<dynamic> denyReceipts(String? id) async => await _api.denyReceipts(id);
 }
