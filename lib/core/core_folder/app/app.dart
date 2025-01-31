@@ -2,6 +2,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import '../../../ui/screen/create_account_screen.dart';
 import '../../../ui/screen/onboarding/onboarding_screen.dart';
+import '../../../ui/screen/super_admin_dashboard/overview/receipt_screen.dart';
 import '../../../ui/screen/super_admin_dashboard/payment_method_screen.dart';
 import '../../../ui/screen/super_admin_dashboard/super_admin_dashboard.dart';
 import '../../../ui/screen/super_admin_dashboard/transactions/super_admin_transaction_screen.dart';
@@ -20,6 +21,7 @@ import '../network/network_service.dart';
   MaterialRoute(page: SuperAdminPaymentMethodScreen, initial: false),
   MaterialRoute(page: SuperAdminTransactionScreen, initial: false),
   MaterialRoute(page: TransferFeeScreen, initial: false),
+  MaterialRoute(page: ViewUsersReceiptScreen, initial: false),
 ], dependencies: [
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: DialogService),

@@ -92,24 +92,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPasswordToggle: model.isOnTogglePassword,
                     ),
                     SizedBox(
-                      height: 14.0.h,
-                    ),
-                    // TextView(
-                    //   text: 'Forgot Password',
-                    //   fontSize: 16.2.sp,
-                    //   fontWeight: FontWeight.w500,
-                    //   color: AppColor.darkGrey,
-                    // ),
-
-                    SizedBox(
                       height: 240.h,
                     ),
                     ButtonWidget(
                       buttonText: 'Login',
-                      color: AppColor.grey,
+                      color: !model.isLoading ? AppColor.white : AppColor.grey,
                       border: 8,
                       isLoading: model.isLoading,
-                      buttonColor: AppColor.inGrey,
+                      buttonColor:
+                          !model.isLoading ? AppColor.primary : AppColor.inGrey,
                       buttonBorderColor: Colors.transparent,
                       onPressed: () {
                         if (formKeyLogin.currentState!.validate()) {
