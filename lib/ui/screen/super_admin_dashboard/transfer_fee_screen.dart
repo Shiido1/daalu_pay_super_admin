@@ -85,10 +85,11 @@ class _TransferFeeScreenState extends State<TransferFeeScreen> {
                     ),
                     ButtonWidget(
                       buttonText: 'Transfer Fee',
-                      color: AppColor.grey,
+                      color: !model.isLoading ? AppColor.white : AppColor.grey,
                       border: 8,
-                      isLoading: model.isLoadingTr,
-                      buttonColor: AppColor.inGrey,
+                      isLoading: model.isLoading,
+                      buttonColor:
+                          !model.isLoading ? AppColor.primary : AppColor.inGrey,
                       buttonBorderColor: Colors.transparent,
                       onPressed: () {
                         if (formKey.currentState!.validate()) {

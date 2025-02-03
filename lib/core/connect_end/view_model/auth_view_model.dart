@@ -2121,6 +2121,106 @@ class AuthViewModel extends BaseViewModel {
         });
   }
 
+  void modalBottomApproveReceiptsSheet({context, String? id}) {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return ViewModelBuilder<AuthViewModel>.reactive(
+              viewModelBuilder: () => locator<AuthViewModel>(),
+              onViewModelReady: (model) {},
+              disposeViewModel: false,
+              builder: (_, AuthViewModel model, __) {
+                return Container(
+                  height: 300.0,
+                  decoration: const BoxDecoration(
+                      color: AppColor.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(14.0),
+                          topRight: Radius.circular(14.0))),
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(14.0),
+                              topRight: Radius.circular(14.0))),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            paddedWing(
+                              value: 24.w,
+                              child: Center(
+                                child: TextView(
+                                  text: 'Approve Receipts',
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: AppColor.inGrey,
+                              thickness: .5.r,
+                            ),
+                            paddedWing(
+                              value: 24.w,
+                              child: TextView(
+                                text:
+                                    'Are you sure you want to approve this user\'s receipt? The user\'s CNY wallet will be credited.',
+                                fontSize: 12.8.sp,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 40.h,
+                            ),
+                            paddedWing(
+                              value: 24.w,
+                              child: ButtonWidget(
+                                  buttonText: 'Approve Receipts',
+                                  color: AppColor.white,
+                                  border: 8,
+                                  isLoading: model.isLoadingReceipts,
+                                  buttonColor: AppColor.primary,
+                                  buttonBorderColor: Colors.transparent,
+                                  onPressed: () =>
+                                      approveReceipts(context, id: id)),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                            ),
+                            paddedWing(
+                              value: 24.w,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.info_outline,
+                                    color: AppColor.yellow,
+                                    size: 30.sp,
+                                  ),
+                                  SizedBox(
+                                    width: 22.w,
+                                  ),
+                                  TextView(
+                                    text:
+                                        'This action will credit the user’s wallet',
+                                    fontSize: 14.2.sp,
+                                    color: AppColor.yellow,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
+                );
+              });
+        });
+  }
+
   void modalBottomSuspendAndUnsuspendUserSheet(
       {context, String? id, String? status}) {
     showModalBottomSheet(
@@ -2397,11 +2497,129 @@ class AuthViewModel extends BaseViewModel {
                                   buttonText: 'Reject Transaction',
                                   color: AppColor.white,
                                   border: 8,
-                                  isLoading: _isLoading,
+                                  isLoading: model.isLoading,
                                   buttonColor: AppColor.red,
                                   buttonBorderColor: Colors.transparent,
                                   onPressed: () =>
                                       denyTransaction(context, id: id)),
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.info_outline,
+                                    color: AppColor.yellow,
+                                    size: 30.sp,
+                                  ),
+                                  SizedBox(
+                                    width: 22.w,
+                                  ),
+                                  TextView(
+                                    text: 'This action connot be undone',
+                                    fontSize: 14.2.sp,
+                                    color: AppColor.yellow,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    width: 12.w,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
+                );
+              });
+        });
+  }
+
+  void modalBottomRejectReceiptSheet({context, String? id}) {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return ViewModelBuilder<AuthViewModel>.reactive(
+              viewModelBuilder: () => locator<AuthViewModel>(),
+              onViewModelReady: (model) {},
+              disposeViewModel: false,
+              builder: (_, AuthViewModel model, __) {
+                return Container(
+                  height: 400.0,
+                  decoration: const BoxDecoration(
+                      color: AppColor.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(14.0),
+                          topRight: Radius.circular(14.0))),
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(14.0),
+                              topRight: Radius.circular(14.0))),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 16.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: Center(
+                                child: TextView(
+                                  text: 'Reject Receipt',
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              color: AppColor.inGrey,
+                              thickness: .5.r,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: TextView(
+                                text:
+                                    'Are you sure you want to reject this receipt? The user will be notified.',
+                                fontSize: 12.8.sp,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: TextFormWidget(
+                                label:
+                                    'Provide a reason for rejection (Option)',
+                                alignLabelWithHint: true,
+                                isFilled: true,
+                                maxline: 5,
+                                fillColor: AppColor.white,
+                                controller: rejectController,
+                                validator: AppValidator.validateString(),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            paddedWing(
+                              value: 20.w,
+                              child: ButtonWidget(
+                                  buttonText: 'Reject Receipt',
+                                  color: AppColor.white,
+                                  border: 8,
+                                  isLoading: model.isLoadingReceipts,
+                                  buttonColor: AppColor.red,
+                                  buttonBorderColor: Colors.transparent,
+                                  onPressed: () =>
+                                      denyReceipts(context, id: id)),
                             ),
                             SizedBox(
                               height: 30.h,
@@ -2655,6 +2873,18 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> getUsersReceiptAgain(contxt) async {
+    try {
+      _getUsersReceiptResponseModel = await runBusyFuture(
+          repositoryImply.getUsersReceipts(),
+          throwException: true);
+    } catch (e) {
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
   Future<void> approveReceipts(contxt, {String? id}) async {
     try {
       _isLoadingReceipts = true;
@@ -2666,7 +2896,7 @@ class AuthViewModel extends BaseViewModel {
           message: 'Users receipts has been approved.',
         );
 
-        getUsersReceipt(contxt);
+        getUsersReceiptAgain(contxt);
       }
 
       _isLoadingReceipts = false;
@@ -2691,7 +2921,7 @@ class AuthViewModel extends BaseViewModel {
           contxt,
           message: 'Users receipts has been denied.',
         );
-        getUsersReceipt(contxt);
+        getUsersReceiptAgain(contxt);
       }
       _isLoadingReceipts = false;
     } catch (e) {

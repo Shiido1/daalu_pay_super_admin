@@ -127,9 +127,10 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                             MainAxisAlignment.end,
                                         children: [
                                           GestureDetector(
-                                            onTap: () => model.approveReceipts(
-                                                context,
-                                                id: o.id.toString()),
+                                            onTap: () => model
+                                                .modalBottomApproveReceiptsSheet(
+                                                    context: context,
+                                                    id: o.id.toString()),
                                             child: Container(
                                                 padding: EdgeInsetsDirectional
                                                     .symmetric(
@@ -151,9 +152,10 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                             height: 20.h,
                                           ),
                                           GestureDetector(
-                                            onTap: () => model.denyReceipts(
-                                                context,
-                                                id: o.id.toString()),
+                                            onTap: () => model
+                                                .modalBottomRejectReceiptSheet(
+                                                    context: context,
+                                                    id: o.id.toString()),
                                             child: Container(
                                                 padding: EdgeInsetsDirectional
                                                     .symmetric(
@@ -179,12 +181,39 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                   ],
                 ),
                 model.isLoadingReceipts
-                    ? Positioned(
-                        bottom: 6,
-                        left: 142,
-                        child: SpinKitCircle(
-                          color: AppColor.primary,
-                          size: 50.sp,
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: Card(
+                          elevation: 2,
+                          shadowColor: AppColor.greyKind,
+                          child: Container(
+                            height: 100.h,
+                            width: 120.w,
+                            padding: EdgeInsets.all(10.w),
+                            decoration: BoxDecoration(
+                                color: AppColor.white,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 14.h,
+                                ),
+                                SpinKitCircle(
+                                  color: AppColor.primary,
+                                  size: 30.sp,
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                TextView(
+                                  text: 'Loading Receipt..!',
+                                  fontSize: 10.2.sp,
+                                  color: AppColor.grey,
+                                  fontWeight: FontWeight.w600,
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       )
                     : const SizedBox.shrink()

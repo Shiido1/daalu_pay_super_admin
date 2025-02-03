@@ -6,7 +6,7 @@ part 'data.g.dart';
 class Data {
   num? id;
   String? currencyCode;
-  String? fee;
+  dynamic fee;
   DateTime? createdAt;
   DateTime? updatedAt;
 
