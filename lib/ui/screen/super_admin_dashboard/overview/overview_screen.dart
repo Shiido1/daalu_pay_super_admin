@@ -24,6 +24,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
   bool isTapped = false;
   bool? isSwitched;
   bool? isCurrency = false;
+  bool? isExchangeRate = false;
   bool? isCurrencyRate = false;
 
   paddWing({child}) => Padding(
@@ -560,185 +561,215 @@ class _OverviewScreenState extends State<OverviewScreen> {
                   SizedBox(
                     height: 10.h,
                   ),
-
-
-
-                 isCurrency==false?const SizedBox.shrink(): Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: AppColor.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColor.inGrey)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        paddWing(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  isCurrency == false
+                      ? const SizedBox.shrink()
+                      : Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: AppColor.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: AppColor.inGrey)),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: 230.w,
-                                child: TextFormWidget(
-                                  label: 'Search',
-                                  labelColor: AppColor.grey,
-                                  hint: null,
-                                  border: 10,
-                                  borderColor: AppColor.transparent,
-                                  isFilled: true,
-                                  fillColor: AppColor.inGreyOut,
-                                  prefixWidget: Padding(
-                                    padding: EdgeInsets.all(12.w),
-                                    child: SvgPicture.asset(
-                                      AppImage.search,
+                                height: 20.h,
+                              ),
+                              paddWing(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: 230.w,
+                                      child: TextFormWidget(
+                                        label: 'Search',
+                                        labelColor: AppColor.grey,
+                                        hint: null,
+                                        border: 10,
+                                        borderColor: AppColor.transparent,
+                                        isFilled: true,
+                                        fillColor: AppColor.inGreyOut,
+                                        prefixWidget: Padding(
+                                          padding: EdgeInsets.all(12.w),
+                                          child: SvgPicture.asset(
+                                            AppImage.search,
+                                          ),
+                                        ),
+                                        onChange: (p0) {
+                                          model.queryCurrency = p0;
+                                          model.notifyListeners();
+                                        },
+                                        // controller: emailController,
+                                        // validator: AppValidator.validateEmail(),
+                                      ),
                                     ),
-                                  ),
-                                  onChange: (p0) {
-                                    model.queryCurrency = p0;
-                                    model.notifyListeners();
-                                  },
-                                  // controller: emailController,
-                                  // validator: AppValidator.validateEmail(),
+                                    SizedBox(
+                                      width: 22.w,
+                                    )
+                                    // IconButton(
+                                    //     onPressed: () {},
+                                    //     icon: Icon(
+                                    //       Icons.add_circle_outline,
+                                    //       size: 26.sp,
+                                    //       color: AppColor.grey,
+                                    //     ))
+                                  ],
                                 ),
                               ),
                               SizedBox(
-                                width: 22.w,
-                              )
-                              // IconButton(
-                              //     onPressed: () {},
-                              //     icon: Icon(
-                              //       Icons.add_circle_outline,
-                              //       size: 26.sp,
-                              //       color: AppColor.grey,
-                              //     ))
+                                height: 16.h,
+                              ),
+                              paddWing(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    TextView(
+                                      text: 'Currency',
+                                      color: AppColor.greyKind,
+                                      fontSize: 16.sp,
+                                    ),
+                                    TextView(
+                                      text: 'Symbol',
+                                      color: AppColor.greyKind,
+                                      fontSize: 16.sp,
+                                    ),
+                                    TextView(
+                                      text: 'Status',
+                                      color: AppColor.greyKind,
+                                      fontSize: 16.sp,
+                                    ),
+                                    SizedBox(
+                                      height: 50.h,
+                                      width: 50.w,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Divider(
+                                color: AppColor.grey,
+                                thickness: .4.sp,
+                              ),
+                              if (model.filteredData.isEmpty)
+                                const SizedBox.shrink()
+                              else if (model.filteredData.isNotEmpty)
+                                model.queryCurrency != ''
+                                    ? Column(
+                                        children: [
+                                          ...model.filteredData
+                                              .where((o) => o.name!
+                                                  .toLowerCase()
+                                                  .contains(model.queryCurrency
+                                                      .toLowerCase()))
+                                              .map((e) =>
+                                                  model.currencyManWidget(e)),
+                                        ],
+                                      )
+                                    : Column(
+                                        children: [
+                                          ...model.filteredData.map((e) =>
+                                              model.currencyManWidget(e)),
+                                        ],
+                                      )
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 16.h,
-                        ),
-                        paddWing(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              TextView(
-                                text: 'Currency',
-                                color: AppColor.greyKind,
-                                fontSize: 16.sp,
-                              ),
-                              TextView(
-                                text: 'Symbol',
-                                color: AppColor.greyKind,
-                                fontSize: 16.sp,
-                              ),
-                              TextView(
-                                text: 'Status',
-                                color: AppColor.greyKind,
-                                fontSize: 16.sp,
-                              ),
-                              SizedBox(
-                                height: 50.h,
-                                width: 50.w,
-                              )
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          color: AppColor.grey,
-                          thickness: .4.sp,
-                        ),
-                        if (model.filteredData.isEmpty)
-                          const SizedBox.shrink()
-                        else if (model.filteredData.isNotEmpty)
-                          model.queryCurrency != ''
-                              ? Column(
-                                  children: [
-                                    ...model.filteredData
-                                        .where((o) => o.name!
-                                            .toLowerCase()
-                                            .contains(model.queryCurrency
-                                                .toLowerCase()))
-                                        .map((e) => model.currencyManWidget(e)),
-                                  ],
-                                )
-                              : Column(
-                                  children: [
-                                    ...model.filteredData
-                                        .map((e) => model.currencyManWidget(e)),
-                                  ],
-                                )
-                      ],
-                    ),
-                  ),
                   SizedBox(
                     height: 30.h,
                   ),
-                  Container(
-                    width: double.infinity,
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.w, horizontal: 16.w),
-                    decoration: BoxDecoration(
-                      color: AppColor.white,
-                      border: Border.all(color: AppColor.inGrey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextView(
-                              text: 'Exchange rates',
-                              color: AppColor.greyKind,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            IconButton(
-                                onPressed: () => model.modalBottomExchangeSheet(
-                                    context: context),
-                                icon: Icon(
-                                  Icons.add_circle_outline,
-                                  size: 20.sp,
-                                  color: AppColor.grey,
-                                ))
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Container(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextView(
+                        text: 'Exchange Rate Management',
+                        color: AppColor.greyKind,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isExchangeRate = !isExchangeRate!;
+                            });
+                          },
+                          icon: Icon(isExchangeRate == false
+                              ? Icons.arrow_drop_down_sharp
+                              : Icons.arrow_drop_up_sharp))
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  isExchangeRate == false
+                      ? const SizedBox.shrink()
+                      : Container(
                           width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.w, horizontal: 16.w),
                           decoration: BoxDecoration(
+                            color: AppColor.white,
                             border: Border.all(color: AppColor.inGrey),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (model.getExchangeRates != null)
-                                ...model.getExchangeRates!.data!.reversed.map(
-                                    (e) => model.exchangeConWidget(context, e))
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextView(
+                                    text: 'Exchange rates',
+                                    color: AppColor.greyKind,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  IconButton(
+                                      onPressed: () =>
+                                          model.modalBottomExchangeSheet(
+                                              context: context),
+                                      icon: Icon(
+                                        Icons.add_circle_outline,
+                                        size: 20.sp,
+                                        color: AppColor.grey,
+                                      ))
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColor.inGrey),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (model.getExchangeRates != null)
+                                      ...model.getExchangeRates!.data!.reversed
+                                          .map((e) => model.exchangeConWidget(
+                                              context, e))
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              TextView(
+                                text:
+                                    'Last Updated at Tuesday, 3 December 2024 08:12 AM(UTC +01:00)',
+                                color: AppColor.primary,
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w400,
+                              )
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        TextView(
-                          text:
-                              'Last Updated at Tuesday, 3 December 2024 08:12 AM(UTC +01:00)',
-                          color: AppColor.primary,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w400,
-                        )
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

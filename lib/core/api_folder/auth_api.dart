@@ -409,10 +409,11 @@ class AuthApi {
     }
   }
 
-  Future<dynamic> denyReceipts(String? id) async {
+  Future<dynamic> denyReceipts({String? id, String? reason}) async {
     try {
       final response = await _service.call(
         'admin/receipts/$id/deny',
+        data: {"reason": reason},
         RequestMethod.post,
       );
       logger.d(response.data);

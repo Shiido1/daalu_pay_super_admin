@@ -228,11 +228,13 @@ class AuthViewModel extends BaseViewModel {
                                   buttonText: 'Delete Rate',
                                   color: AppColor.white,
                                   border: 8,
-                                  isLoading: isLoading,
+                                  isLoading: _isLoading,
                                   buttonColor: AppColor.red,
                                   buttonBorderColor: Colors.transparent,
-                                  onPressed: () =>
-                                      deleteExchanges(context, id!)),
+                                  onPressed: () {
+                                    deleteExchanges(context, id!);
+                                    model.notifyListeners();
+                                  }),
                             ),
                             SizedBox(
                               height: 30.h,
@@ -662,8 +664,8 @@ class AuthViewModel extends BaseViewModel {
                                         validator:
                                             AppValidator.validateString(),
                                         suffixWidget: IconButton(
-                                            onPressed: () => model
-                                                .shwToCurrencyDialog(context),
+                                            onPressed: () =>
+                                                shwToCurrencyDialog(context),
                                             icon: const Icon(
                                               Icons.arrow_drop_down_sharp,
                                               color: AppColor.black,
@@ -704,7 +706,6 @@ class AuthViewModel extends BaseViewModel {
                                     buttonBorderColor: Colors.transparent,
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        Navigator.pop(context);
                                         if (d == null) {
                                           addExchanges(
                                               context,
@@ -715,6 +716,7 @@ class AuthViewModel extends BaseViewModel {
                                                   toCurrency:
                                                       toCurrencyController.text,
                                                   rate: rateController.text));
+                                          model.notifyListeners();
                                         } else {
                                           updateExchanges(
                                               context,
@@ -726,6 +728,8 @@ class AuthViewModel extends BaseViewModel {
                                                       toCurrencyController.text,
                                                   rate: rateController.text),
                                               d.id.toString());
+
+                                          model.notifyListeners();
                                         }
                                       }
                                     }),
@@ -987,6 +991,7 @@ class AuthViewModel extends BaseViewModel {
                                         onTap: () {
                                           toCurrencyController.text =
                                               e['code']!;
+                                          model.notifyListeners();
                                           Navigator.of(context).pop();
                                         },
                                         child: Padding(
@@ -1828,11 +1833,13 @@ class AuthViewModel extends BaseViewModel {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         AppUtils.snackbar(context, message: 'Rate added Successfully..!');
       });
+      Navigator.pop(context);
       getExchanges(context);
       fromCurrencyController.text = '';
       toCurrencyController.text = '';
       rateController.text = '';
       _isLoadingRate = false;
+      notifyListeners();
     } catch (e) {
       _isLoadingRate = false;
       logger.d(e);
@@ -1852,12 +1859,14 @@ class AuthViewModel extends BaseViewModel {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         AppUtils.snackbar(context, message: 'Rate updated Successfully..!');
       });
+      Navigator.pop(context);
       getExchanges(context);
 
       fromCurrencyController.text = '';
       toCurrencyController.text = '';
       rateController.text = '';
       _isLoadingRate = false;
+      notifyListeners();
     } catch (e) {
       _isLoadingRate = false;
       logger.d(e);
@@ -1871,6 +1880,8 @@ class AuthViewModel extends BaseViewModel {
       _isLoading = true;
       await runBusyFuture(repositoryImply.deleteExchangeRate(id),
           throwException: true);
+
+      Navigator.pop(context);
       getExchanges(context);
       _isLoading = false;
     } catch (e) {
@@ -2639,8 +2650,8 @@ class AuthViewModel extends BaseViewModel {
                                   isLoading: model.isLoadingReceipts,
                                   buttonColor: AppColor.red,
                                   buttonBorderColor: Colors.transparent,
-                                  onPressed: () =>
-                                      denyReceipts(context, id: id)),
+                                  onPressed: () => denyReceipts(context,
+                                      id: id, reason: rejectController.text)),
                             ),
                             SizedBox(
                               height: 30.h,
@@ -2929,13 +2940,11 @@ class AuthViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> denyReceipts(contxt, {String? id}) async {
+  Future<void> denyReceipts(contxt, {String? id, String? reason}) async {
     try {
       _isLoadingReceipts = true;
       var v = await runBusyFuture(
-          repositoryImply.denyReceipts(
-            id,
-          ),
+          repositoryImply.denyReceipts(id: id, reason: reason),
           throwException: true);
       if (v['status'] == 'success') {
         AppUtils.snackbar(
