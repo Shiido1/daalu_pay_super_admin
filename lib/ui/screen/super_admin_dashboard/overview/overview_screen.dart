@@ -23,6 +23,8 @@ class OverviewScreen extends StatefulWidget {
 class _OverviewScreenState extends State<OverviewScreen> {
   bool isTapped = false;
   bool? isSwitched;
+  bool? isCurrency = false;
+  bool? isCurrencyRate = false;
 
   paddWing({child}) => Padding(
         padding: EdgeInsets.symmetric(
@@ -31,36 +33,36 @@ class _OverviewScreenState extends State<OverviewScreen> {
         child: child,
       );
 
-  List currentManagement = [
-    {
-      'currency': 'CNY',
-      'country': 'China',
-      'flag': AppImage.china,
-      'status': 'Active',
-      'status_value': true,
-    },
-    {
-      'currency': 'NGN',
-      'country': 'Nigeria',
-      'flag': AppImage.nigeria,
-      'status': 'Active',
-      'status_value': true,
-    },
-    {
-      'currency': 'GBP',
-      'country': 'UK',
-      'flag': AppImage.uk,
-      'status': 'Active',
-      'status_value': true,
-    },
-    {
-      'currency': 'CAD',
-      'country': 'Canada',
-      'flag': AppImage.canada,
-      'status': 'Disabled',
-      'status_value': false,
-    },
-  ];
+  // List currentManagement = [
+  //   {
+  //     'currency': 'CNY',
+  //     'country': 'China',
+  //     'flag': AppImage.china,
+  //     'status': 'Active',
+  //     'status_value': true,
+  //   },
+  //   {
+  //     'currency': 'NGN',
+  //     'country': 'Nigeria',
+  //     'flag': AppImage.nigeria,
+  //     'status': 'Active',
+  //     'status_value': true,
+  //   },
+  //   {
+  //     'currency': 'GBP',
+  //     'country': 'UK',
+  //     'flag': AppImage.uk,
+  //     'status': 'Active',
+  //     'status_value': true,
+  //   },
+  //   {
+  //     'currency': 'CAD',
+  //     'country': 'Canada',
+  //     'flag': AppImage.canada,
+  //     'status': 'Disabled',
+  //     'status_value': false,
+  //   },
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -535,16 +537,33 @@ class _OverviewScreenState extends State<OverviewScreen> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  TextView(
-                    text: 'Currency Management',
-                    color: AppColor.greyKind,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w500,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextView(
+                        text: 'Currency Management',
+                        color: AppColor.greyKind,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isCurrency = !isCurrency!;
+                            });
+                          },
+                          icon: Icon(isCurrency == false
+                              ? Icons.arrow_drop_down_sharp
+                              : Icons.arrow_drop_up_sharp))
+                    ],
                   ),
                   SizedBox(
                     height: 10.h,
                   ),
-                  Container(
+
+
+
+                 isCurrency==false?const SizedBox.shrink(): Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: AppColor.white,

@@ -57,6 +57,8 @@ class AuthViewModel extends BaseViewModel {
 
   bool get isLoading => _isLoading;
   bool _isLoading = false;
+  bool get isLoadingRate => _isLoadingRate;
+  bool _isLoadingRate = false;
   bool get isLoadingTr => _isLoadingTr;
   bool _isLoadingTr = false;
 
@@ -157,6 +159,8 @@ class AuthViewModel extends BaseViewModel {
   GetPaymentMethod? get getPaymentMethod => _getPaymentMethod;
   GetPaymentMethod? _getPaymentMethod;
   DateTime selectedDOB = DateTime.now();
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String? _formattedDob = DateFormat('EEEE, d MMM yyyy').format(DateTime.now());
   paddWingEx({child}) => Padding(
@@ -556,7 +560,7 @@ class AuthViewModel extends BaseViewModel {
         context: context,
         builder: (builder) {
           return ViewModelBuilder<AuthViewModel>.reactive(
-              viewModelBuilder: () => AuthViewModel(),
+              viewModelBuilder: () => locator<AuthViewModel>(),
               onViewModelReady: (model) {
                 if (d != null) {
                   fromCurrencyController.text = d.fromCurrency!;
@@ -580,144 +584,154 @@ class AuthViewModel extends BaseViewModel {
                               topLeft: Radius.circular(14.0),
                               topRight: Radius.circular(14.0))),
                       child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 16.h,
-                            ),
-                            paddedWing(
-                              value: 20.w,
-                              child: Center(
-                                child: TextView(
-                                  text: d == null
-                                      ? 'Add Exchange Rate'
-                                      : 'Update Exchange Rate',
-                                  fontSize: 16.4.sp,
-                                  fontWeight: FontWeight.w500,
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 16.h,
+                              ),
+                              paddedWing(
+                                value: 20.w,
+                                child: Center(
+                                  child: TextView(
+                                    text: d == null
+                                        ? 'Add Exchange Rate'
+                                        : 'Update Exchange Rate',
+                                    fontSize: 16.4.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Divider(
-                              color: AppColor.inGrey,
-                              thickness: .5.r,
-                            ),
-                            paddedWing(
-                              value: 20.w,
-                              child: TextView(
-                                text: d == null
-                                    ? 'Kindly select currencies to add exchange rates'
-                                    : 'Kindly select currencies to update exchange rates',
-                                fontSize: 14.8.sp,
-                                textAlign: TextAlign.start,
+                              Divider(
+                                color: AppColor.inGrey,
+                                thickness: .5.r,
                               ),
-                            ),
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            paddedWing(
-                              value: 20.w,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: TextFormWidget(
-                                      label: 'From Currency',
-                                      hint: 'Exchange rate from',
-                                      border: 10,
-                                      isFilled: true,
-                                      readOnly: true,
-                                      fillColor: AppColor.white,
-                                      controller: fromCurrencyController,
-                                      validator: AppValidator.validateString(),
-                                      suffixWidget: IconButton(
-                                          onPressed: () =>
-                                              shwFromCurrencyDialog(context),
-                                          icon: const Icon(
-                                            Icons.arrow_drop_down_sharp,
-                                            color: AppColor.black,
-                                          )),
+                              paddedWing(
+                                value: 20.w,
+                                child: TextView(
+                                  text: d == null
+                                      ? 'Kindly select currencies to add exchange rates'
+                                      : 'Kindly select currencies to update exchange rates',
+                                  fontSize: 14.8.sp,
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              paddedWing(
+                                value: 20.w,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: TextFormWidget(
+                                        label: 'From Currency',
+                                        hint: 'Exchange rate from',
+                                        border: 10,
+                                        isFilled: true,
+                                        readOnly: true,
+                                        fillColor: AppColor.white,
+                                        controller: fromCurrencyController,
+                                        validator:
+                                            AppValidator.validateString(),
+                                        suffixWidget: IconButton(
+                                            onPressed: () =>
+                                                shwFromCurrencyDialog(context),
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down_sharp,
+                                              color: AppColor.black,
+                                            )),
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 18.w,
-                                  ),
-                                  Expanded(
-                                    child: TextFormWidget(
-                                      label: 'To Currency',
-                                      hint: 'Exchange rate to',
-                                      border: 10,
-                                      isFilled: true,
-                                      readOnly: true,
-                                      fillColor: AppColor.white,
-                                      controller: toCurrencyController,
-                                      validator: AppValidator.validateString(),
-                                      suffixWidget: IconButton(
-                                          onPressed: () => model
-                                              .shwToCurrencyDialog(context),
-                                          icon: const Icon(
-                                            Icons.arrow_drop_down_sharp,
-                                            color: AppColor.black,
-                                          )),
+                                    SizedBox(
+                                      width: 18.w,
                                     ),
-                                  ),
-                                ],
+                                    Expanded(
+                                      child: TextFormWidget(
+                                        label: 'To Currency',
+                                        hint: 'Exchange rate to',
+                                        border: 10,
+                                        isFilled: true,
+                                        readOnly: true,
+                                        fillColor: AppColor.white,
+                                        controller: toCurrencyController,
+                                        validator:
+                                            AppValidator.validateString(),
+                                        suffixWidget: IconButton(
+                                            onPressed: () => model
+                                                .shwToCurrencyDialog(context),
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down_sharp,
+                                              color: AppColor.black,
+                                            )),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 16.h,
-                            ),
-                            paddedWing(
-                              value: 20.w,
-                              child: TextFormWidget(
-                                label: 'Add Rate',
-                                alignLabelWithHint: true,
-                                border: 10,
-                                isFilled: true,
-                                fillColor: AppColor.white,
-                                controller: rateController,
-                                validator: AppValidator.validateString(),
+                              SizedBox(
+                                height: 16.h,
                               ),
-                            ),
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            paddedWing(
-                              value: 20.w,
-                              child: ButtonWidget(
-                                  buttonText: d == null
-                                      ? 'Add Exchange Rate'
-                                      : 'Update Exchange Rate',
-                                  color: AppColor.white,
-                                  border: 8,
-                                  isLoading: model.isLoading,
-                                  buttonColor: AppColor.red,
-                                  buttonBorderColor: Colors.transparent,
-                                  onPressed: () {
-                                    if (d == null) {
-                                      addExchanges(
-                                          context,
-                                          AddExchangeRateEntityModel(
-                                              fromCurrency:
-                                                  fromCurrencyController.text,
-                                              toCurrency:
-                                                  toCurrencyController.text,
-                                              rate: rateController.text));
-                                    } else {
-                                      updateExchanges(
-                                          context,
-                                          AddExchangeRateEntityModel(
-                                              fromCurrency:
-                                                  fromCurrencyController.text,
-                                              toCurrency:
-                                                  toCurrencyController.text,
-                                              rate: rateController.text),
-                                          d.id.toString());
-                                    }
-                                  }),
-                            ),
-                          ],
+                              paddedWing(
+                                value: 20.w,
+                                child: TextFormWidget(
+                                  label: 'Add Rate',
+                                  alignLabelWithHint: true,
+                                  border: 10,
+                                  isFilled: true,
+                                  fillColor: AppColor.white,
+                                  controller: rateController,
+                                  validator: AppValidator.validateString(),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              paddedWing(
+                                value: 20.w,
+                                child: ButtonWidget(
+                                    buttonText: d == null
+                                        ? 'Add Exchange Rate'
+                                        : 'Update Exchange Rate',
+                                    color: AppColor.white,
+                                    border: 8,
+                                    isLoading: _isLoadingRate,
+                                    buttonColor: AppColor.red,
+                                    buttonBorderColor: Colors.transparent,
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        Navigator.pop(context);
+                                        if (d == null) {
+                                          addExchanges(
+                                              context,
+                                              AddExchangeRateEntityModel(
+                                                  fromCurrency:
+                                                      fromCurrencyController
+                                                          .text,
+                                                  toCurrency:
+                                                      toCurrencyController.text,
+                                                  rate: rateController.text));
+                                        } else {
+                                          updateExchanges(
+                                              context,
+                                              AddExchangeRateEntityModel(
+                                                  fromCurrency:
+                                                      fromCurrencyController
+                                                          .text,
+                                                  toCurrency:
+                                                      toCurrencyController.text,
+                                                  rate: rateController.text),
+                                              d.id.toString());
+                                        }
+                                      }
+                                    }),
+                              ),
+                            ],
+                          ),
                         ),
                       )),
                 );
@@ -1808,16 +1822,19 @@ class AuthViewModel extends BaseViewModel {
   Future<void> addExchanges(
       context, AddExchangeRateEntityModel addExchangeRates) async {
     try {
-      _isLoading = true;
+      _isLoadingRate = true;
       await runBusyFuture(repositoryImply.addExchangeRate(addExchangeRates),
           throwException: true);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        AppUtils.snackbar(context, message: 'Rate added Successfully..!');
+      });
       getExchanges(context);
       fromCurrencyController.text = '';
       toCurrencyController.text = '';
       rateController.text = '';
-      _isLoading = false;
+      _isLoadingRate = false;
     } catch (e) {
-      _isLoading = false;
+      _isLoadingRate = false;
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }
@@ -1827,18 +1844,22 @@ class AuthViewModel extends BaseViewModel {
   Future<void> updateExchanges(
       context, AddExchangeRateEntityModel addExchangeRates, String id) async {
     try {
-      _isLoading = true;
+      _isLoadingRate = true;
       await runBusyFuture(
           repositoryImply.updateExchangeRate(addExchangeRates, id),
           throwException: true);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        AppUtils.snackbar(context, message: 'Rate updated Successfully..!');
+      });
       getExchanges(context);
 
       fromCurrencyController.text = '';
       toCurrencyController.text = '';
       rateController.text = '';
-      _isLoading = false;
+      _isLoadingRate = false;
     } catch (e) {
-      _isLoading = false;
+      _isLoadingRate = false;
       logger.d(e);
       AppUtils.snackbar(context, message: e.toString(), error: true);
     }
