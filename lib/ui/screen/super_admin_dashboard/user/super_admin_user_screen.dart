@@ -289,46 +289,34 @@ class SuperAdminUserScreen extends StatelessWidget {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal: i.status ==
-                                                                              'active'
-                                                                          ? 8.w
-                                                                          : 3.2
-                                                                              .w,
+                                                                      horizontal:
+                                                                          4.w,
                                                                       vertical:
                                                                           5.2.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: i.status ==
-                                                                              'active'
-                                                                          ? AppColor.green.withOpacity(
-                                                                              .17)
-                                                                          : AppColor.greyKind.withOpacity(
-                                                                              .17),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              4)),
-                                                                  child:
-                                                                      TextView(
-                                                                    text: i.status
-                                                                            ?.capitalize() ??
-                                                                        '',
-                                                                    fontSize: i.status ==
-                                                                            'active'
-                                                                        ? 12.4
-                                                                            .sp
-                                                                        : 10.sp,
-                                                                    color: i.status ==
-                                                                            'active'
-                                                                        ? AppColor
-                                                                            .deeperGreen
-                                                                        : AppColor
-                                                                            .greyKind,
-                                                                    fontWeight: i.status ==
-                                                                            'active'
-                                                                        ? FontWeight
-                                                                            .w500
-                                                                        : FontWeight
-                                                                            .w600,
-                                                                  ),
+                                                                      color: i.status == 'suspended'
+                                                                          ? AppColor.greyKind.withOpacity(.17)
+                                                                          : i.kycStatus == 'approved'
+                                                                              ? AppColor.deeperGreen.withOpacity(.17)
+                                                                              : i.kycStatus == 'rejected'
+                                                                                  ? AppColor.red.withOpacity(.17)
+                                                                                  : i.kycStatus == 'pending'
+                                                                                      ? AppColor.yellow.withOpacity(.17)
+                                                                                      : AppColor.greyKind.withOpacity(.17),
+                                                                      borderRadius: BorderRadius.circular(4)),
+                                                                  child: TextView(
+                                                                      text: i.status == 'suspended' ? i.status!.capitalize() : i.kycStatus?.capitalize() ?? '',
+                                                                      fontSize: 11.2.sp,
+                                                                      color: i.status == 'suspended'
+                                                                          ? AppColor.greyKind
+                                                                          : i.kycStatus == 'approved'
+                                                                              ? AppColor.deeperGreen
+                                                                              : i.kycStatus == 'rejected'
+                                                                                  ? AppColor.red
+                                                                                  : i.kycStatus == 'pending'
+                                                                                      ? AppColor.yellow
+                                                                                      : AppColor.greyKind,
+                                                                      fontWeight: FontWeight.w500),
                                                                 ),
                                                                 PopupMenuButton(
                                                                   onSelected:
@@ -462,46 +450,34 @@ class SuperAdminUserScreen extends StatelessWidget {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal: i.status ==
-                                                                              'active'
-                                                                          ? 8.w
-                                                                          : 3.2
-                                                                              .w,
+                                                                      horizontal:
+                                                                          4.w,
                                                                       vertical:
                                                                           5.2.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: i.status ==
-                                                                              'active'
-                                                                          ? AppColor.green.withOpacity(
-                                                                              .17)
-                                                                          : AppColor.greyKind.withOpacity(
-                                                                              .17),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              4)),
-                                                                  child:
-                                                                      TextView(
-                                                                    text: i.status
-                                                                            ?.capitalize() ??
-                                                                        '',
-                                                                    fontSize: i.status ==
-                                                                            'active'
-                                                                        ? 12.4
-                                                                            .sp
-                                                                        : 10.sp,
-                                                                    color: i.status ==
-                                                                            'active'
-                                                                        ? AppColor
-                                                                            .deeperGreen
-                                                                        : AppColor
-                                                                            .greyKind,
-                                                                    fontWeight: i.status ==
-                                                                            'active'
-                                                                        ? FontWeight
-                                                                            .w500
-                                                                        : FontWeight
-                                                                            .w600,
-                                                                  ),
+                                                                      color: i.status == 'suspended'
+                                                                          ? AppColor.greyKind.withOpacity(.17)
+                                                                          : i.kycStatus == 'approved'
+                                                                              ? AppColor.deeperGreen.withOpacity(.17)
+                                                                              : i.kycStatus == 'rejected'
+                                                                                  ? AppColor.red.withOpacity(.17)
+                                                                                  : i.kycStatus == 'pending'
+                                                                                      ? AppColor.yellow.withOpacity(.17)
+                                                                                      : AppColor.greyKind.withOpacity(.17),
+                                                                      borderRadius: BorderRadius.circular(4)),
+                                                                  child: TextView(
+                                                                      text: i.status == 'suspended' ? i.status!.capitalize() : i.kycStatus?.capitalize() ?? '',
+                                                                      fontSize: 11.2.sp,
+                                                                      color: i.status == 'suspended'
+                                                                          ? AppColor.greyKind
+                                                                          : i.kycStatus == 'approved'
+                                                                              ? AppColor.deeperGreen
+                                                                              : i.kycStatus == 'rejected'
+                                                                                  ? AppColor.red
+                                                                                  : i.kycStatus == 'pending'
+                                                                                      ? AppColor.yellow
+                                                                                      : AppColor.greyKind,
+                                                                      fontWeight: FontWeight.w500),
                                                                 ),
                                                                 PopupMenuButton(
                                                                   onSelected:
@@ -634,46 +610,34 @@ class SuperAdminUserScreen extends StatelessWidget {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal: i.status ==
-                                                                              'active'
-                                                                          ? 8.w
-                                                                          : 3.2
-                                                                              .w,
+                                                                      horizontal:
+                                                                          4.w,
                                                                       vertical:
                                                                           5.2.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: i.status ==
-                                                                              'active'
-                                                                          ? AppColor.green.withOpacity(
-                                                                              .17)
-                                                                          : AppColor.greyKind.withOpacity(
-                                                                              .17),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              4)),
-                                                                  child:
-                                                                      TextView(
-                                                                    text: i.status
-                                                                            ?.capitalize() ??
-                                                                        '',
-                                                                    fontSize: i.status ==
-                                                                            'active'
-                                                                        ? 12.4
-                                                                            .sp
-                                                                        : 10.sp,
-                                                                    color: i.status ==
-                                                                            'active'
-                                                                        ? AppColor
-                                                                            .deeperGreen
-                                                                        : AppColor
-                                                                            .greyKind,
-                                                                    fontWeight: i.status ==
-                                                                            'active'
-                                                                        ? FontWeight
-                                                                            .w500
-                                                                        : FontWeight
-                                                                            .w600,
-                                                                  ),
+                                                                      color: i.status == 'suspended'
+                                                                          ? AppColor.greyKind.withOpacity(.17)
+                                                                          : i.kycStatus == 'approved'
+                                                                              ? AppColor.deeperGreen.withOpacity(.17)
+                                                                              : i.kycStatus == 'rejected'
+                                                                                  ? AppColor.red.withOpacity(.17)
+                                                                                  : i.kycStatus == 'pending'
+                                                                                      ? AppColor.yellow.withOpacity(.17)
+                                                                                      : AppColor.greyKind.withOpacity(.17),
+                                                                      borderRadius: BorderRadius.circular(4)),
+                                                                  child: TextView(
+                                                                      text: i.status == 'suspended' ? i.status!.capitalize() : i.kycStatus?.capitalize() ?? '',
+                                                                      fontSize: 11.2.sp,
+                                                                      color: i.status == 'suspended'
+                                                                          ? AppColor.greyKind
+                                                                          : i.kycStatus == 'approved'
+                                                                              ? AppColor.deeperGreen
+                                                                              : i.kycStatus == 'rejected'
+                                                                                  ? AppColor.red
+                                                                                  : i.kycStatus == 'pending'
+                                                                                      ? AppColor.yellow
+                                                                                      : AppColor.greyKind,
+                                                                      fontWeight: FontWeight.w500),
                                                                 ),
                                                                 PopupMenuButton(
                                                                   onSelected:
@@ -803,46 +767,34 @@ class SuperAdminUserScreen extends StatelessWidget {
                                                                 ),
                                                                 Container(
                                                                   padding: EdgeInsets.symmetric(
-                                                                      horizontal: i.status ==
-                                                                              'active'
-                                                                          ? 8.w
-                                                                          : 3.2
-                                                                              .w,
+                                                                      horizontal:
+                                                                          4.w,
                                                                       vertical:
                                                                           5.2.w),
                                                                   decoration: BoxDecoration(
-                                                                      color: i.status ==
-                                                                              'active'
-                                                                          ? AppColor.green.withOpacity(
-                                                                              .17)
-                                                                          : AppColor.greyKind.withOpacity(
-                                                                              .17),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              4)),
-                                                                  child:
-                                                                      TextView(
-                                                                    text: i.status
-                                                                            ?.capitalize() ??
-                                                                        '',
-                                                                    fontSize: i.status ==
-                                                                            'active'
-                                                                        ? 12.4
-                                                                            .sp
-                                                                        : 10.sp,
-                                                                    color: i.status ==
-                                                                            'active'
-                                                                        ? AppColor
-                                                                            .deeperGreen
-                                                                        : AppColor
-                                                                            .greyKind,
-                                                                    fontWeight: i.status ==
-                                                                            'active'
-                                                                        ? FontWeight
-                                                                            .w500
-                                                                        : FontWeight
-                                                                            .w600,
-                                                                  ),
+                                                                      color: i.status == 'suspended'
+                                                                          ? AppColor.greyKind.withOpacity(.17)
+                                                                          : i.kycStatus == 'approved'
+                                                                              ? AppColor.deeperGreen.withOpacity(.17)
+                                                                              : i.kycStatus == 'rejected'
+                                                                                  ? AppColor.red.withOpacity(.17)
+                                                                                  : i.kycStatus == 'pending'
+                                                                                      ? AppColor.yellow.withOpacity(.17)
+                                                                                      : AppColor.greyKind.withOpacity(.17),
+                                                                      borderRadius: BorderRadius.circular(4)),
+                                                                  child: TextView(
+                                                                      text: i.status == 'suspended' ? i.status!.capitalize() : i.kycStatus?.capitalize() ?? '',
+                                                                      fontSize: 11.2.sp,
+                                                                      color: i.status == 'suspended'
+                                                                          ? AppColor.greyKind
+                                                                          : i.kycStatus == 'approved'
+                                                                              ? AppColor.deeperGreen
+                                                                              : i.kycStatus == 'rejected'
+                                                                                  ? AppColor.red
+                                                                                  : i.kycStatus == 'pending'
+                                                                                      ? AppColor.yellow
+                                                                                      : AppColor.greyKind,
+                                                                      fontWeight: FontWeight.w500),
                                                                 ),
                                                                 PopupMenuButton(
                                                                   onSelected:
