@@ -9,7 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../app_assets/app_color.dart';
 import '../../app_assets/app_image.dart';
 import '../widget/text_widget.dart';
-import 'notification/super_admin_notification_screen.dart';
+// import 'notification/super_admin_notification_screen.dart';
 import 'overview/overview_screen.dart';
 import 'transactions/super_admin_transaction_screen.dart';
 import 'admin_user/super_admin_admin_screen.dart';
@@ -29,7 +29,7 @@ class _SuperAdminDashboardState extends State<SuperAdminDashboard> {
     SuperAdminUsersScreen(),
     SuperAdminTransactionScreen(),
     SuperAdminUserScreen(),
-    SuperAdminNotificationScreen(),
+    // SuperAdminNotificationScreen(),
   ];
 
   Future<bool> willPopControl() async {
@@ -136,14 +136,14 @@ class _SuperAdminDashboardState extends State<SuperAdminDashboard> {
                   ),
                   label: 'User',
                 ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    AppImage.bell,
-                    color:
-                        _currentIndex == 4 ? AppColor.primary : AppColor.black,
-                  ),
-                  label: 'Notifications',
-                ),
+                // BottomNavigationBarItem(
+                //   icon: SvgPicture.asset(
+                //     AppImage.bell,
+                //     color:
+                //         _currentIndex == 4 ? AppColor.primary : AppColor.black,
+                //   ),
+                //   label: 'Notifications',
+                // ),
               ]),
         ),
       ),

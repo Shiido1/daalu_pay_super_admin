@@ -9,7 +9,7 @@ part of 'data.dart';
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       id: json['id'] as num?,
       currencyCode: json['currencyCode'] as String?,
-      fee: json['fee'] as dynamic,
+      fee: json['fee'],
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
