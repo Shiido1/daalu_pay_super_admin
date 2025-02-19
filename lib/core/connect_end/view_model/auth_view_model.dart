@@ -2972,6 +2972,7 @@ class AuthViewModel extends BaseViewModel {
         );
 
         getUsersReceiptAgain(contxt);
+        filename = '';
       }
 
       _isLoadingReceipts = false;

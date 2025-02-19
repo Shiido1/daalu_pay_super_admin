@@ -79,8 +79,7 @@ class _ViewReceiptState extends State<ViewReceipt> {
                                   height: 10.h,
                                 ),
                                 QrImageView(
-                                  data: widget.datum?.recipientAlipayId ??
-                                      'https://qrfy.io/r/kvkzs_kXLe',
+                                  data: widget.datum?.recipientAlipayId ?? '',
                                   version: QrVersions.auto,
                                   size: 200,
                                   gapless: false,
@@ -103,7 +102,7 @@ class _ViewReceiptState extends State<ViewReceipt> {
                                           Clipboard.setData(ClipboardData(
                                               text: widget.datum
                                                       ?.recipientAlipayId ??
-                                                  'https://qrfy.io/r/kvkzs_kXLe'));
+                                                  ''));
                                           AppUtils.snackbar(context,
                                               message:
                                                   'Barcode Address Copied..!');

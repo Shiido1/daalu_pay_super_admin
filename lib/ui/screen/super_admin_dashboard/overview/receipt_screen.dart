@@ -150,10 +150,9 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                       ),
                                       o.documentType == 'alipay_id'
                                           ? QrImageView(
-                                              data: o.recipientAlipayId ??
-                                                  'https://qrfy.io/r/kvkzs_kXLe',
+                                              data: o.recipientAlipayId ?? '',
                                               version: QrVersions.auto,
-                                              size: 70,
+                                              size: 90,
                                               gapless: false,
                                             )
                                           : ClipRRect(
