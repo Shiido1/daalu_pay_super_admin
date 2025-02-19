@@ -50,7 +50,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                       ),
                       TextView(
                         text: 'User Management',
-                        fontSize: 20.sp,
+                        fontSize: 22.0.sp,
                         fontWeight: FontWeight.w500,
                       ),
                       SvgPicture.asset(
@@ -176,7 +176,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                       TextView(
                         text: 'Admin Users',
                         fontSize: 18.sp,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                       ),
                       IconButton(
                           onPressed: () =>
@@ -208,25 +208,25 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                             children: [
                               TextView(
                                 text: 'Name',
-                                fontSize: 14.sp,
+                                fontSize: 16.4.sp,
                                 fontWeight: FontWeight.w500,
                               ),
                               TextView(
                                 text: 'Email',
-                                fontSize: 14.sp,
+                                fontSize: 16.4.sp,
                                 fontWeight: FontWeight.w500,
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 80.w),
+                                padding: EdgeInsets.only(left: 40.w),
                                 child: TextView(
                                   text: 'Status',
-                                  fontSize: 14.sp,
+                                  fontSize: 16.4.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               TextView(
                                 text: 'Actions',
-                                fontSize: 14.sp,
+                                fontSize: 16.4.sp,
                                 fontWeight: FontWeight.w500,
                               ),
                             ],
@@ -306,13 +306,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                     .spaceBetween,
                                                             children: [
                                                               SizedBox(
-                                                                width: 50.w,
+                                                                width: 60.w,
                                                                 child: TextView(
                                                                   text:
                                                                       e.firstName ??
                                                                           '',
                                                                   fontSize:
-                                                                      14.sp,
+                                                                      16.4.sp,
                                                                   maxLines: 1,
                                                                   textOverflow:
                                                                       TextOverflow
@@ -323,13 +323,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                               ),
                                                               SizedBox(
-                                                                width: 140.w,
+                                                                width: 130.w,
                                                                 child: TextView(
                                                                   text: e.email
                                                                           ?.toLowerCase() ??
                                                                       '',
                                                                   fontSize:
-                                                                      14.sp,
+                                                                      16.sp,
                                                                   maxLines: 1,
                                                                   textOverflow:
                                                                       TextOverflow
@@ -366,7 +366,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                           ?.capitalize() ??
                                                                       '',
                                                                   fontSize:
-                                                                      12.4.sp,
+                                                                      12.sp,
                                                                   color: e.status ==
                                                                           'active'
                                                                       ? AppColor
@@ -470,13 +470,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                     .spaceBetween,
                                                             children: [
                                                               SizedBox(
-                                                                width: 50.w,
+                                                                width: 60.w,
                                                                 child: TextView(
                                                                   text:
                                                                       e.firstName ??
                                                                           '',
                                                                   fontSize:
-                                                                      14.sp,
+                                                                      16.sp,
                                                                   maxLines: 1,
                                                                   textOverflow:
                                                                       TextOverflow
@@ -487,13 +487,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                               ),
                                                               SizedBox(
-                                                                width: 140.w,
+                                                                width: 130.w,
                                                                 child: TextView(
                                                                   text: e.email
                                                                           ?.toLowerCase() ??
                                                                       '',
                                                                   fontSize:
-                                                                      14.sp,
+                                                                      16.sp,
                                                                   maxLines: 1,
                                                                   textOverflow:
                                                                       TextOverflow
@@ -530,7 +530,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                           ?.capitalize() ??
                                                                       '',
                                                                   fontSize:
-                                                                      12.4.sp,
+                                                                      12.sp,
                                                                   color: e.status ==
                                                                           'active'
                                                                       ? AppColor
@@ -635,13 +635,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                     .spaceBetween,
                                                             children: [
                                                               SizedBox(
-                                                                width: 50.w,
+                                                                width: 60.w,
                                                                 child: TextView(
                                                                   text:
                                                                       e.firstName ??
                                                                           '',
                                                                   fontSize:
-                                                                      14.sp,
+                                                                      16.sp,
                                                                   maxLines: 1,
                                                                   textOverflow:
                                                                       TextOverflow
@@ -652,13 +652,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                               ),
                                                               SizedBox(
-                                                                width: 140.w,
+                                                                width: 130.w,
                                                                 child: TextView(
                                                                   text: e.email
                                                                           ?.toLowerCase() ??
                                                                       '',
                                                                   fontSize:
-                                                                      14.sp,
+                                                                      16.sp,
                                                                   maxLines: 1,
                                                                   textOverflow:
                                                                       TextOverflow
@@ -695,7 +695,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                           ?.capitalize() ??
                                                                       '',
                                                                   fontSize:
-                                                                      12.4.sp,
+                                                                      12.sp,
                                                                   color: e.status ==
                                                                           'active'
                                                                       ? AppColor
@@ -795,13 +795,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                     .spaceBetween,
                                                             children: [
                                                               SizedBox(
-                                                                width: 50.w,
+                                                                width: 60.w,
                                                                 child: TextView(
                                                                   text:
                                                                       e.firstName ??
                                                                           '',
                                                                   fontSize:
-                                                                      14.sp,
+                                                                      16.sp,
                                                                   maxLines: 1,
                                                                   textOverflow:
                                                                       TextOverflow
@@ -812,13 +812,13 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                 ),
                                                               ),
                                                               SizedBox(
-                                                                width: 140.w,
+                                                                width: 130.w,
                                                                 child: TextView(
                                                                   text: e.email
                                                                           ?.toLowerCase() ??
                                                                       '',
                                                                   fontSize:
-                                                                      14.sp,
+                                                                      16.sp,
                                                                   maxLines: 1,
                                                                   textOverflow:
                                                                       TextOverflow
@@ -855,7 +855,7 @@ class _SuperAdminUsersScreenState extends State<SuperAdminUsersScreen> {
                                                                           ?.capitalize() ??
                                                                       '',
                                                                   fontSize:
-                                                                      12.4.sp,
+                                                                      12.sp,
                                                                   color: e.status ==
                                                                           'active'
                                                                       ? AppColor

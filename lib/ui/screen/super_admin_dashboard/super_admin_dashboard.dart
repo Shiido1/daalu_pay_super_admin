@@ -103,6 +103,8 @@ class _SuperAdminDashboardState extends State<SuperAdminDashboard> {
               backgroundColor: AppColor.white,
               selectedItemColor: AppColor.primary,
               type: BottomNavigationBarType.fixed,
+              selectedFontSize: 14.8.sp,
+              unselectedFontSize: 14.6.sp,
               items: [
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
@@ -113,10 +115,14 @@ class _SuperAdminDashboardState extends State<SuperAdminDashboard> {
                   label: 'Overview',
                 ),
                 BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    AppImage.person,
-                    color:
-                        _currentIndex == 1 ? AppColor.primary : AppColor.black,
+                  icon: Padding(
+                    padding: EdgeInsets.only(top: 4.w),
+                    child: SvgPicture.asset(
+                      AppImage.person,
+                      color: _currentIndex == 1
+                          ? AppColor.primary
+                          : AppColor.black,
+                    ),
                   ),
                   label: 'Admin',
                 ),

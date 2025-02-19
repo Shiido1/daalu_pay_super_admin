@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:stacked/stacked.dart';
 import '../../../../core/connect_end/view_model/auth_view_model.dart';
 import '../../../../core/core_folder/app/app.locator.dart';
@@ -90,8 +91,10 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           TextView(
-                                              text:
-                                                  '${getAllCurrency('CNY')}${oCcy.format(double.parse(o.amount!))}'),
+                                            text:
+                                                '${getAllCurrency('CNY')}${oCcy.format(double.parse(o.amount!))}',
+                                            fontSize: 18.sp,
+                                          ),
                                           SizedBox(
                                             height: 10.h,
                                           ),
@@ -107,7 +110,7 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                                       ? AppColor.grey
                                                           .withOpacity(.2)
                                                       : o.status?.toLowerCase() ==
-                                                              'approved'
+                                                              'completed'
                                                           ? AppColor.green
                                                               .withOpacity(.2)
                                                           : AppColor.red
@@ -115,15 +118,23 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                                   borderRadius:
                                                       BorderRadius.circular(4)),
                                               child: TextView(
-                                                text: o.status?.toLowerCase() ==
-                                                        'pending'
-                                                    ? 'Pending'
-                                                    : o.status?.toLowerCase() ==
-                                                            'approved'
-                                                        ? 'Approved'
-                                                        : 'Denied',
-                                                fontSize: 12.sp,
-                                              )),
+                                                  text: o.status
+                                                              ?.toLowerCase() ==
+                                                          'pending'
+                                                      ? 'Pending'
+                                                      : o.status?.toLowerCase() ==
+                                                              'completed'
+                                                          ? 'Approved'
+                                                          : 'Denied',
+                                                  fontSize: 14.8.sp,
+                                                  color: o.status
+                                                              ?.toLowerCase() ==
+                                                          'pending'
+                                                      ? AppColor.grey
+                                                      : o.status?.toLowerCase() ==
+                                                              'completed'
+                                                          ? AppColor.green
+                                                          : AppColor.red)),
                                           SizedBox(
                                             height: 6.h,
                                           ),
@@ -132,24 +143,24 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                                     'yyyy MMM dd, hh:mm a')
                                                 .format(DateTime.parse(
                                                     o.createdAt.toString())),
-                                            fontSize: 11.4.sp,
+                                            fontSize: 14.4.sp,
                                             color: AppColor.grey,
                                           ),
                                         ],
                                       ),
-                                      o.receipt == null
-                                          ? TextView(
-                                              text: 'file-: ${o.receipt}'
-                                                  .capitalize(),
-                                              fontSize: 14.sp,
-                                              color: AppColor.black,
-                                              fontWeight: FontWeight.w400,
+                                      o.documentType == 'alipay_id'
+                                          ? QrImageView(
+                                              data: o.recipientAlipayId ??
+                                                  'https://qrfy.io/r/kvkzs_kXLe',
+                                              version: QrVersions.auto,
+                                              size: 70,
+                                              gapless: false,
                                             )
                                           : ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                               child: Image.network(
-                                                'https://res.cloudinary.com/walexbiz/image/upload/f_auto,q_auto/${o.receipt}',
+                                                'https://res.cloudinary.com/walexbiz/image/upload/f_auto,q_auto/${o.recipientAlipayId}',
                                                 width: 90.w,
                                                 height: 120,
                                                 fit: BoxFit.cover,

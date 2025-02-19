@@ -44,7 +44,7 @@ class ButtonWidget extends StatelessWidget {
           child: isLoading == false || isLoading == null
               ? TextView(
                   text: buttonText!,
-                  fontSize: 16.sp,
+                  fontSize: 18.4.sp,
                   color: color,
                   fontWeight: FontWeight.w600,
                 )
