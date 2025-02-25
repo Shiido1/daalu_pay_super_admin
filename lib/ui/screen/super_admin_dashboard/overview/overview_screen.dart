@@ -34,37 +34,6 @@ class _OverviewScreenState extends State<OverviewScreen> {
         child: child,
       );
 
-  // List currentManagement = [
-  //   {
-  //     'currency': 'CNY',
-  //     'country': 'China',
-  //     'flag': AppImage.china,
-  //     'status': 'Active',
-  //     'status_value': true,
-  //   },
-  //   {
-  //     'currency': 'NGN',
-  //     'country': 'Nigeria',
-  //     'flag': AppImage.nigeria,
-  //     'status': 'Active',
-  //     'status_value': true,
-  //   },
-  //   {
-  //     'currency': 'GBP',
-  //     'country': 'UK',
-  //     'flag': AppImage.uk,
-  //     'status': 'Active',
-  //     'status_value': true,
-  //   },
-  //   {
-  //     'currency': 'CAD',
-  //     'country': 'Canada',
-  //     'flag': AppImage.canada,
-  //     'status': 'Disabled',
-  //     'status_value': false,
-  //   },
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AuthViewModel>.reactive(
@@ -240,55 +209,6 @@ class _OverviewScreenState extends State<OverviewScreen> {
                             ),
                           ),
                         ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        // Container(
-                        //   padding: EdgeInsets.symmetric(
-                        //       horizontal: 34.w, vertical: 6.w),
-                        //   decoration: BoxDecoration(
-                        //       border: Border.all(
-                        //         color: AppColor.inGrey,
-                        //       ),
-                        //       borderRadius: BorderRadius.circular(8.r)),
-                        //   child: Row(
-                        //     children: [
-                        //       TextView(
-                        //         text: 'Deposit',
-                        //         fontSize: 14.sp,
-                        //         fontWeight: FontWeight.w400,
-                        //       ),
-                        //       SizedBox(
-                        //         width: 16.w,
-                        //       ),
-                        //       SvgPicture.asset(AppImage.arrowDown)
-                        //     ],
-                        //   ),
-                        // ),
-                        //     Container(
-                        //       padding: EdgeInsets.symmetric(
-                        //           horizontal: 34.w, vertical: 6.w),
-                        //       decoration: BoxDecoration(
-                        //           border: Border.all(
-                        //             color: AppColor.inGrey,
-                        //           ),
-                        //           borderRadius: BorderRadius.circular(8.r)),
-                        //       child: Row(
-                        //         children: [
-                        //           TextView(
-                        //             text: 'Withdraw',
-                        //             fontSize: 14.sp,
-                        //             fontWeight: FontWeight.w400,
-                        //           ),
-                        //           SizedBox(
-                        //             width: 16.w,
-                        //           ),
-                        //           SvgPicture.asset(AppImage.arrowUp)
-                        //         ],
-                        //       ),
-                        //     )
-                        //   ],
-                        // )
                       ],
                     ),
                   ),
@@ -601,20 +521,11 @@ class _OverviewScreenState extends State<OverviewScreen> {
                                           model.queryCurrency = p0;
                                           model.notifyListeners();
                                         },
-                                        // controller: emailController,
-                                        // validator: AppValidator.validateEmail(),
                                       ),
                                     ),
                                     SizedBox(
                                       width: 22.w,
                                     )
-                                    // IconButton(
-                                    //     onPressed: () {},
-                                    //     icon: Icon(
-                                    //       Icons.add_circle_outline,
-                                    //       size: 26.sp,
-                                    //       color: AppColor.grey,
-                                    //     ))
                                   ],
                                 ),
                               ),
@@ -741,6 +652,31 @@ class _OverviewScreenState extends State<OverviewScreen> {
                               SizedBox(
                                 height: 10.h,
                               ),
+                              SizedBox(
+                                width: 230.w,
+                                child: TextFormWidget(
+                                  label: 'Search',
+                                  labelColor: AppColor.grey,
+                                  hint: null,
+                                  border: 10,
+                                  borderColor: AppColor.transparent,
+                                  isFilled: true,
+                                  fillColor: AppColor.inGreyOut,
+                                  prefixWidget: Padding(
+                                    padding: EdgeInsets.all(12.w),
+                                    child: SvgPicture.asset(
+                                      AppImage.search,
+                                    ),
+                                  ),
+                                  onChange: (p0) {
+                                    model.queryExchangeRate = p0;
+                                    model.notifyListeners();
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
                               Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
@@ -751,9 +687,36 @@ class _OverviewScreenState extends State<OverviewScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     if (model.getExchangeRates != null)
-                                      ...model.getExchangeRates!.data!.reversed
-                                          .map((e) => model.exchangeConWidget(
-                                              context, e))
+                                      model.queryExchangeRate != ''
+                                          ? Column(
+                                              children: [
+                                                ...model.getExchangeRates!.data!
+                                                    .reversed
+                                                    .where((o) =>
+                                                        o.fromCurrency!
+                                                            .toLowerCase()
+                                                            .contains(model
+                                                                .queryExchangeRate
+                                                                .toLowerCase()) ||
+                                                        o.toCurrency!
+                                                            .toLowerCase()
+                                                            .contains(model
+                                                                .queryExchangeRate
+                                                                .toLowerCase()))
+                                                    .map((e) =>
+                                                        model.exchangeConWidget(
+                                                            context, e))
+                                              ],
+                                            )
+                                          : Column(
+                                              children: [
+                                                ...model.getExchangeRates!.data!
+                                                    .reversed
+                                                    .map((e) =>
+                                                        model.exchangeConWidget(
+                                                            context, e))
+                                              ],
+                                            )
                                   ],
                                 ),
                               ),
