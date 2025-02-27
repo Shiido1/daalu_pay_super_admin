@@ -13,9 +13,11 @@ import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_respo
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import '../connect_end/model/approve_receipt_entity_model.dart';
+import '../connect_end/model/approve_withdrawal_entity_model.dart';
 import '../connect_end/model/create_admin_response_model/create_admin_response_model.dart';
 import '../connect_end/model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
 import '../connect_end/model/get_all_user_response_model/get_all_user_response_model.dart';
+import '../connect_end/model/get_all_withdrawals_response_model/get_all_withdrawals_response_model.dart';
 import '../connect_end/model/get_payment_method/get_payment_method.dart';
 import '../connect_end/model/get_users_receipt_response_model/get_users_receipt_response_model.dart';
 import '../connect_end/model/login_entity_model.dart';
@@ -339,10 +341,12 @@ class AuthApi {
     }
   }
 
-  Future<dynamic> approveTransactions(String? id) async {
+  Future<dynamic> approveTransactions(
+      String? id, ApproveWithdrawalEntityModel? approve) async {
     try {
       final response = await _service.call(
-          'admin/transactions/$id/approve', RequestMethod.post);
+          'admin/withdrawals/$id/approve', RequestMethod.post,
+          data: approve?.toJson());
       logger.d(response.data);
       return response.data;
     } catch (e) {
@@ -354,7 +358,7 @@ class AuthApi {
   Future<dynamic> denyTransactions({String? id, String? text}) async {
     try {
       final response = await _service.call(
-          'admin/transactions/$id/deny', RequestMethod.post,
+          'admin/withdrawals/$id/deny', RequestMethod.post,
           data: {"reason": text});
       logger.d(response.data);
       return response.data;
@@ -440,6 +444,18 @@ class AuthApi {
           data: FormData.fromMap(post.toJson()));
       logger.d(response.data);
       return PostUserVerificationCloudResponse.fromJson(response.data);
+    } catch (e) {
+      logger.d("response:$e");
+      rethrow;
+    }
+  }
+
+  Future<GetAllWithdrawalsResponseModel> getWithdrawals() async {
+    try {
+      final response =
+          await _service.call(UrlConfig.withdrawal, RequestMethod.get);
+      logger.d(response.data);
+      return GetAllWithdrawalsResponseModel.fromJson(response.data);
     } catch (e) {
       logger.d("response:$e");
       rethrow;

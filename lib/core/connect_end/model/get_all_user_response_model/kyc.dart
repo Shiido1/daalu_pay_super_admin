@@ -13,6 +13,7 @@ class Kyc {
   String? documentType;
   String? documentNumber;
   String? documentImage;
+  String? passportPhoto;
   DateTime? createdAt;
   DateTime? updatedAt;
   dynamic deletedAt;
@@ -27,6 +28,7 @@ class Kyc {
     this.documentType,
     this.documentNumber,
     this.documentImage,
+    this.passportPhoto,
     this.createdAt,
     this.updatedAt,
     this.deletedAt,

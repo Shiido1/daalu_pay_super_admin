@@ -22,6 +22,7 @@ class SuperAdminTransactionScreen extends StatelessWidget {
         viewModelBuilder: () => AuthViewModel(),
         onViewModelReady: (model) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
+            await model.getWithdrawals(context);
             await model.getAdminTransactions(context);
           });
         },
@@ -52,24 +53,28 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                       )
                     ],
                   ),
+                  model.pend.isNotEmpty
+                      ? SizedBox(
+                          height: 30.h,
+                        )
+                      : const SizedBox.shrink(),
+                  model.pend.isNotEmpty
+                      ? TextView(
+                          text: 'Pending Withdrawals',
+                          color: AppColor.greyKind,
+                          fontSize: 19.2.sp,
+                          fontWeight: FontWeight.w500,
+                        )
+                      : const SizedBox.shrink(),
                   SizedBox(
-                    height: 30.h,
+                    height: 14.0.h,
                   ),
-                  if (model.pendingTransactons!.isEmpty)
-                    Center(
-                      child: TextView(
-                        text: 'No Pending Transactions',
-                        fontSize: 16.4.sp,
-                        color: AppColor.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  else
-                    ...model.pendingTransactons!.map(
-                      (e) => Container(
+                  if (model.pend.isNotEmpty)
+                    ...model.pend.reversed.map(
+                      (o) => Container(
                         padding: EdgeInsets.symmetric(
                             vertical: 16.w, horizontal: 16.w),
-                        margin: EdgeInsets.only(bottom: 12.w),
+                        margin: EdgeInsets.only(bottom: 10.w),
                         width: double.infinity,
                         decoration: BoxDecoration(
                             color: AppColor.white,
@@ -78,40 +83,19 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextView(
-                              text:
-                                  '${e.user?.firstName ?? ''} ${e.user?.lastName ?? ''}',
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: TextView(
+                                text: DateFormat('yyyy MMM dd, hh:mm a').format(
+                                    DateTime.parse(o.createdAt.toString())),
+                                fontSize: 14.8.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.grey,
+                              ),
                             ),
                             TextView(
-                              text: DateFormat('yyyy-MM-dd hh:mm a').format(
-                                  DateTime.parse(e.createdAt.toString())),
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColor.grey,
-                            ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: [
-                            // TextView(
-                            //   text: 'Jane Doe',
-                            //   fontSize: 14.sp,
-                            //   fontWeight: FontWeight.w500,
-                            // ),
-                            //     TextView(
-                                  // text: DateFormat('yyyy-MM-dd hh:mm a')
-                                  //               .format(DateTime.parse(
-                                  //                   e.createdAt.toString())),
-                            //       fontSize: 14.sp,
-                            //       fontWeight: FontWeight.w500,
-                            //       color: AppColor.grey,
-                            //     ),
-                            //   ],
-                            // ),
-                            TextView(
-                              text: 'ID- #${e.transactionId}',
-                              fontSize: 14.sp,
+                              text: 'ID-: ${o.transactionId}',
+                              fontSize: 17.4.sp,
                               fontWeight: FontWeight.w500,
                             ),
                             SizedBox(
@@ -119,10 +103,20 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                             ),
                             TextView(
                               text:
-                                  '${getAllCurrency(e.fromCurrency)}${oCcy.format(double.parse(e.fromAmount!))} -> ${oCcy.format(double.parse(e.toAmount!))}${getAllCurrency(e.toCurrency)}',
+                                  '${getCurrency()}${oCcy.format(double.parse(o.amount!))} ',
                               textStyle: TextStyle(
                                 fontSize: 26.sp,
                                 fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            TextView(
+                              text: '${o.bankName} (${o.accountNumber})',
+                              textStyle: TextStyle(
+                                fontSize: 18.20.sp,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                             SizedBox(
@@ -133,10 +127,10 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () => model.modalBottomApproveSheet(
-                                      context: context, id: e.id.toString()),
+                                      context: context, id: o.id.toString()),
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 12.w, vertical: 6.w),
+                                        horizontal: 10.w, vertical: 6.w),
                                     decoration: BoxDecoration(
                                         color: AppColor.green.withOpacity(.17),
                                         borderRadius: BorderRadius.circular(4)),
@@ -152,7 +146,7 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                                         ),
                                         TextView(
                                           text: 'Approved',
-                                          fontSize: 12.4.sp,
+                                          fontSize: 14.4.sp,
                                           color: AppColor.deeperGreen,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -162,10 +156,10 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                                 ),
                                 GestureDetector(
                                   onTap: () => model.modalBottomRejectSheet(
-                                      context: context, id: e.id.toString()),
+                                      context: context, id: o.id.toString()),
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 12.w, vertical: 6.w),
+                                        horizontal: 10.w, vertical: 6.w),
                                     decoration: BoxDecoration(
                                         color: AppColor.red.withOpacity(.17),
                                         borderRadius: BorderRadius.circular(4)),
@@ -181,7 +175,7 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                                         ),
                                         TextView(
                                           text: 'Reject',
-                                          fontSize: 12.4.sp,
+                                          fontSize: 14.4.sp,
                                           color: AppColor.red,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -191,7 +185,7 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                                 ),
                                 Container(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 12.w, vertical: 6.w),
+                                      horizontal: 10.w, vertical: 6.w),
                                   decoration: BoxDecoration(
                                       color: AppColor.greyKind.withOpacity(.17),
                                       borderRadius: BorderRadius.circular(4)),
@@ -207,7 +201,7 @@ class SuperAdminTransactionScreen extends StatelessWidget {
                                       ),
                                       TextView(
                                         text: 'Hold',
-                                        fontSize: 12.4.sp,
+                                        fontSize: 14.4.sp,
                                         color: AppColor.greyNice,
                                         fontWeight: FontWeight.w600,
                                       ),

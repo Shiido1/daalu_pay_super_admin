@@ -1,6 +1,7 @@
 class UrlConfig {
   static const String login = 'super-admin/login';
   static const String stats = 'super-admin/stats';
+  static const String withdrawal = 'admin/withdrawals';
   static const String allUsers = 'super-admin/users';
   static const String users = 'admin/users';
   static const String admins = 'super-admin/admins';

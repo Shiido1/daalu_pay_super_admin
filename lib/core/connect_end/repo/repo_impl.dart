@@ -1,3 +1,4 @@
+import 'package:daalu_pay_super_admin/core/connect_end/model/approve_withdrawal_entity_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_entity_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/create_admin_response_model/create_admin_response_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/create_transfer_fees_entity_model.dart';
@@ -18,6 +19,7 @@ import '../model/approve_receipt_entity_model.dart';
 import '../model/disable_currency_response_model/disable_currency_response_model.dart';
 import '../model/get_admin_transactions_response_model/get_admin_transactions_response_model.dart';
 import '../model/get_all_user_response_model/get_all_user_response_model.dart';
+import '../model/get_all_withdrawals_response_model/get_all_withdrawals_response_model.dart';
 import '../model/get_payment_method/get_payment_method.dart';
 import '../model/get_users_receipt_response_model/get_users_receipt_response_model.dart';
 import '../model/login_entity_model.dart';
@@ -157,8 +159,9 @@ class AuthRepoImpl {
     return response;
   }
 
-  Future<dynamic> approveTransaction(String id) async {
-    final response = await _contract.approveTransaction(id);
+  Future<dynamic> approveTransaction(
+      String id, ApproveWithdrawalEntityModel approve) async {
+    final response = await _contract.approveTransaction(id, approve);
     return response;
   }
 
@@ -197,6 +200,11 @@ class AuthRepoImpl {
   Future<PostUserVerificationCloudResponse> postCloudinary(
       PostUserCloudEntityModel postCloudinary) async {
     final response = await _contract.postCloudinary(postCloudinary);
+    return response;
+  }
+
+  Future<GetAllWithdrawalsResponseModel> withdrawals() async {
+    final response = await _contract.getWithdrawal();
     return response;
   }
 
