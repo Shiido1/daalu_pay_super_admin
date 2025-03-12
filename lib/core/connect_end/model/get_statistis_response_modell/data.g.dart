@@ -17,7 +17,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       swaps: (json['swaps'] as List<dynamic>?)
           ?.map((e) => Swap.fromJson(e as Map<String, dynamic>))
           .toList(),
-      nairaBalance: (json['nairaBalance'] as num?)?.toInt(),
+      nairaBalance: json['nairaBalance'] as num?,
     );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{

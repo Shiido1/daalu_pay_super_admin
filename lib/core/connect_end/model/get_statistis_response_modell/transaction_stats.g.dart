@@ -8,10 +8,10 @@ part of 'transaction_stats.dart';
 
 TransactionStats _$TransactionStatsFromJson(Map<String, dynamic> json) =>
     TransactionStats(
-      total: (json['total'] as num?)?.toInt(),
-      pending: (json['pending'] as num?)?.toInt(),
-      approved: (json['approved'] as num?)?.toInt(),
-      rejected: (json['rejected'] as num?)?.toInt(),
+      total: json['total'] as num?,
+      pending: json['pending'] as num?,
+      approved: json['approved'] as num?,
+      rejected: json['rejected'] as num?,
     );
 
 Map<String, dynamic> _$TransactionStatsToJson(TransactionStats instance) =>

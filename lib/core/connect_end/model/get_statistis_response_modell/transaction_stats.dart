@@ -4,10 +4,10 @@ part 'transaction_stats.g.dart';
 
 @JsonSerializable()
 class TransactionStats {
-  int? total;
-  int? pending;
-  int? approved;
-  int? rejected;
+  num? total;
+  num? pending;
+  num? approved;
+  num? rejected;
 
   TransactionStats({
     this.total,

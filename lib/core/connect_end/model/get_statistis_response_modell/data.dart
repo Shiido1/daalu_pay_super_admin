@@ -11,7 +11,7 @@ class Data {
   UserStats? userStats;
   TransactionStats? transactionStats;
   List<Swap>? swaps;
-  int? nairaBalance;
+  num? nairaBalance;
 
   Data({
     this.userStats,

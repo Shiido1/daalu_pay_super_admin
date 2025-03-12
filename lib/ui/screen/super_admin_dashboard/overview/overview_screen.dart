@@ -411,7 +411,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                                     children: [
                                       TextView(
                                         text:
-                                            '${getAllCurrency(o.fromCurrency)}${oCcy.format(double.parse(o.fromAmount!))} -> ${oCcy.format(double.parse(o.toAmount!))}${getAllCurrency(o.toCurrency)}',
+                                            '${getAllCurrency(o.fromCurrency)}${oCcy.format(double.parse(o.fromAmount!.toString()))} -> ${oCcy.format(double.parse(o.toAmount!.toString()))}${getAllCurrency(o.toCurrency)}',
                                         textStyle: TextStyle(
                                           color: o.status == 'approved'
                                               ? AppColor.green
