@@ -2254,7 +2254,7 @@ class AuthViewModel extends BaseViewModel {
                                     approveReceipts(context,
                                         id: id,
                                         approve: ApproveReceiptEntityModel(
-                                          amount: datum?.amount,
+                                          amount: datum?.amount.toString(),
                                           recipientAddress:
                                               recipientWalletIdController?.text,
                                           currency: 'CNY',

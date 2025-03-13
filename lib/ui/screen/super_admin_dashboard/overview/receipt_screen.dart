@@ -92,7 +92,7 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                         children: [
                                           TextView(
                                             text:
-                                                '${getAllCurrency('CNY')}${oCcy.format(double.parse(o.amount!))}',
+                                                '${getAllCurrency(o.currency)} ${oCcy.format(double.parse(o.amount.toString()))}',
                                             fontSize: 18.sp,
                                           ),
                                           SizedBox(
@@ -150,7 +150,7 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                       ),
                                       o.documentType == 'alipay_id'
                                           ? QrImageView(
-                                              data: o.recipientAlipayId ?? '',
+                                              data: o.paymentDetails ?? '',
                                               version: QrVersions.auto,
                                               size: 90,
                                               gapless: false,
@@ -159,11 +159,34 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                               child: Image.network(
-                                                'https://res.cloudinary.com/walexbiz/image/upload/f_auto,q_auto/${o.recipientAlipayId}',
-                                                width: 90.w,
-                                                height: 120,
-                                                fit: BoxFit.cover,
-                                              ),
+                                                  'https://res.cloudinary.com/walexbiz/image/upload/f_auto,q_auto/${o.qrCode ?? o.paymentDetails}',
+                                                  width: 90.w,
+                                                  height: 120,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          color: AppColor.grey
+                                                              .withOpacity(.3),
+                                                        ),
+                                                        width: 90.w,
+                                                        height: 120,
+                                                        child: Center(
+                                                          child: TextView(
+                                                            text: 'File Error',
+                                                            fontSize: 13.2.sp,
+                                                            color:
+                                                                AppColor.black,
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                          ),
+                                                        ),
+                                                      )),
                                             )
                                     ],
                                   ),
