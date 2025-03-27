@@ -11,6 +11,7 @@ class User {
   String? gender;
   String? email;
   String? phone;
+  dynamic photo;
   String? status;
   String? kycStatus;
   DateTime? emailVerifiedAt;
@@ -27,6 +28,7 @@ class User {
     this.gender,
     this.email,
     this.phone,
+    this.photo,
     this.status,
     this.kycStatus,
     this.emailVerifiedAt,

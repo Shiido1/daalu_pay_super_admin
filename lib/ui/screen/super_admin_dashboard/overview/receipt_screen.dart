@@ -43,7 +43,7 @@ class ViewUsersReceiptScreen extends StatelessWidget {
                           height: 40.h,
                         ),
                         TextView(
-                          text: 'Alipay Receipts',
+                          text: 'Transfer Receipts',
                           fontSize: 21.2.sp,
                           color: AppColor.primary,
                           fontWeight: FontWeight.w500,
