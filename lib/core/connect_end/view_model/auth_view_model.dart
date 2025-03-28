@@ -51,6 +51,7 @@ import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../model/send_broadcast_entity_model.dart';
 import '../repo/repo_impl.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_admin_user_response_model/datum.dart'
     as d;
@@ -3008,6 +3009,23 @@ class AuthViewModel extends BaseViewModel {
       _getUsersReceiptResponseModel = await runBusyFuture(
           repositoryImply.getUsersReceipts(),
           throwException: true);
+      _isLoading = false;
+    } catch (e) {
+      _isLoading = false;
+      logger.d(e);
+      AppUtils.snackbar(contxt, message: e.toString(), error: true);
+    }
+    notifyListeners();
+  }
+
+  Future<void> sendBroadCast(contxt, {SendBroadcastEntityModel? send}) async {
+    try {
+      _isLoading = true;
+      var v = await runBusyFuture(repositoryImply.sendBroadCast(send!),
+          throwException: true);
+      if (v['status'] == 'success') {
+        AppUtils.snackbar(contxt, message: 'Mesasage Sent Successfully..!');
+      }
       _isLoading = false;
     } catch (e) {
       _isLoading = false;

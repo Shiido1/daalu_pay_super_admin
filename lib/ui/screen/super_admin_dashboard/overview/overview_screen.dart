@@ -88,6 +88,16 @@ class _OverviewScreenState extends State<OverviewScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                            PopupMenuItem(
+                              value: '/broadcast',
+                              onTap: () => navigate
+                                  .navigateTo(Routes.sendBroadcastScreen),
+                              child: TextView(
+                                text: 'Send Broadcast',
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ];
                         },
                       )

@@ -8,6 +8,7 @@ import 'package:daalu_pay_super_admin/core/connect_end/model/get_currencies_resp
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_exchange_rates/get_exchange_rates.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_statistis_response_modell/get_statistis_response_modell.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/get_transfer_fees_model_response/get_transfer_fees_model_response.dart';
+import 'package:daalu_pay_super_admin/core/connect_end/model/send_broadcast_entity_model.dart';
 import 'package:daalu_pay_super_admin/core/connect_end/model/suspend_admin_response_model/suspend_admin_response_model.dart';
 import 'package:injectable/injectable.dart';
 
@@ -100,4 +101,6 @@ class AuthContractsImpl {
       await _api.postTocloudinary(postCloudinary);
   Future<GetAllWithdrawalsResponseModel> getWithdrawal() async =>
       await _api.getWithdrawals();
+  Future<dynamic> sendBroadCast(SendBroadcastEntityModel sendBroadCast) async =>
+      await _api.sendBroadCast(sendBroadCast);
 }

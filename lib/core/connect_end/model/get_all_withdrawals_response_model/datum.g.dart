@@ -14,7 +14,7 @@ Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
       currencyId: json['currencyId'] as num?,
       walletId: json['walletId'] as num?,
       transactionId: json['transactionId'] as String?,
-      bankId: json['bankAccountId'] as num?,
+      bankId: json['bankId'] as num?,
       bankName: json['bankName'] as String?,
       accountNumber: json['accountNumber'] as String?,
       accountName: json['accountName'],

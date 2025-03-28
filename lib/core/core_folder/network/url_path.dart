@@ -13,4 +13,5 @@ class UrlConfig {
   static const String currencies = 'super-admin/currencies';
   // ignore: constant_identifier_names
   static const String transfer_fees = 'super-admin/transfer-fees';
+  static const String broadcast = 'super-admin/send-push';
 }

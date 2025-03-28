@@ -26,6 +26,7 @@ import '../model/login_entity_model.dart';
 import '../model/login_response_model/login_response_model.dart';
 import '../model/post_user_cloud_entity_model.dart';
 import '../model/post_user_verification_cloud_response/post_user_verification_cloud_response.dart';
+import '../model/send_broadcast_entity_model.dart';
 
 @lazySingleton
 class AuthRepoImpl {
@@ -205,6 +206,11 @@ class AuthRepoImpl {
 
   Future<GetAllWithdrawalsResponseModel> withdrawals() async {
     final response = await _contract.getWithdrawal();
+    return response;
+  }
+
+  Future<dynamic> sendBroadCast(SendBroadcastEntityModel send) async {
+    final response = await _contract.sendBroadCast(send);
     return response;
   }
 
